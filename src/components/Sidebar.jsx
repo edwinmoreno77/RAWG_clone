@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { PropTypes } from "prop-types";
+import { Context } from "../store/appContext";
+import { useContext } from "react";
 
 const key = import.meta.env.VITE_RAWG_API_KEY;
 
 export const Sidebar = ({ onFilter }) => {
+  const { store, actions } = useContext(Context);
   const [filters, setFilters] = useState({
     year: "",
     genre: "",
@@ -71,6 +74,7 @@ export const Sidebar = ({ onFilter }) => {
 
   const handleApplyFilters = () => {
     onFilter(filters);
+    actions.closeSidebar();
   };
 
   const renderSelect = (name, label, optionsList) => (
@@ -93,7 +97,11 @@ export const Sidebar = ({ onFilter }) => {
   );
 
   return (
-    <aside className="w-48 bg-stone-950 text-white text-xs p-4 h-full">
+    <aside
+      className={`fixed z-10 top-0 left-0 h-full w-64 bg-stone-950 text-white p-4 transform ${
+        store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } transition-transform duration-300 lg:relative lg:translate-x-0`}
+    >
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
       {/* Year Select */}

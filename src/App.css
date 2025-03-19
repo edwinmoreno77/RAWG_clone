@@ -3,13 +3,9 @@
 @tailwind utilities;
 
 body {
-  background: rgb(243, 243, 243);
+  @apply bg-stone-950;
 }
 
 .min_vh {
   min-height: 75vh;
-}
-
-.cursor_pointer {
-  cursor: pointer;
 }
