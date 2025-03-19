@@ -3,9 +3,10 @@
 RAWG Game Finder es una aplicación web moderna y dinámica que permite a los usuarios explorar, buscar y gestionar una lista de videojuegos utilizando la API de RAWG. Con una interfaz intuitiva y responsiva, los usuarios pueden filtrar juegos por género, plataforma, desarrollador, etiquetas, y más. Además, pueden agregar juegos a su lista de favoritos para un acceso rápido.
 
 # 🖼️ Capturas de pantalla
-
-![Escritorio](https://github.com/edwinmoreno77/page-games/tree/main/src/assets/rawg_desktop.webp)
-![Movil](https://github.com/edwinmoreno77/page-games/tree/main/src/assets/mobile.webp)
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/rawg_desktop.webp" width="600"/>
+  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/rawg_mobile.webp" width="150"/>
+</div>
 
 ## 🚀 Características
 
