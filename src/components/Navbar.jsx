@@ -9,7 +9,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 p-4 text-white">
+    <nav className="bg-stone-950 p-4 text-white">
       <div className="container mx-auto lg:flex items-center justify-center">
         <button
           onClick={handlerMenu}
@@ -26,17 +26,26 @@ export const Navbar = () => {
           } lg:flex space-x-0 lg:space-x-4 font-bold`}
         >
           <li>
-            <Link to={`/`} className="hover:text-lime-300 ">
+            <Link
+              to={`/`}
+              className="hover:text-gray-500 transition duration-300"
+            >
               Games List
             </Link>
           </li>
           <li>
-            <Link to={`/favorites`} className="hover:text-lime-300">
+            <Link
+              to={`/favorites`}
+              className="hover:text-gray-500 transition duration-300"
+            >
               Favorites
             </Link>
           </li>
           <li>
-            <Link to={`/search`} className="hover:text-lime-300">
+            <Link
+              to={`/search`}
+              className="hover:text-gray-500 transition duration-300"
+            >
               Search
             </Link>
           </li>

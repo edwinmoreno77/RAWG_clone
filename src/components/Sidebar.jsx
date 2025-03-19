@@ -93,7 +93,7 @@ export const Sidebar = ({ onFilter }) => {
   );
 
   return (
-    <aside className="w-64 bg-gray-900 text-white p-4 h-full">
+    <aside className="w-48 bg-stone-950 text-white text-xs p-4 h-full">
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
       {/* Year Select */}

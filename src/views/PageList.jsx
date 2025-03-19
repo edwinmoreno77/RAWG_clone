@@ -25,7 +25,7 @@ export const PageList = () => {
 
   return (
     <Layout onFilter={handleFilter}>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-1">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1">
         {filteredData?.map((item) => (
           <Card key={item.id} item={item} />
         ))}

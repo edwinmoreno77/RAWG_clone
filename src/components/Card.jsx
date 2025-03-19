@@ -24,15 +24,15 @@ export const Card = ({ item }) => {
   return (
     <>
       <article key={item?.id} className="flex justify-center items-center p-2">
-        <div className="max-w-sm transition ease-in-out duration-300 bg-slate-800 text-white hover:text-black hover:bg-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105 hover:skew-y-1">
+        <div className="w-auto h-auto transition ease-in-out duration-300 bg-stone-900 text-white hover:text-black hover:bg-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105 hover:skew-y-1">
           <Link to={`${item?.id}`}>
             <img
               src={item?.background_image}
-              className="w-full h-48 md:h-56 lg:h-72 object-cover rounded-t-lg"
+              className="w-full h-36 md:h-40 lg:h-44 object-cover rounded-t-lg"
               alt={item.name}
             />
           </Link>
-          <div className="p-4">
+          <div className="p-4 brightness-110">
             <h5 className="text-lg font-semibold">{item?.name}</h5>
             <div className="flex justify-between">
               <span>rating: {item.rating}</span>

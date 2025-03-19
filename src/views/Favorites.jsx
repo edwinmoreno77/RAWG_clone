@@ -10,7 +10,7 @@ export const Favorites = () => {
   return (
     <>
       <Navbar />
-      <main className="container-fluid px-5 min-h-screen bg-black">
+      <main className="container-fluid px-5 min-h-screen bg-stone-950">
         <h1 className="text-center pt-3 text-4xl text-white font-bold underline decoration-white tracking-tight">
           Favorites
         </h1>

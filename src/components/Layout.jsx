@@ -11,7 +11,9 @@ export const Layout = ({ children, onFilter }) => {
         {/* Sidebar */}
         <Sidebar onFilter={onFilter} />
         {/* Main Content */}
-        <main className="flex-1 bg-black p-4 overflow-y-auto">{children}</main>
+        <main className="flex-1 bg-stone-950 p-4 overflow-y-auto">
+          {children}
+        </main>
       </div>
     </div>
   );

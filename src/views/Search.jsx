@@ -15,7 +15,7 @@ export const Search = () => {
   return (
     <>
       <Navbar />
-      <main className="container-fluid min-h-screen bg-black">
+      <main className="container-fluid min-h-screen bg-stone-950">
         <h1 className="text-center pt-5 text-3xl font-bold text-white hover:brightness-110">
           Search Game by Name
         </h1>

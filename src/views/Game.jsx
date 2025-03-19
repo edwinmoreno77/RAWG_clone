@@ -38,7 +38,7 @@ export const Game = () => {
   return (
     <>
       <Navbar />
-      <main className="container-fluid min-h-screen text-white bg-black">
+      <main className="container-fluid min-h-screen text-white bg-stone-950">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-5/12 p-5 flex justify-center">
             {data ? (
