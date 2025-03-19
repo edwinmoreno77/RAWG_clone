@@ -88,6 +88,10 @@ pnpm dev
 
 Abre tu navegador y navega a http://localhost:5173.
 
+### Desplegado en:
+
+https://page-games.vercel.app/
+
 
 ### 🌐 API utilizada
 Este proyecto utiliza la RAWG API para obtener datos de videojuegos. Asegúrate de registrar una cuenta y obtener una clave de API para usarla en el proyecto.
