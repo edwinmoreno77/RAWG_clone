@@ -7,14 +7,6 @@ const key = import.meta.env.VITE_RAWG_API_KEY;
 
 export const Sidebar = ({ onFilter }) => {
   const { store, actions } = useContext(Context);
-  const [filters, setFilters] = useState({
-    year: "",
-    genre: "",
-    platform: "",
-    tag: "",
-    developer: "",
-  });
-
   const [options, setOptions] = useState({
     genres: [],
     platforms: [],
@@ -69,11 +61,11 @@ export const Sidebar = ({ onFilter }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    actions.setFilters({ name, value });
   };
 
   const handleApplyFilters = () => {
-    onFilter(filters);
+    onFilter(store.filters);
     actions.closeSidebar();
   };
 
@@ -82,13 +74,17 @@ export const Sidebar = ({ onFilter }) => {
       <label className="block mb-1">{label}</label>
       <select
         name={name}
-        value={filters[name]}
+        value={store.filters[name]}
         onChange={handleChange}
         className="w-full p-2 rounded bg-gray-800 text-white"
       >
         <option value="">All {label}</option>
         {optionsList.map((item) => (
-          <option key={item.id} value={item.slug}>
+          <option
+            key={item.id}
+            // la query params de plataforma funciona con los id
+            value={name === "platform" ? item.id : item.slug}
+          >
             {item.name}
           </option>
         ))}
@@ -109,7 +105,7 @@ export const Sidebar = ({ onFilter }) => {
         <label className="block mb-1">Year</label>
         <select
           name="year"
-          value={filters.year}
+          value={store.filters.year}
           onChange={handleChange}
           className="w-full p-2 rounded bg-gray-800 text-white"
         >

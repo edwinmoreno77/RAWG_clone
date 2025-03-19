@@ -70,12 +70,15 @@ export const Game = () => {
                 <p className="text-lg pt-2">released: {data?.released}</p>
                 <p className="text-lg">rating: {data?.rating}</p>
                 <p className="text-lg">id: {data?.id}</p>
-                <Link
-                  to={`${data?.website}`}
-                  className="bg-lime-500 transition ease-in-out  hover:scale-105 hover:bg-lime-700 text-white py-2 px-4 rounded my-5 inline-block"
-                >
-                  website
-                </Link>
+                {data.website && (
+                  <Link
+                    to={data?.website}
+                    className="bg-lime-500 transition ease-in-out  hover:scale-105 hover:bg-lime-700 text-white py-2 px-4 rounded my-5 inline-block"
+                  >
+                    website
+                  </Link>
+                )}
+
                 <div className="flex justify-evenly items-center mt-9">
                   <button
                     onClick={() => navigate(-1)}

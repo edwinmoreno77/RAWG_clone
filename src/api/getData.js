@@ -22,7 +22,7 @@ export const getGameById = async (id) => {
   }
 };
 
-export const getPages = async (page) => {
+export const getGamesPage = async (page) => {
   try {
     const response = await fetch(
       `https://api.rawg.io/api/games?ordering=-metacritic&metacritic=0,100&page=${page}&key=${key}`
@@ -86,6 +86,7 @@ export const getFilteredGames = async (filters) => {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
+    console.log(data);
     return data.results;
   } catch (error) {
     console.log("Error en getFilteredGames", error);

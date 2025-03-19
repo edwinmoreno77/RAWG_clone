@@ -1,4 +1,4 @@
-import { getPages } from "../api/getData";
+import { getGamesPage } from "../api/getData";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faHeart,
@@ -15,13 +15,20 @@ const getState = ({ getStore, getActions, setStore }) => {
       page: 1,
       pageData: null,
       favorites: [],
-      isSidebarOpen: false, // Estado global para controlar la visibilidad del Sidebar
+      isSidebarOpen: false,
+      filters: {
+        year: "",
+        genre: "",
+        platform: "",
+        tag: "",
+        developer: "",
+      },
     },
 
     actions: {
       getPages: async () => {
         const { page } = getStore();
-        const pageData = await getPages(page);
+        const pageData = await getGamesPage(page);
         setStore({ pageData });
       },
 
@@ -59,15 +66,17 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({ favorites: newFavorites });
       },
 
-      // Acción para alternar la visibilidad del Sidebar
       toggleSidebar: () => {
         const { isSidebarOpen } = getStore();
         setStore({ isSidebarOpen: !isSidebarOpen });
       },
 
-      // Acción para cerrar el Sidebar
       closeSidebar: () => {
         setStore({ isSidebarOpen: false });
+      },
+      setFilters: ({ name, value }) => {
+        const { filters } = getStore();
+        setStore({ filters: { ...filters, [name]: value } });
       },
     },
   };
