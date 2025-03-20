@@ -4,6 +4,7 @@ import { Context } from "../store/appContext";
 import { getGameById } from "../api/getData";
 import { Navbar } from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
 export const Game = () => {
   const { id } = useParams();
@@ -88,9 +89,9 @@ export const Game = () => {
                   </button>
                   <button onClick={() => handlerLikes(like, id)}>
                     <FontAwesomeIcon
-                      icon="heart"
-                      className={`cursor-pointer text-lg transition ease-in-out  hover:scale-125 ${
-                        like ? "text-red-500" : "text-gray-400"
+                      icon={faBookmark}
+                      className={`cursor-pointer text-2xl transition ease-in-out  hover:scale-125 ${
+                        like ? "text-lime-600" : "text-stone-700"
                       }`}
                     />
                   </button>

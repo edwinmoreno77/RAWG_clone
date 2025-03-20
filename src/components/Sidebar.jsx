@@ -83,7 +83,7 @@ export const Sidebar = () => {
         name={name}
         value={store.filters[name]}
         onChange={handleChange}
-        className="w-full p-2 rounded bg-stone-800 text-white"
+        className="w-full p-2 rounded bg-stone-800 text-white hover:brightness-125 cursor-pointer"
       >
         <option value="">All {label}</option>
         {optionsList.map((item) => (
@@ -120,7 +120,7 @@ export const Sidebar = () => {
               name="year"
               value={store.filters.year}
               onChange={handleChange}
-              className="w-full p-2 rounded bg-stone-800 text-white"
+              className="w-full p-2 rounded bg-stone-800 text-white  hover:brightness-125 cursor-pointer"
             >
               <option value="">All Years</option>
               {years.map((year) => (
