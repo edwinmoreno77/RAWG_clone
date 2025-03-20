@@ -20,7 +20,7 @@ export const Navbar = () => {
     <nav className="bg-stone-950 p-4 text-white">
       <div className="container mx-auto flex items-center justify-between lg:justify-center">
         <ul className="flex items-center space-x-4">
-          <li className="group relative flex flex-col items-center justify-center">
+          <li className="group relative flex flex-col items-center justify-center hover:text-stone-300">
             <Link to="/">
               <FontAwesomeIcon icon={faHouse} className="text-lg" />
             </Link>
@@ -28,7 +28,7 @@ export const Navbar = () => {
               Home
             </span>
           </li>
-          <li className="group relative flex flex-col items-center justify-center">
+          <li className="group relative flex flex-col items-center justify-center hover:text-stone-300">
             <Link to="/search">
               <FontAwesomeIcon icon={faMagnifyingGlass} className="text-lg" />
             </Link>
@@ -36,7 +36,7 @@ export const Navbar = () => {
               Search
             </span>
           </li>
-          <li className="group relative flex flex-col items-center justify-center">
+          <li className="group relative flex flex-col items-center justify-center hover:text-stone-300">
             <Link to="/favorites">
               <FontAwesomeIcon icon={faBookmark} className="text-lg" />
             </Link>

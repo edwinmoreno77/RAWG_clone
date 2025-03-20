@@ -65,9 +65,9 @@ export const Sidebar = () => {
   };
 
   const handleApplyFilters = async () => {
-    setIsLoading(true); // Activar el loading
-    await actions.setFilteredData(); // Esperar a que se complete la acción
-    setIsLoading(false); // Desactivar el loading
+    setIsLoading(true);
+    await actions.setFilteredData();
+    setIsLoading(false);
     actions.closeSidebar();
   };
 
