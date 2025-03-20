@@ -24,7 +24,7 @@ export const Navbar = () => {
             <Link to="/">
               <FontAwesomeIcon icon={faHouse} className="text-lg" />
             </Link>
-            <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
               Home
             </span>
           </li>
@@ -32,7 +32,7 @@ export const Navbar = () => {
             <Link to="/search">
               <FontAwesomeIcon icon={faMagnifyingGlass} className="text-lg" />
             </Link>
-            <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
               Search
             </span>
           </li>
@@ -40,7 +40,7 @@ export const Navbar = () => {
             <Link to="/favorites">
               <FontAwesomeIcon icon={faBookmark} className="text-lg" />
             </Link>
-            <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
               Favorites
             </span>
           </li>

@@ -88,6 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             developer: "",
           },
         });
+        setStore({ page: 1 });
         getActions().getPages();
       },
       setFilteredData: async () => {

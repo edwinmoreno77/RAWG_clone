@@ -34,7 +34,7 @@ export const Search = () => {
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
             />
             <input
-              className="form-input w-full p-3 pl-10 border rounded-xl shadow-lg"
+              className="form-input w-full p-3 pl-10 border rounded-xl shadow-lg focus:bg-black focus:text-white"
               type="text"
               placeholder="What game are you looking for?"
               value={name}

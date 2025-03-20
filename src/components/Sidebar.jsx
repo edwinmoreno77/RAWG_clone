@@ -24,7 +24,6 @@ export const Sidebar = () => {
 
   useEffect(() => {
     const fetchOptions = async () => {
-      setIsLoading(true); // Activar el loading
       try {
         const endpoints = [
           { key: "genres", url: `https://api.rawg.io/api/genres?key=${key}` },
@@ -54,8 +53,6 @@ export const Sidebar = () => {
         }));
       } catch (error) {
         console.error("Error fetching filter options:", error);
-      } finally {
-        setIsLoading(false); // Desactivar el loading
       }
     };
 
