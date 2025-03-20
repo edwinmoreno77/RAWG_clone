@@ -1,4 +1,4 @@
-import { getGamesPage } from "../api/getData";
+import { getFilteredGames } from "../api/getData";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faHeart,
@@ -13,7 +13,6 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       page: 1,
-      pageData: null,
       favorites: [],
       isSidebarOpen: false,
       filters: {
@@ -23,13 +22,14 @@ const getState = ({ getStore, getActions, setStore }) => {
         tag: "",
         developer: "",
       },
+      filteredData: [],
     },
 
     actions: {
       getPages: async () => {
-        const { page } = getStore();
-        const pageData = await getGamesPage(page);
-        setStore({ pageData });
+        const { filters, page } = getStore();
+        const filteredData = await getFilteredGames(filters, page);
+        setStore({ filteredData });
       },
 
       increasePage: () => {
@@ -77,6 +77,24 @@ const getState = ({ getStore, getActions, setStore }) => {
       setFilters: ({ name, value }) => {
         const { filters } = getStore();
         setStore({ filters: { ...filters, [name]: value } });
+      },
+      resetFilters: () => {
+        setStore({
+          filters: {
+            year: "",
+            genre: "",
+            platform: "",
+            tag: "",
+            developer: "",
+          },
+        });
+        getActions().getPages();
+      },
+      setFilteredData: async () => {
+        const { filters } = getStore();
+        const filteredData = await getFilteredGames(filters, 1);
+        setStore({ page: 1 });
+        setStore({ filteredData });
       },
     },
   };

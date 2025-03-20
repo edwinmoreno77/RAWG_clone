@@ -11,11 +11,8 @@ export const Favorites = () => {
     <>
       <Navbar />
       <main className="container-fluid px-5 min-h-screen bg-stone-950">
-        <h1 className="text-center pt-3 text-4xl text-white font-bold underline decoration-white tracking-tight">
-          Favorites
-        </h1>
         {favorites.length === 0 ? (
-          <h1 className="text-center pt-3 mt-28 text-8xl text-white font-bold decoration-white tracking-tight">
+          <h1 className="text-center pt-3 mt-28 text-4xl animate-pulse text-white font-bold decoration-white tracking-tight">
             Add favorites
           </h1>
         ) : (

@@ -59,7 +59,7 @@ export const getGameByName = async (name) => {
   }
 };
 
-export const getFilteredGames = async (filters) => {
+export const getFilteredGames = async (filters, page) => {
   try {
     const queryParams = new URLSearchParams();
 
@@ -73,6 +73,7 @@ export const getFilteredGames = async (filters) => {
     if (filters.platform) queryParams.append("platforms", filters.platform);
     if (filters.tag) queryParams.append("tags", filters.tag);
     if (filters.developer) queryParams.append("developers", filters.developer);
+    if (page) queryParams.append("page", page);
 
     // Agregar siempre el orden y filtro por metacritic
     queryParams.append("ordering", "-metacritic");
@@ -86,7 +87,6 @@ export const getFilteredGames = async (filters) => {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    console.log(data);
     return data.results;
   } catch (error) {
     console.log("Error en getFilteredGames", error);

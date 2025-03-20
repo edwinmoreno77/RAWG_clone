@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
 export const Card = ({ item }) => {
   const { actions, store } = useContext(Context);
@@ -47,9 +48,9 @@ export const Card = ({ item }) => {
               </Link>
               <button onClick={() => handlerLikes(like, item.id)}>
                 <FontAwesomeIcon
-                  icon="heart"
+                  icon={faBookmark}
                   className={`cursor-pointer text-lg transition ease-in-out  hover:scale-125 ${
-                    like ? "text-red-500" : "text-gray-400"
+                    like ? "text-lime-600" : "text-stone-700"
                   }`}
                 />
               </button>

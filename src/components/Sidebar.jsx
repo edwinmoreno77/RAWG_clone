@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { PropTypes } from "prop-types";
 import { Context } from "../store/appContext";
 import { useContext } from "react";
 
 const key = import.meta.env.VITE_RAWG_API_KEY;
 
-export const Sidebar = ({ onFilter }) => {
+export const Sidebar = () => {
   const { store, actions } = useContext(Context);
   const [options, setOptions] = useState({
     genres: [],
@@ -13,6 +12,7 @@ export const Sidebar = ({ onFilter }) => {
     tags: [],
     developers: [],
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // Generar años desde 1980 hasta el actual
   const startYear = 1980;
@@ -24,6 +24,7 @@ export const Sidebar = ({ onFilter }) => {
 
   useEffect(() => {
     const fetchOptions = async () => {
+      setIsLoading(true); // Activar el loading
       try {
         const endpoints = [
           { key: "genres", url: `https://api.rawg.io/api/genres?key=${key}` },
@@ -53,6 +54,8 @@ export const Sidebar = ({ onFilter }) => {
         }));
       } catch (error) {
         console.error("Error fetching filter options:", error);
+      } finally {
+        setIsLoading(false); // Desactivar el loading
       }
     };
 
@@ -64,8 +67,15 @@ export const Sidebar = ({ onFilter }) => {
     actions.setFilters({ name, value });
   };
 
-  const handleApplyFilters = () => {
-    onFilter(store.filters);
+  const handleApplyFilters = async () => {
+    setIsLoading(true); // Activar el loading
+    await actions.setFilteredData(); // Esperar a que se complete la acción
+    setIsLoading(false); // Desactivar el loading
+    actions.closeSidebar();
+  };
+
+  const handleReset = () => {
+    actions.resetFilters();
     actions.closeSidebar();
   };
 
@@ -76,13 +86,12 @@ export const Sidebar = ({ onFilter }) => {
         name={name}
         value={store.filters[name]}
         onChange={handleChange}
-        className="w-full p-2 rounded bg-gray-800 text-white"
+        className="w-full p-2 rounded bg-stone-800 text-white"
       >
         <option value="">All {label}</option>
         {optionsList.map((item) => (
           <option
             key={item.id}
-            // la query params de plataforma funciona con los id
             value={name === "platform" ? item.id : item.slug}
           >
             {item.name}
@@ -100,39 +109,52 @@ export const Sidebar = ({ onFilter }) => {
     >
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
-      {/* Year Select */}
-      <div className="mb-4">
-        <label className="block mb-1">Year</label>
-        <select
-          name="year"
-          value={store.filters.year}
-          onChange={handleChange}
-          className="w-full p-2 rounded bg-gray-800 text-white"
-        >
-          <option value="">All Years</option>
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Mostrar el spinner si está cargando */}
+      {isLoading ? (
+        <div className="flex justify-center items-center h-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+        </div>
+      ) : (
+        <>
+          {/* Year Select */}
+          <div className="mb-4">
+            <label className="block mb-1">Year</label>
+            <select
+              name="year"
+              value={store.filters.year}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-stone-800 text-white"
+            >
+              <option value="">All Years</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {renderSelect("genre", "Genres", options.genres)}
-      {renderSelect("platform", "Platforms", options.platforms)}
-      {renderSelect("tag", "Tags", options.tags)}
-      {renderSelect("developer", "Developers", options.developers)}
+          {renderSelect("genre", "Genres", options.genres)}
+          {renderSelect("platform", "Platforms", options.platforms)}
+          {renderSelect("tag", "Tags", options.tags)}
+          {renderSelect("developer", "Developers", options.developers)}
 
-      <button
-        onClick={handleApplyFilters}
-        className="w-full bg-white hover:bg-black text-black hover:text-white py-2 px-4 rounded"
-      >
-        Apply Filters
-      </button>
+          <div className="flex gap-1">
+            <button
+              onClick={handleReset}
+              className="w-full bg-white hover:bg-stone-800 text-black hover:text-white py-2 px-2 rounded"
+            >
+              Reset
+            </button>
+            <button
+              onClick={handleApplyFilters}
+              className="w-full bg-white hover:bg-stone-800 text-black hover:text-white py-2 px-2 rounded"
+            >
+              Apply Filters
+            </button>
+          </div>
+        </>
+      )}
     </aside>
   );
-};
-
-Sidebar.propTypes = {
-  onFilter: PropTypes.func.isRequired,
 };
