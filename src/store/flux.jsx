@@ -25,7 +25,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       increasePage: () => {
         const { page } = getStore();
-        if (page === 42) return;
+        if (page === 100) return;
         const newPage = page + 1;
         setStore({ page: newPage });
         getActions().getPages();
