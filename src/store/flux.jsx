@@ -1,13 +1,4 @@
 import { getFilteredGames } from "../api/getData";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faHeart,
-  faArrowLeft,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
-
-// Agregar íconos a la biblioteca
-library.add(faHeart, faArrowLeft, faArrowRight);
 
 const getState = ({ getStore, getActions, setStore }) => {
   return {
