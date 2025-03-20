@@ -41,6 +41,10 @@ export const Game = () => {
     ? data.platforms.map((p) => p.platform.name).join(", ")
     : "Unknown";
 
+  const genres = data?.genres
+    ? data.genres.map((g) => g.name).join(", ")
+    : "Unknown";
+
   return (
     <>
       <Navbar />
@@ -86,6 +90,14 @@ export const Game = () => {
                   className="mt-4 p-5 font-mono text-sm text-stone-100"
                   dangerouslySetInnerHTML={{ __html: data.description }}
                 />
+                <p className="font-bold">
+                  <span className="text-stone-300 text-base"> Platforms:</span>{" "}
+                  <span className="text-white text-base">{platforms}</span>
+                </p>
+                <p className="font-bold">
+                  <span className="text-stone-300 text-base"> genres:</span>{" "}
+                  <span className="text-white text-base">{genres}</span>
+                </p>
                 <div className="flex justify-center gap-4 text-xs font-bold text-amber-400">
                   <span>Rating: {data?.rating}</span>{" "}
                   <span>Metacritic: {data?.metacritic ?? "Not available"}</span>
@@ -102,10 +114,7 @@ export const Game = () => {
                     Website: {data?.website}
                   </a>
                 )}
-                <p className="font-bold">
-                  <span className="text-stone-300 text-base"> Platforms:</span>{" "}
-                  <span className="text-white text-lg">{platforms}</span>
-                </p>
+
                 <p className="text-xs">ID: {data?.id}</p>
 
                 <div className="flex justify-between items-center mx-10 mt-2 pb-4">
