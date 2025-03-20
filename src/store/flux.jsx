@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       page: 1,
-      favorites: [],
+      favorites: JSON.parse(localStorage.getItem("favorites")) || [],
       isSidebarOpen: false,
       filters: {
         year: "",
@@ -46,15 +46,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       addFavorites: (favorite) => {
         const { favorites } = getStore();
-        setStore({ favorites: [...favorites, favorite] });
+        const updatedFavorites = [...favorites, favorite];
+        setStore({ favorites: updatedFavorites });
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       },
 
       removeFavorites: (favorite) => {
         const { favorites } = getStore();
-        const newFavorites = favorites.filter(
+        const updatedFavorites = favorites.filter(
           (item) => item.id !== favorite.id
         );
-        setStore({ favorites: newFavorites });
+        setStore({ favorites: updatedFavorites });
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      },
+
+      clearFavorites: () => {
+        setStore({ favorites: [] });
+        localStorage.removeItem("favorites");
       },
 
       toggleSidebar: () => {

@@ -74,7 +74,7 @@ export const Game = () => {
                 {data.website && (
                   <Link
                     to={data?.website}
-                    className="bg-lime-500 transition ease-in-out  hover:scale-105 hover:bg-lime-700 text-white py-2 px-4 rounded my-5 inline-block"
+                    className="bg-stone-500 transition ease-in-out  hover:scale-105 hover:bg-lime-700 text-white py-2 px-4 rounded my-5 inline-block"
                   >
                     website
                   </Link>
@@ -83,9 +83,9 @@ export const Game = () => {
                 <div className="flex justify-evenly items-center mt-9">
                   <button
                     onClick={() => navigate(-1)}
-                    className="bg-lime-500 transition ease-in-out  hover:scale-105 hover:bg-lime-700 text-white py-2 px-4 rounded my-5 inline-block"
+                    className="bg-stone-500 transition ease-in-out  hover:scale-105 hover:bg-lime-700 text-white py-2 px-4 rounded my-5 inline-block"
                   >
-                    Volver
+                    Back
                   </button>
                   <button onClick={() => handlerLikes(like, id)}>
                     <FontAwesomeIcon
