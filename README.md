@@ -32,8 +32,9 @@ RAWG Game Finder es una aplicación web moderna y dinámica que permite a los us
 - **Frontend**:
   - [React](https://reactjs.org/) (v18.3.1)
   - [React Router](https://reactrouter.com/) (v7.3.0)
-  - [Tailwind CSS](https://tailwindcss.com/) (v3.4.10)
-  - [FontAwesome](https://fontawesome.com/) para íconos
+  - [Tailwind CSS](https://tailwindcss.com/) (v3.4.10) Estilos
+  - [FontAwesome](https://fontawesome.com/) Para íconos
+  - [Framer Motion](https://www.framer.com/motion/) Para animaciones fluidas
 - **Gestión de estado**:
   - Context API con un patrón Flux personalizado
 - **Backend**:
@@ -43,8 +44,6 @@ RAWG Game Finder es una aplicación web moderna y dinámica que permite a los us
   - [ESLint](https://eslint.org/) para mantener un código limpio y consistente
 
 ---
-
-## 📂 Estructura del proyecto
 
 ```plaintext
 rawg/
@@ -102,6 +101,20 @@ https://page-games.vercel.app/
 
 ### 🌐 API utilizada
 Este proyecto utiliza la RAWG API para obtener datos de videojuegos. Asegúrate de registrar una cuenta y obtener una clave de API para usarla en el proyecto.
+
+## 🤝 Contribuciones
+
+¡Las contribuciones son bienvenidas! Si deseas contribuir al proyecto, sigue estos pasos:
+
+1. Haz un fork del repositorio.
+2. Crea una rama para tu funcionalidad (`git checkout -b feature/nueva-funcionalidad`).
+3. Realiza tus cambios y haz un commit (`git commit -m 'Agrega nueva funcionalidad'`).
+4. Haz un push a la rama (`git push origin feature/nueva-funcionalidad`).
+5. Abre un Pull Request.
+
+Por favor, asegúrate de seguir las mejores prácticas de código y de incluir pruebas para cualquier funcionalidad nueva.
+
+## 📂 Estructura del proyecto
 
 
 📧 Contacto
