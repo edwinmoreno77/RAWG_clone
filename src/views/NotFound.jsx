@@ -5,7 +5,7 @@ export const NotFound = () => {
   return (
     <>
       <Navbar />
-      <main className="container mx-auto min-h-screen flex flex-col justify-center items-center">
+      <main className="container mx-auto min-h-screen flex flex-col justify-center items-center bg-stone-950">
         <div className="text-center mt-5">
           <h1 className="text-4xl font-bold mb-5">Not Found</h1>
           <Link

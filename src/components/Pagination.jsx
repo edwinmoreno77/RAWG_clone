@@ -11,7 +11,7 @@ export const Pagination = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const totalPages = 42; // Número total de páginas
+  const totalPages = 100; // Número total de páginas
   const getPageNumbers = () => {
     const range = 3; // Número de páginas a mostrar a cada lado de la actual
     const start = Math.max(1, page - range);

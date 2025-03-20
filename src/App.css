@@ -5,7 +5,3 @@
 body {
   @apply bg-stone-950;
 }
-
-.min_vh {
-  min-height: 75vh;
-}

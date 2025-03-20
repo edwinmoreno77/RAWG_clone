@@ -45,7 +45,6 @@ const CardComponent = ({ item }) => {
           <h5 className="text-lg font-semibold">{item?.name}</h5>
           <div className="flex justify-between">
             <span>rating: {item.rating}</span>
-            <p>{item.species}</p>
           </div>
           <div className="flex justify-between items-center">
             <Link
