@@ -5,17 +5,15 @@ RAWG Game Finder es una aplicación web moderna y dinámica que permite a los us
 # 🖼️ Capturas de pantalla
 <div style="display: flex; justify-content: center; gap: 10px;">
   <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/homePage.webp" width="600"/>
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/mobileHome.webp" width="150"/>
+  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/mobileHome.webp" width="140"/>
 </div>
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/pageGame.webp" width="600"/>
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/pageSearch.webp" width="600"/>
+  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/pageGame.webp" width="330"/>
+  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/pageSearch.webp" width="330"/>
+  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/favoritesPage.webp" width="330"/>
 </div>
 
-<div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/favoritesPage.webp" width="600"/>
-</div>
 
 ## 🚀 Características
 
