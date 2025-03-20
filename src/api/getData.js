@@ -1,6 +1,12 @@
 const key = import.meta.env.VITE_RAWG_API_KEY;
 
+const gameCache = new Map();
+
 export const getGameById = async (id) => {
+  if (gameCache.has(id)) {
+    return gameCache.get(id); // Devuelve los datos en caché si están disponibles
+  }
+
   try {
     const response = await fetch(
       `https://api.rawg.io/api/games/${id}?key=${key}`,
@@ -15,25 +21,11 @@ export const getGameById = async (id) => {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-
+    gameCache.set(id, data); // Guarda los datos en caché
     return data;
   } catch (error) {
     console.log("Error capturado en el fetch", error);
-  }
-};
-
-export const getGamesPage = async (page) => {
-  try {
-    const response = await fetch(
-      `https://api.rawg.io/api/games?ordering=-metacritic&metacritic=0,100&page=${page}&key=${key}`
-    );
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
-    }
-    const data = await response.json();
-    return data.results;
-  } catch (error) {
-    console.log("Error capturado en el fetch", error);
+    return null; // Devuelve null si la petición falla
   }
 };
 
@@ -56,10 +48,18 @@ export const getGameByName = async (name) => {
     return data.results;
   } catch (error) {
     console.log("Error capturado en el fetch", error);
+    return null;
   }
 };
 
+const filteredGamesCache = new Map();
+
 export const getFilteredGames = async (filters, page) => {
+  const cacheKey = JSON.stringify({ filters, page });
+  if (filteredGamesCache.has(cacheKey)) {
+    return filteredGamesCache.get(cacheKey); // Devuelve los datos en caché si están disponibles
+  }
+
   try {
     const queryParams = new URLSearchParams();
 
@@ -75,7 +75,6 @@ export const getFilteredGames = async (filters, page) => {
     if (filters.developer) queryParams.append("developers", filters.developer);
     if (page) queryParams.append("page", page);
 
-    // Agregar siempre el orden y filtro por metacritic
     queryParams.append("ordering", "-metacritic");
     queryParams.append("metacritic", "0,100");
     queryParams.append("key", key);
@@ -87,8 +86,10 @@ export const getFilteredGames = async (filters, page) => {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
+    filteredGamesCache.set(cacheKey, data.results); // Guarda los datos en caché
     return data.results;
   } catch (error) {
     console.log("Error en getFilteredGames", error);
+    return [];
   }
 };
