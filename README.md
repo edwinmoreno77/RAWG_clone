@@ -63,8 +63,8 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu máquina local:
 1. Clonar el repositorio
 
 ```
-git clone https://github.com/tu-usuario/rawg-game-finder.git
-cd rawg-game-finder
+git clone https://github.com/edwinmoreno77/page-games.git
+cd page-games
 ```
 
 2. Instalar dependencias
@@ -83,7 +83,7 @@ VITE_RAWG_API_KEY=tu_clave_de_api
 4. Ejecutar el proyecto
 
 ```
-pnpm dev
+pnpm run dev
 ```
 
 Abre tu navegador y navega a http://localhost:5173.
