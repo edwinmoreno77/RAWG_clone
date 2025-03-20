@@ -7,6 +7,7 @@ import {
   faMagnifyingGlass,
   faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 export const Navbar = () => {
   const { actions } = useContext(Context);
@@ -49,7 +50,7 @@ export const Navbar = () => {
           className="text-white lg:hidden text-xl font-bold"
           type="button"
         >
-          Menu
+          <FontAwesomeIcon icon={faFilter} />
         </button>
       </div>
     </nav>

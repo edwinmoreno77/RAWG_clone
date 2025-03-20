@@ -28,7 +28,7 @@ export const Search = () => {
       <Navbar />
       <main className="container-fluid min-h-screen bg-stone-950">
         <div className="flex flex-col items-center justify-center mt-3">
-          <div className="relative w-5/12">
+          <div className="relative w-11/12 md:w-5/12">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
