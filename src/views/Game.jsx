@@ -45,6 +45,8 @@ export const Game = () => {
     ? data.genres.map((g) => g.name).join(", ")
     : "Unknown";
 
+  console.log(data, data?.clip);
+
   return (
     <>
       <Navbar />
@@ -90,6 +92,22 @@ export const Game = () => {
                   className="mt-4 p-5 font-mono text-sm text-stone-100"
                   dangerouslySetInnerHTML={{ __html: data.description }}
                 />
+                {/* Tráiler del juego */}
+                <div>
+                  {data?.clip ? (
+                    <video
+                      controls
+                      className="w-full max-w-3xl mx-auto rounded-lg shadow-lg"
+                    >
+                      <source src={data.clip.clip} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <p className="text-center text-white">
+                      No trailer available.
+                    </p>
+                  )}
+                </div>
                 <p className="font-bold">
                   <span className="text-stone-300 text-base"> Platforms:</span>{" "}
                   <span className="text-white text-base">{platforms}</span>
