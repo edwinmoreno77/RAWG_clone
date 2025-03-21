@@ -4,14 +4,14 @@ RAWG Game Finder es una aplicación web moderna y dinámica que permite a los us
 
 # 🖼️ Capturas de pantalla
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/homePage.webp" width="600"/>
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/mobileHome.webp" width="140"/>
+  <img src="https://github.com/edwinmoreno77/_game_finder_page_/blob/main/src/assets/homePage.webp" width="600"/>
+  <img src="https://github.com/edwinmoreno77/_game_finder_page_/blob/main/src/assets/mobileHome.webp" width="140"/>
 </div>
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/pageGame.webp" width="330"/>
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/pageSearch.webp" width="330"/>
-  <img src="https://github.com/edwinmoreno77/page-games/blob/main/src/assets/favoritesPage.webp" width="330"/>
+  <img src="https://github.com/edwinmoreno77/_game_finder_page_/blob/main/src/assets/pageGame.webp" width="330"/>
+  <img src="https://github.com/edwinmoreno77/_game_finder_page_/blob/main/src/assets/pageSearch.webp" width="330"/>
+  <img src="https://github.com/edwinmoreno77/_game_finder_page_/blob/main/src/assets/favoritesPage.webp" width="330"/>
 </div>
 
 
@@ -69,8 +69,8 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu máquina local:
 1. Clonar el repositorio
 
 ```
-git clone https://github.com/edwinmoreno77/page-games.git
-cd page-games
+git clone https://github.com/edwinmoreno77/_game_finder_page_.git
+cd _game_finder_page_
 ```
 
 2. Instalar dependencias
@@ -96,7 +96,7 @@ Abre tu navegador y navega a http://localhost:5173.
 
 ### Desplegado en:
 
-https://page-games.vercel.app/
+https://game-finder-page.vercel.app/
 
 
 ### 🌐 API utilizada
