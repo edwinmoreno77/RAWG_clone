@@ -45,28 +45,26 @@ export const Game = () => {
     ? data.genres.map((g) => g.name).join(", ")
     : "Unknown";
 
-  console.log(data, data?.clip);
-
   return (
     <>
       <Navbar />
       <main
-        className="relative h-[calc(100vh-6rem)] bg-cover bg-center bg-no-repeat text-white"
+        className="relative min-h-screen bg-cover bg-center bg-no-repeat text-white"
         style={{
           backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 1, 0.1), rgba(0, 0, 0, 1)), url(${data?.background_image_additional})`,
         }}
       >
-        <div className="relative z-10 flex flex-col md:flex-row bg-gradient-to-t from-black via-black/50 to-transparent h-[calc(100vh-3rem)]">
+        <div className="relative z-10 flex flex-col md:flex-row bg-gradient-to-t from-black via-black/50 to-transparent min-h-screen">
           {data ? (
             <motion.div
-              initial={{ opacity: 0.2 }} // Estado inicial (poco visible)
-              animate={{ opacity: 1 }} // Estado final (visible)
-              transition={{ duration: 1.2 }} // Duración de la animación
+              initial={{ opacity: 0.2 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2 }}
               className="md:w-5/12 p-5 flex justify-center"
             >
               <img
                 src={data?.background_image}
-                className="rounded-lg w-full shadow-lg aspect-[4/3] object-cover "
+                className="rounded-lg w-full shadow-lg aspect-[4/3] object-cover"
                 alt={data?.name}
               />
             </motion.div>
@@ -77,7 +75,7 @@ export const Game = () => {
           )}
 
           {/* Información del juego */}
-          <div className="w-full md:w-7/12 text-center md:pl-5 pb-5 text-stone-300  h-[calc(100vh-6rem)]">
+          <div className="w-full md:w-7/12 text-center md:pl-5 pb-5 text-stone-300">
             {data ? (
               <>
                 <motion.h3
@@ -93,7 +91,7 @@ export const Game = () => {
                   dangerouslySetInnerHTML={{ __html: data.description }}
                 />
                 {/* Tráiler del juego */}
-                <div>
+                <div className="my-5">
                   {data?.clip ? (
                     <video
                       controls
@@ -135,6 +133,7 @@ export const Game = () => {
 
                 <p className="text-xs">ID: {data?.id}</p>
 
+                {/* Botones de "Atrás" y "Guardar en Favoritos" */}
                 <div className="flex justify-between items-center mx-10 mt-2 pb-4">
                   <button
                     onClick={() => navigate(-1)}
@@ -159,13 +158,7 @@ export const Game = () => {
                 <span className="block bg-gray-300 h-6 w-4/12 mb-2"></span>
                 <span className="block bg-gray-300 h-6 w-6/12 mb-2"></span>
                 <span className="block bg-gray-300 h-6 w-8/12 mb-2"></span>
-                <span className="block bg-gray-300 h-6 w-8/12 mb-2"></span>
-                <span className="block bg-gray-300 h-6 w-11/12 mb-2"></span>
-                <span className="block bg-gray-300 h-6 w-11/12 mb-2"></span>
-                <br />
-                <span className="block bg-gray-300 h-6 w-11/12 mb-2"></span>
-                <span className="block bg-gray-300 h-6 w-11/12 mb-2"></span>
-                <span className="block bg-gray-300 h-6 w-11/12 mb-2"></span>
+                <span className="block bg-gray-300 h-8 w-11/12 mb-2"></span>
               </p>
             )}
           </div>
