@@ -19,6 +19,8 @@ export const Game = () => {
   const isFavorite = favorites.some((favorite) => favorite.id == id);
   const [like, setLike] = useState(isFavorite);
 
+  const [showFullDescription, setShowFullDescription] = useState(false); // Estado para controlar la descripción
+
   const handlerLikes = (like, id) => {
     if (!favorites.some((favorite) => favorite.id == id)) {
       addFavorites(data);
@@ -45,6 +47,10 @@ export const Game = () => {
     ? data.genres.map((g) => g.name).join(", ")
     : "Unknown";
 
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
   return (
     <>
       <Navbar />
@@ -60,11 +66,11 @@ export const Game = () => {
               initial={{ opacity: 0.2 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.2 }}
-              className="md:w-5/12 p-5 flex justify-center"
+              className="md:w-5/12 p-5 flex justify-center h-[calc(100vh-4rem)]"
             >
               <img
                 src={data?.background_image}
-                className="rounded-lg w-full shadow-lg aspect-[4/3] object-cover"
+                className="rounded-lg w-full h-full shadow-lg object-cover"
                 alt={data?.name}
               />
             </motion.div>
@@ -86,10 +92,32 @@ export const Game = () => {
                 >
                   {data?.name}
                 </motion.h3>
-                <div
-                  className="mt-4 p-5 font-mono text-sm text-stone-100"
-                  dangerouslySetInnerHTML={{ __html: data.description }}
-                />
+
+                <div className="mt-4 p-1 font-serif text-sm text-stone-100 prose prose-invert">
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{
+                      opacity: 1,
+                      height: showFullDescription ? "auto" : "13.5rem",
+                    }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="overflow-hidden whitespace-pre-line"
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: showFullDescription
+                          ? data.description
+                          : data.description.substring(0, 800) + "...",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    onClick={toggleDescription}
+                    className="text-lime-500 underline mt-2 hover:text-lime-400 transition-colors"
+                  >
+                    {showFullDescription ? "Leer menos" : "Leer más"}
+                  </button>
+                </div>
                 {/* Tráiler del juego */}
                 <div className="my-5">
                   {data?.clip ? (
