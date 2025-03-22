@@ -6,6 +6,7 @@ import { Navbar } from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import { useTilt } from "../hooks/useTilt";
 
 export const Game = () => {
   const { id } = useParams();
@@ -39,6 +40,8 @@ export const Game = () => {
     fetchData();
   }, [id]);
 
+  const { rotate, onMouseMove, onMouseLeave } = useTilt();
+
   const platforms = data?.platforms
     ? data.platforms.map((p) => p.platform.name).join(", ")
     : "Unknown";
@@ -66,12 +69,19 @@ export const Game = () => {
               initial={{ opacity: 0.2 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.2 }}
-              className="md:w-5/12 p-5 flex justify-center h-[calc(100vh-4rem)]"
+              className="md:w-5/12 p-5 flex justify-center h-[calc(100vh-4rem)] "
             >
               <img
                 src={data?.background_image}
-                className="rounded-lg w-full h-full shadow-lg object-cover"
+                className="rounded-lg w-full h-full shadow-lg object-cover transition-[all_400ms_cubic-bezier(0.03,0.98,0.52,0.99)_0s] will-change-transform"
                 alt={data?.name}
+                onMouseMove={onMouseMove}
+                onMouseLeave={onMouseLeave}
+                style={{
+                  transform: `perspective(1000px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1, 1, 1)`,
+                  transition:
+                    "all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s",
+                }}
               />
             </motion.div>
           ) : (
@@ -101,7 +111,7 @@ export const Game = () => {
                       height: showFullDescription ? "auto" : "13.5rem",
                     }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="overflow-hidden whitespace-pre-line"
+                    className="overflow-hidden whitespace-pre-line text-xs"
                   >
                     <div
                       dangerouslySetInnerHTML={{
@@ -113,9 +123,9 @@ export const Game = () => {
                   </motion.div>
                   <button
                     onClick={toggleDescription}
-                    className="text-lime-500 underline mt-2 hover:text-lime-400 transition-colors"
+                    className="text-lime-500 text-xs underline mt-2 hover:text-lime-400 transition-colors"
                   >
-                    {showFullDescription ? "Leer menos" : "Leer más"}
+                    {showFullDescription ? "Read lees" : "Read more"}
                   </button>
                 </div>
                 {/* Tráiler del juego */}
@@ -165,7 +175,7 @@ export const Game = () => {
                 <div className="flex justify-between items-center mx-10 mt-2 pb-4">
                   <button
                     onClick={() => navigate(-1)}
-                    className="btn-primary px-4 py-1 hover:bg-lime-500 hover:scale-110 transition rounded bg-stone-700"
+                    className="inline-flex mt-2 h-8 animate-background-shine items-center justify-center rounded-md border-2 border-stone-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-3 font-medium text-gray-200 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-50 font-cursive text-xs"
                   >
                     Back
                   </button>
