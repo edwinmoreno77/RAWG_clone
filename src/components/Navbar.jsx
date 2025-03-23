@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,7 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 export const Navbar = () => {
   const { actions } = useContext(Context);
+  const location = useLocation();
 
   const handleMenuClick = () => {
     actions.toggleSidebar();
@@ -69,13 +70,15 @@ export const Navbar = () => {
             </span>
           </li>
         </ul>
-        <button
-          onClick={handleMenuClick}
-          className="text-white lg:hidden text-xl font-bold"
-          type="button"
-        >
-          <FontAwesomeIcon icon={faFilter} />
-        </button>
+        {location.pathname === "/" && (
+          <button
+            onClick={handleMenuClick}
+            className="text-white lg:hidden text-xl font-bold"
+            type="button"
+          >
+            <FontAwesomeIcon icon={faFilter} />
+          </button>
+        )}
       </div>
     </nav>
   );

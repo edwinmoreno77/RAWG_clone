@@ -2,6 +2,8 @@ import { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { filterOptions } from "../constants/filterOptions";
 import { SpotlightSelect } from "./SpotlightSelect";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 export const Sidebar = () => {
   const { store, actions } = useContext(Context);
@@ -66,11 +68,15 @@ export const Sidebar = () => {
 
   return (
     <aside
-      className={`fixed z-10 top-0 left-0 h-full w-64  bg-stone-950  lg:bg-transparent text-white p-4 transform ${
+      className={`fixed z-10 top-0 left-0 h-full w-56  bg-stone-950  lg:bg-transparent text-white p-3 transform ${
         store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 lg:relative lg:translate-x-0`}
     >
-      <h2 className="text-xl font-bold mb-4">Filters</h2>
+      <h2 className="text-base font-bold mb-4">
+        {" "}
+        <FontAwesomeIcon icon={faFilter} />
+        <span className="mx-2">Filters</span>
+      </h2>
 
       {isLoading ? (
         <div className="flex justify-center items-center h-20">
@@ -78,15 +84,15 @@ export const Sidebar = () => {
         </div>
       ) : (
         <>
+          {renderSelect("platform", "Platforms", filterOptions.platforms)}
+
+          {renderSelect("genre", "Genres", filterOptions.genres)}
+          {renderSelect("developer", "Developers", filterOptions.developers)}
+          {renderSelect("tag", "Tags", filterOptions.tags)}
           {/* Year Select */}
           {renderYearSelect()}
 
-          {renderSelect("genre", "Genres", filterOptions.genres)}
-          {renderSelect("platform", "Platforms", filterOptions.platforms)}
-          {renderSelect("tag", "Tags", filterOptions.tags)}
-          {renderSelect("developer", "Developers", filterOptions.developers)}
-
-          <div className="flex gap-1 mt-4">
+          <div className="flex gap-1 mt-4 text-xs">
             <button
               onClick={handleReset}
               className="w-full bg-white hover:bg-stone-800 text-black hover:text-white py-2 px-2 rounded transition-colors"
