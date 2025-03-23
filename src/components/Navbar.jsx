@@ -18,7 +18,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-stone-950 p-4 text-stone-400">
+    <nav className="bg-transparent p-4 text-stone-400 z-50 ">
       <div className="container mx-auto flex items-center justify-between lg:justify-center">
         <ul className="flex items-center space-x-4">
           <li className="group relative flex flex-col items-center justify-center hover:text-white hover:brightness-150">

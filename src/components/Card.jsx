@@ -7,6 +7,7 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
+const DEFAULT_IMAGE = "./public/noimage.jpg";
 
 const CardComponent = ({ item }) => {
   const { actions, store } = useContext(Context);
@@ -62,7 +63,7 @@ const CardComponent = ({ item }) => {
         />
         <Link to={`${item?.id}`}>
           <img
-            src={item?.background_image}
+            src={item?.background_image || DEFAULT_IMAGE}
             className="w-full h-36 md:h-40 lg:h-44 object-cover rounded-t-lg"
             alt={item.name}
           />
@@ -108,7 +109,7 @@ CardComponent.propTypes = {
     name: PropTypes.string.isRequired,
     background_image: PropTypes.string,
     species: PropTypes.string,
-    rating: PropTypes.number.isRequired,
-    metacritic: PropTypes.number.isRequired,
+    rating: PropTypes.number,
+    metacritic: PropTypes.number,
   }).isRequired,
 };
