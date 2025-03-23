@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,29 +17,53 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-stone-950 p-4 text-white">
+    <nav className="bg-stone-950 p-4 text-stone-400">
       <div className="container mx-auto flex items-center justify-between lg:justify-center">
         <ul className="flex items-center space-x-4">
-          <li className="group relative flex flex-col items-center justify-center hover:text-stone-300">
-            <Link to="/">
-              <FontAwesomeIcon icon={faHouse} className="text-lg" />
-            </Link>
+          <li className="group relative flex flex-col items-center justify-center hover:text-white hover:brightness-150">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive ? "text-white" : "text-stone-400"
+              }
+            >
+              <FontAwesomeIcon
+                icon={faHouse}
+                className="text-lg hover:drop-shadow-md"
+              />
+            </NavLink>
             <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
               Home
             </span>
           </li>
-          <li className="group relative flex flex-col items-center justify-center hover:text-stone-300">
-            <Link to="/search">
-              <FontAwesomeIcon icon={faMagnifyingGlass} className="text-lg" />
-            </Link>
+          <li className="group relative flex flex-col items-center justify-center hover:text-white hover:brightness-150">
+            <NavLink
+              to="/search"
+              className={({ isActive }) =>
+                isActive ? "text-white" : "text-stone-400"
+              }
+            >
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="text-lg hover:drop-shadow-md"
+              />
+            </NavLink>
             <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
               Search
             </span>
           </li>
-          <li className="group relative flex flex-col items-center justify-center hover:text-stone-300">
-            <Link to="/favorites">
-              <FontAwesomeIcon icon={faBookmark} className="text-lg" />
-            </Link>
+          <li className="group relative flex flex-col items-center justify-center hover:text-white hover:brightness-150">
+            <NavLink
+              to="/favorites"
+              className={({ isActive }) =>
+                isActive ? "text-white" : "text-stone-400"
+              }
+            >
+              <FontAwesomeIcon
+                icon={faBookmark}
+                className="text-lg hover:drop-shadow-md"
+              />
+            </NavLink>
             <span className="absolute bottom-100 left-1/2 transform -translate-x-1/2 translate-y-full mt-1 px-2 py-1 bg-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
               Favorites
             </span>
