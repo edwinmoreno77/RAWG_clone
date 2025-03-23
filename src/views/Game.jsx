@@ -56,13 +56,13 @@ export const Game = () => {
 
   return (
     <>
-      <Navbar />
       <main
-        className="relative min-h-screen bg-cover bg-center bg-no-repeat text-white"
+        className="relative min-h-screen bg-cover bg-center bg-no-repeat text-white z-0"
         style={{
           backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 1, 0.1), rgba(0, 0, 0, 1)), url(${data?.background_image_additional})`,
         }}
       >
+        <Navbar />
         <div className="relative z-10 flex flex-col md:flex-row bg-gradient-to-t from-black via-black/50 to-transparent min-h-screen">
           {data ? (
             <motion.div
@@ -123,7 +123,7 @@ export const Game = () => {
                   </motion.div>
                   <button
                     onClick={toggleDescription}
-                    className="text-lime-500 text-xs underline mt-2 hover:text-lime-400 transition-colors"
+                    className="text-stone-300 font-bold text-xs underline mt-2 hover:text-white transition-colors"
                   >
                     {showFullDescription ? "Read lees" : "Read more"}
                   </button>
@@ -163,7 +163,7 @@ export const Game = () => {
                     href={data?.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary text-lime-500 animate-pulse"
+                    className="btn-primary  animate-pulse"
                   >
                     Website: {data?.website}
                   </a>

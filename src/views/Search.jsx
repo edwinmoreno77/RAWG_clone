@@ -72,11 +72,11 @@ export const Search = () => {
         />
         <Navbar />
 
-        <div className="relative z-10 flex flex-col items-center justify-center mt-3">
-          <div className="relative w-11/12 md:w-5/12">
+        <div className="relative z-10 flex flex-col items-center justify-center mt-3 ">
+          <div className="relative w-11/12 md:w-5/12 group ">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
-              className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-white ${
+              className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400 transition group-hover:text-white ${
                 name !== "" ? "animate-pulse" : ""
               }`}
             />
@@ -89,7 +89,7 @@ export const Search = () => {
             />
             {/* Input con efecto spotlight */}
             <input
-              className="form-input w-full p-3 pl-10 bg-stone-800 text-white rounded-xl shadow-lg focus:bg-black focus:text-white"
+              className="form-input w-full p-3 pl-10 bg-stone-800 text-white rounded-xl shadow-lg focus:bg-black focus:text-white hover:placeholder-white"
               type="text"
               placeholder="What game are you looking for?"
               value={name}
