@@ -3,24 +3,37 @@ import { Navbar } from "../components/Navbar";
 import { Card } from "../components/Card";
 import { getGameByName } from "../api/getData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 export const Search = () => {
   const [name, setName] = useState("");
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Hook para el efecto en el input (spotlight)
   const {
-    inputRef,
-    position,
-    opacity,
-    handleMouseMove,
-    handleFocus,
-    handleBlur,
-    handleMouseEnter,
-    handleMouseLeave,
+    inputRef: inputRefInput,
+    position: positionInput,
+    opacity: opacityInput,
+    handleMouseMove: handleMouseMoveInput,
+    handleFocus: handleFocusInput,
+    handleBlur: handleBlurInput,
+    handleMouseEnter: handleMouseEnterInput,
+    handleMouseLeave: handleMouseLeaveInput,
+  } = useSpotlightBorder();
+
+  // Hook para el efecto en el fondo (ambient)
+  const {
+    inputRef: bgRef,
+    position: bgPosition,
+    opacity: bgOpacity,
+    handleMouseMove: handleMouseMoveBg,
+    handleMouseEnter: handleMouseEnterBg,
+    handleMouseLeave: handleMouseLeaveBg,
   } = useSpotlightBorder();
 
   const searchByName = async (name) => {
@@ -31,21 +44,35 @@ export const Search = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     searchByName("call of duty");
-    setIsLoading(false);
   }, []);
 
   const clearInput = () => {
     setName("");
-    inputRef.current.blur(); //quitar el foco del input
+    inputRefInput.current.blur();
   };
 
   return (
     <>
-      <Navbar />
-      <main className="container-fluid min-h-screen bg-stone-950">
-        <div className="flex flex-col items-center justify-center mt-3">
+      {/* Fondo con efecto ambient */}
+      <main
+        ref={bgRef}
+        onMouseMove={handleMouseMoveBg}
+        onMouseEnter={handleMouseEnterBg}
+        onMouseLeave={handleMouseLeaveBg}
+        className="relative container-fluid min-h-screen bg-stone-950 overflow-hidden"
+      >
+        {/* Efecto de fondo ambient */}
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-300"
+          style={{
+            opacity: bgOpacity,
+            background: `radial-gradient(150px circle at ${bgPosition.x}px ${bgPosition.y}px, rgba(255,255,255,0.05), transparent)`,
+          }}
+        />
+        <Navbar />
+
+        <div className="relative z-10 flex flex-col items-center justify-center mt-3">
           <div className="relative w-11/12 md:w-5/12">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -60,6 +87,7 @@ export const Search = () => {
               } cursor-pointer`}
               onClick={clearInput}
             />
+            {/* Input con efecto spotlight */}
             <input
               className="form-input w-full p-3 pl-10 bg-stone-800 text-white rounded-xl shadow-lg focus:bg-black focus:text-white"
               type="text"
@@ -67,20 +95,20 @@ export const Search = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={() => searchByName(name)}
-              ref={inputRef}
-              onMouseMove={handleMouseMove}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              ref={inputRefInput}
+              onMouseMove={handleMouseMoveInput}
+              onFocus={handleFocusInput}
+              onBlur={handleBlurInput}
+              onMouseEnter={handleMouseEnterInput}
+              onMouseLeave={handleMouseLeaveInput}
             />
-            {/* Borde animado */}
+            {/* Efecto de borde para el input */}
             <input
               disabled
               style={{
                 border: "1.5px solid #ffffff",
-                opacity,
-                WebkitMaskImage: `radial-gradient(30% 30px at ${position.x}px ${position.y}px, black 45%, transparent)`,
+                opacity: opacityInput,
+                WebkitMaskImage: `radial-gradient(30% 30px at ${positionInput.x}px ${positionInput.y}px, black 45%, transparent)`,
               }}
               aria-hidden="true"
               className="pointer-events-none absolute left-0 top-0 z-10 h-12 w-full rounded-xl bg-transparent transition-opacity duration-500"
@@ -88,11 +116,11 @@ export const Search = () => {
           </div>
         </div>
         {isLoading ? (
-          <div className="flex justify-center items-center h-40 pt-10">
+          <div className="relative z-10 flex justify-center items-center h-40 pt-10">
             <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-white"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 pt-5">
+          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 pt-5">
             {data?.map((game) => (
               <Card key={game.id} item={game} />
             ))}
