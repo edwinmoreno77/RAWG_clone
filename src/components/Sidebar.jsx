@@ -66,7 +66,7 @@ export const Sidebar = () => {
 
   return (
     <aside
-      className={`fixed z-10 top-0 left-0 h-full w-64 bg-transparent text-white p-4 transform ${
+      className={`fixed z-10 top-0 left-0 h-full w-64  bg-stone-950  lg:bg-transparent text-white p-4 transform ${
         store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 lg:relative lg:translate-x-0`}
     >

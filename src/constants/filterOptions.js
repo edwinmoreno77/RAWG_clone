@@ -61,7 +61,6 @@ export const filterOptions = {
     { id: 11, name: "Wii", slug: "wii" },
     { id: 105, name: "GameCube", slug: "gamecube" },
     { id: 83, name: "Nintendo 64", slug: "nintendo-64" },
-    { id: 105, name: "GameCube", slug: "gamecube" },
     { id: 8, name: "Nintendo 3DS", slug: "nintendo-3ds" },
     { id: 9, name: "Nintendo DS", slug: "nintendo-ds" },
     { id: 13, name: "Nintendo DSi", slug: "nintendo-dsi" },
