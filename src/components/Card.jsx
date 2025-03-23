@@ -7,7 +7,8 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
-const DEFAULT_IMAGE = "./public/noimage.jpg";
+const DEFAULT_IMAGE =
+  "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
 const CardComponent = ({ item }) => {
   const { actions, store } = useContext(Context);
