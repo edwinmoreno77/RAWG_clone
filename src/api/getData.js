@@ -2,13 +2,17 @@ const key = import.meta.env.VITE_RAWG_API_KEY;
 
 const gameCache = new Map();
 
+// debe llamar a dos urls diferentes para obtener la información de un juego
+// la primera url es para obtener la información general del juego
+// la segunda url es para obtener screenshots del juego
 export const getGameById = async (id) => {
   if (gameCache.has(id)) {
     return gameCache.get(id); // Devuelve los datos en caché si están disponibles
   }
 
   try {
-    const response = await fetch(
+    // Realizar la primera solicitud para obtener la información general del juego
+    const gameResponse = await fetch(
       `https://api.rawg.io/api/games/${id}?key=${key}`,
       {
         method: "GET",
@@ -17,15 +21,45 @@ export const getGameById = async (id) => {
         },
       }
     );
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
+
+    if (!gameResponse.ok) {
+      throw new Error(
+        `Error en la solicitud del juego: ${gameResponse.status} ${gameResponse.statusText}`
+      );
     }
-    const data = await response.json();
-    gameCache.set(id, data); // Guarda los datos en caché
-    return data;
+
+    const gameData = await gameResponse.json();
+
+    // Realizar la segunda solicitud para obtener los screenshots del juego
+    const screenshotsResponse = await fetch(
+      `https://api.rawg.io/api/games/${id}/screenshots?key=${key}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!screenshotsResponse.ok) {
+      throw new Error(
+        `Error en la solicitud de screenshots: ${screenshotsResponse.status} ${screenshotsResponse.statusText}`
+      );
+    }
+
+    const screenshotsData = await screenshotsResponse.json();
+
+    // Combinar los datos del juego con los screenshots
+    const combinedData = {
+      ...gameData,
+      screenshots: screenshotsData.results || [], // Agregar screenshots al objeto
+    };
+
+    gameCache.set(id, combinedData); // Guardar en caché
+    return combinedData;
   } catch (error) {
-    console.log("Error capturado en el fetch", error);
-    return null; // Devuelve null si la petición falla
+    console.log("Error capturado en getGameById", error);
+    return null; // Devuelve null si alguna de las solicitudes falla
   }
 };
 
