@@ -59,17 +59,20 @@ export const Game = () => {
       <main
         className="relative min-h-screen bg-cover bg-center bg-no-repeat text-white z-0"
         style={{
-          backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 1, 0.1), rgba(0, 0, 0, 1)), url(${data?.background_image_additional})`,
+          backgroundImage: data
+            ? `linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 1, 0.1), rgba(0, 0, 0, 1)), url(${data?.background_image_additional})`
+            : "linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 1, 0.1), rgba(0, 0, 0, 1))",
         }}
       >
         <Navbar />
         <div className="relative z-10 flex flex-col lg:flex-row bg-gradient-to-t from-black via-black/50 to-transparent min-h-screen">
+          {/* Imagen principal */}
           {data ? (
             <motion.div
               initial={{ opacity: 0.2 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 2.5 }}
-              className="w-full p-5 flex justify-center h:56 md:h-96 lg:h-[calc(100vh-4rem)] "
+              className="w-full p-5 flex justify-center h:56 md:h-96 lg:h-[calc(100vh-4rem)]"
             >
               <img
                 src={data?.background_image}
@@ -86,67 +89,94 @@ export const Game = () => {
               />
             </motion.div>
           ) : (
-            <div className="animate-pulse flex space-x-4">
-              <div className="rounded bg-slate-500 m-5 h-96 w-9/12 md:ms-10 md:mt-7"></div>
+            <div className="w-full p-5 flex justify-center">
+              <div className="animate-pulse rounded bg-slate-500 m-5 h-96 w-9/12 md:ms-10 md:mt-7" />
             </div>
           )}
 
           {/* Información del juego */}
           <div className="w-full md:w-12/12 text-center md:pl-5 pb-5 text-stone-300">
-            <motion.h3
-              initial={{ opacity: 0.2 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.5 }}
-              className="text-5xl font-extrabold text-white"
-            >
-              {data?.name}
-            </motion.h3>
+            {/* Título */}
+            {data ? (
+              <motion.h3
+                initial={{ opacity: 0.2 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.5 }}
+                className="text-5xl font-extrabold text-white"
+              >
+                {data?.name}
+              </motion.h3>
+            ) : (
+              <div className="animate-pulse bg-slate-500 h-12 w-1/2 mx-auto rounded mb-4" />
+            )}
 
             {/* Descripción */}
             <div className="mt-4 p-1 font-serif text-sm text-stone-100 prose prose-invert">
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{
-                  opacity: 1,
-                  height: showFullDescription ? "auto" : "3rem",
-                }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="overflow-hidden whitespace-pre-line text-xs"
-              >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: showFullDescription
-                      ? data?.description
-                      : data?.description?.substring(0, 800) + "...",
-                  }}
-                />
-              </motion.div>
-              <button
-                onClick={toggleDescription}
-                className="text-stone-300 font-bold text-xs underline mt-2 hover:text-white transition-colors"
-              >
-                {showFullDescription ? "Read less" : "Read more"}
-              </button>
+              {data ? (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{
+                      opacity: 1,
+                      height: showFullDescription ? "auto" : "3rem",
+                    }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="overflow-hidden whitespace-pre-line text-xs"
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: showFullDescription
+                          ? data?.description
+                          : data?.description?.substring(0, 800) + "...",
+                      }}
+                    />
+                  </motion.div>
+                  <button
+                    onClick={toggleDescription}
+                    className="text-stone-300 font-bold text-xs underline mt-2 hover:text-white transition-colors"
+                  >
+                    {showFullDescription ? "Read less" : "Read more"}
+                  </button>
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <div className="animate-pulse bg-slate-500 h-4 w-full rounded" />
+                  <div className="animate-pulse bg-slate-500 h-4 w-5/6 rounded" />
+                  <div className="animate-pulse bg-slate-500 h-4 w-3/4 rounded" />
+                  <div className="animate-pulse bg-slate-500 h-4 w-1/2 rounded" />
+                </div>
+              )}
             </div>
 
             {/* Grid de screenshots */}
-            {data?.screenshots?.length > 0 && (
-              <div className="mt-8 px-5">
+            <div className="mt-8 px-5">
+              {data ? (
+                data?.screenshots?.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+                    {data.screenshots.map((screenshot) => (
+                      <div key={screenshot.id} className="relative group">
+                        <img
+                          src={screenshot.image}
+                          alt={`Screenshot ${screenshot.id}`}
+                          className="w-full h-40 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 border border-stone-600 hover:border-2 hover:border-stone-200"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )
+              ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
-                  {data.screenshots.map((screenshot) => (
-                    <div key={screenshot.id} className="relative group">
-                      <img
-                        src={screenshot.image}
-                        alt={`Screenshot ${screenshot.id}`}
-                        className="w-full h-40 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 border border-stone-600 hover:border-2 hover:border-stone-200"
-                      />
-                    </div>
+                  {[...Array(6)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="animate-pulse bg-slate-500 h-36 w-full rounded-lg"
+                    />
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
-            {/* Botones de "Atrás" y "Guardar en Favoritos" */}
+            {/* Botones */}
             <div className="flex justify-between items-center mx-10 mt-5">
               <button
                 onClick={() => navigate(-1)}
@@ -154,61 +184,90 @@ export const Game = () => {
               >
                 Back
               </button>
-              <button onClick={() => handlerLikes(like, id)}>
-                <FontAwesomeIcon
-                  icon={faBookmark}
-                  className={`cursor-pointer text-2xl transition ease-in-out hover:scale-125 ${
-                    like ? "text-lime-600" : "text-stone-700"
-                  }`}
-                />
-              </button>
+              {data && (
+                <button onClick={() => handlerLikes(like, id)}>
+                  <FontAwesomeIcon
+                    icon={faBookmark}
+                    className={`cursor-pointer text-2xl transition ease-in-out hover:scale-125 ${
+                      like ? "text-lime-600" : "text-stone-700"
+                    }`}
+                  />
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Contenido adicional centrado */}
+        {/* Contenido adicional */}
         <div className="py-10 text-center bg-black">
-          {/* Tráiler del juego */}
-          {/* <div className="my-5">
-            {data?.clip ? (
-              <video
-                controls
-                className="w-full max-w-3xl mx-auto rounded-lg shadow-lg"
-              >
-                <source src={data.clip.clip} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+          {/* Plataformas */}
+          <p className="font-bold">
+            {data ? (
+              <>
+                <span className="text-stone-300 text-base">Platforms:</span>{" "}
+                <span className="text-white text-base">{platforms}</span>
+              </>
             ) : (
-              <p className="text-center text-white">No trailer available.</p>
+              <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
             )}
-          </div> */}
+          </p>
 
-          <p className="font-bold">
-            <span className="text-stone-300 text-base">Platforms:</span>{" "}
-            <span className="text-white text-base">{platforms}</span>
+          {/* Géneros */}
+          <p className="font-bold mt-2">
+            {data ? (
+              <>
+                <span className="text-stone-300 text-base">Genres:</span>{" "}
+                <span className="text-white text-base">{genres}</span>
+              </>
+            ) : (
+              <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
+            )}
           </p>
-          <p className="font-bold">
-            <span className="text-stone-300 text-base">Genres:</span>{" "}
-            <span className="text-white text-base">{genres}</span>
-          </p>
-          <div className="flex justify-center gap-4 text-xs font-bold text-amber-400">
-            <span>Rating: {data?.rating}</span>{" "}
-            <span>Metacritic: {data?.metacritic ?? "Not available"}</span>
+
+          {/* Rating y Metacritic */}
+          <div className="flex justify-center gap-4 text-xs font-bold text-amber-400 mt-2">
+            {data ? (
+              <>
+                <span>Rating: {data?.rating}</span>
+                <span>Metacritic: {data?.metacritic ?? "Not available"}</span>
+              </>
+            ) : (
+              <>
+                <div className="animate-pulse bg-slate-500 h-4 w-20 rounded" />
+                <div className="animate-pulse bg-slate-500 h-4 w-24 rounded" />
+              </>
+            )}
           </div>
-          <p className="text-sm pt-2">Released: {data?.released}</p>
 
+          {/* Fecha de lanzamiento */}
+          <p className="text-sm pt-2">
+            {data ? (
+              `Released: ${data?.released}`
+            ) : (
+              <div className="animate-pulse bg-slate-500 h-4 w-36 mx-auto rounded" />
+            )}
+          </p>
+
+          {/* Website */}
           {data?.website && (
             <a
               href={data?.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary animate-pulse"
+              className="btn-primary animate-pulse mt-2 inline-block"
             >
               Website: {data?.website}
             </a>
           )}
 
-          <p className="text-xs">ID: {data?.id}</p>
+          {/* ID */}
+          <p className="text-xs mt-2">
+            {data ? (
+              `ID: ${data?.id}`
+            ) : (
+              <div className="animate-pulse bg-slate-500 h-3 w-20 mx-auto rounded" />
+            )}
+          </p>
         </div>
       </main>
     </>
