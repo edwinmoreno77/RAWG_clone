@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
       page: 1,
+      isLoading: false,
       favorites: JSON.parse(localStorage.getItem("favorites")) || [],
       isSidebarOpen: false,
       filters: {
@@ -22,26 +23,27 @@ const getState = ({ getStore, getActions, setStore }) => {
         const filteredData = await getFilteredGames(filters, page);
         setStore({ filteredData });
       },
+      setIsLoading: (isLoading) => {
+        setStore({ isLoading });
+      },
 
-      increasePage: () => {
+      increasePage: async () => {
         const { page } = getStore();
         if (page === 100) return;
-        const newPage = page + 1;
-        setStore({ page: newPage });
-        getActions().getPages();
+        setStore({ page: page + 1 });
+        await getActions().getPages();
       },
 
-      decreasePage: () => {
+      decreasePage: async () => {
         const { page } = getStore();
-        if (page === 0) return;
-        const newPage = page - 1;
-        setStore({ page: newPage });
-        getActions().getPages();
+        if (page === 1) return;
+        setStore({ page: page - 1 });
+        await getActions().getPages();
       },
 
-      setPage: (page) => {
+      setPage: async (page) => {
         setStore({ page });
-        getActions().getPages();
+        await getActions().getPages();
       },
 
       addFavorites: (favorite) => {
@@ -73,11 +75,13 @@ const getState = ({ getStore, getActions, setStore }) => {
       closeSidebar: () => {
         setStore({ isSidebarOpen: false });
       },
+
       setFilters: ({ name, value }) => {
         const { filters } = getStore();
         setStore({ filters: { ...filters, [name]: value } });
       },
-      resetFilters: () => {
+
+      resetFilters: async () => {
         setStore({
           filters: {
             year: "",
@@ -88,13 +92,13 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         });
         setStore({ page: 1 });
-        getActions().getPages();
+        await getActions().getPages();
       },
+
       setFilteredData: async () => {
         const { filters } = getStore();
         const filteredData = await getFilteredGames(filters, 1);
-        setStore({ page: 1 });
-        setStore({ filteredData });
+        setStore({ page: 1, filteredData });
       },
     },
   };

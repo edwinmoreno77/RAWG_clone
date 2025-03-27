@@ -54,6 +54,11 @@ export const Game = () => {
     setShowFullDescription(!showFullDescription);
   };
 
+  // mantener el scroll en la parte superior
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
   return (
     <>
       <main
