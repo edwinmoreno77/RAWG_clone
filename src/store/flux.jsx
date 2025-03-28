@@ -108,6 +108,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             platform: "",
             tag: "",
             developer: "",
+            ordering: "",
           },
         });
         setStore({ page: 1 });
