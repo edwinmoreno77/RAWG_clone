@@ -18,15 +18,26 @@ const getState = ({ getStore, getActions, setStore }) => {
     },
 
     actions: {
-      getPages: async () => {
-        const { filters, page } = getStore();
-        const filteredData = await getFilteredGames(filters, page);
-        setStore({ filteredData });
-      },
-      setIsLoading: (isLoading) => {
-        setStore({ isLoading });
+      startLoading: () => {
+        setStore({ isLoading: true });
       },
 
+      stopLoading: () => {
+        setStore({ isLoading: false });
+      },
+
+      getPages: async () => {
+        try {
+          getActions().startLoading();
+          const { filters, page } = getStore();
+          const filteredData = await getFilteredGames(filters, page);
+          setStore({ filteredData });
+        } catch (error) {
+          console.error("Error fetching filtered games:", error);
+        } finally {
+          getActions().stopLoading();
+        }
+      },
       increasePage: async () => {
         const { page } = getStore();
         if (page === 100) return;
@@ -97,8 +108,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
       setFilteredData: async () => {
         const { filters } = getStore();
+        getActions().startLoading();
         const filteredData = await getFilteredGames(filters, 1);
         setStore({ page: 1, filteredData });
+        getActions().stopLoading();
       },
     },
   };
