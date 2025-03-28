@@ -17,21 +17,28 @@ export const OrderingSelect = () => {
         value={ordering}
         onChange={handleOrderingChange}
       >
+        {/*Relevancia (orden por defecto de RAWG) */}
         <option className="text-xs" value="">
           Relevance
         </option>
+        {/*Fecha de añadido (orden inverso) */}
         <option className="text-xs" value="-added">
+          {" "}
           Date added
         </option>
+        {/* Nombre (orden alfabetico A-Z) */}
         <option className="text-xs" value="name">
           Name
         </option>
+        {/*Fecha de lanzamiento (más recientes primero)*/}
         <option className="text-xs" value="-released">
           Release date
         </option>
+        {/* Rating (juegos mejor valorados primero) */}
         <option className="text-xs" value="-rating">
           Rating
         </option>
+        {/* Metacritic (juegos mejor valorados primero) */}
         <option className="text-xs" value="-metacritic">
           Metacritic
         </option>
