@@ -2,6 +2,7 @@ import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 import PropTypes from "prop-types";
+import { OrderingSelect } from "./OrderingSelect";
 
 export const Layout = ({ children }) => {
   const {
@@ -33,6 +34,7 @@ export const Layout = ({ children }) => {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <main className="flex-1 bg-stone-950 p-4 overflow-y-auto">
+          <OrderingSelect />
           {children}
         </main>
       </div>

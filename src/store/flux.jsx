@@ -13,6 +13,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         platform: "",
         tag: "",
         developer: "",
+        ordering: "",
       },
       filteredData: [],
     },
@@ -38,6 +39,13 @@ const getState = ({ getStore, getActions, setStore }) => {
           getActions().stopLoading();
         }
       },
+      setOrdering: async (ordering) => {
+        const { filters } = getStore();
+        setStore({ filters: { ...filters, ordering } });
+        setStore({ page: 1 });
+        getActions().getPages();
+      },
+
       increasePage: async () => {
         const { page } = getStore();
         if (page === 100) return;

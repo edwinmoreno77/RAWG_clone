@@ -2,9 +2,6 @@ const key = import.meta.env.VITE_RAWG_API_KEY;
 
 const gameCache = new Map();
 
-// debe llamar a dos urls diferentes para obtener la información de un juego
-// la primera url es para obtener la información general del juego
-// la segunda url es para obtener screenshots del juego
 export const getGameById = async (id) => {
   if (gameCache.has(id)) {
     return gameCache.get(id); // Devuelve los datos en caché si están disponibles
@@ -107,10 +104,9 @@ export const getFilteredGames = async (filters, page) => {
     if (filters.platform) queryParams.append("platforms", filters.platform);
     if (filters.tag) queryParams.append("tags", filters.tag);
     if (filters.developer) queryParams.append("developers", filters.developer);
+    if (filters.ordering) queryParams.append("ordering", filters.ordering);
     if (page) queryParams.append("page", page);
 
-    queryParams.append("ordering", "-metacritic");
-    queryParams.append("metacritic", "0,100");
     queryParams.append("key", key);
 
     const response = await fetch(
