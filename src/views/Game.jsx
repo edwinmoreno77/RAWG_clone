@@ -206,7 +206,7 @@ export const Game = () => {
         {/* Contenido adicional */}
         <div className="py-10 text-center bg-black">
           {/* Plataformas */}
-          <p className="font-bold">
+          <div className="font-bold">
             {data ? (
               <>
                 <span className="text-stone-300 text-base">Platforms:</span>{" "}
@@ -215,10 +215,10 @@ export const Game = () => {
             ) : (
               <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
             )}
-          </p>
+          </div>
 
           {/* Géneros */}
-          <p className="font-bold mt-2">
+          <div className="font-bold mt-2">
             {data ? (
               <>
                 <span className="text-stone-300 text-base">Genres:</span>{" "}
@@ -227,7 +227,7 @@ export const Game = () => {
             ) : (
               <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
             )}
-          </p>
+          </div>
 
           {/* Rating y Metacritic */}
           <div className="flex justify-center gap-4 text-xs font-bold text-amber-400 mt-2">
@@ -245,13 +245,13 @@ export const Game = () => {
           </div>
 
           {/* Fecha de lanzamiento */}
-          <p className="text-sm pt-2">
+          <div className="text-sm pt-2">
             {data ? (
               `Released: ${data?.released}`
             ) : (
               <div className="animate-pulse bg-slate-500 h-4 w-36 mx-auto rounded" />
             )}
-          </p>
+          </div>
 
           {/* Website */}
           {data?.website && (
@@ -266,13 +266,13 @@ export const Game = () => {
           )}
 
           {/* ID */}
-          <p className="text-xs mt-2">
+          <div className="text-xs mt-2">
             {data ? (
               `ID: ${data?.id}`
             ) : (
               <div className="animate-pulse bg-slate-500 h-3 w-20 mx-auto rounded" />
             )}
-          </p>
+          </div>
         </div>
       </main>
     </>
