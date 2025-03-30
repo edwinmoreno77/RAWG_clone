@@ -7,6 +7,7 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
+import { PlatformIcons } from "./PlatformIcons";
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
@@ -70,16 +71,22 @@ const CardComponent = ({ item }) => {
           />
         </Link>
         <div className="p-4 brightness-110 relative z-10">
-          <h5 className="text-lg font-semibold">{item?.name}</h5>
+          <PlatformIcons platforms={item?.platforms} />
+          <h5 className="text-lg font-bold">{item?.name}</h5>
           <div className="flex justify-between">
-            <span className="text-xs">
-              metacritic:{" "}
-              {item?.metacritic !== null ? item.metacritic : "Not available"}
-            </span>
-            <span className="text-xs">
-              rating: {item?.rating !== null ? item.rating : "Not available"}
-            </span>
+            <div className="text-xs">
+              <span className="">
+                metacritic:{" "}
+                {item?.metacritic !== null ? item.metacritic : "Not available"}
+              </span>
+            </div>
+            <div className="text-xs">
+              <span>
+                rating: {item?.rating !== null ? item.rating : "Not available"}
+              </span>
+            </div>
           </div>
+
           <div className="flex justify-between items-center">
             <Link
               to={`${item?.id}`}
@@ -103,7 +110,7 @@ const CardComponent = ({ item }) => {
 };
 
 export const Card = memo(CardComponent);
-
+// agregar platforms
 CardComponent.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.number.isRequired,
@@ -112,5 +119,12 @@ CardComponent.propTypes = {
     species: PropTypes.string,
     rating: PropTypes.number,
     metacritic: PropTypes.number,
+    platforms: PropTypes.arrayOf(
+      PropTypes.shape({
+        platform: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+        }).isRequired,
+      })
+    ),
   }).isRequired,
 };
