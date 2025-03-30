@@ -77,7 +77,7 @@ export const Game = () => {
               initial={{ opacity: 0.2 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 2.5 }}
-              className="w-full p-5 flex justify-center h:56 md:h-96 lg:h-[calc(100vh-4rem)]"
+              className="w-full p-5 flex justify-center h-96 md:h-96 lg:h-[calc(100vh-4rem)]"
             >
               <img
                 src={data?.background_image}
@@ -94,8 +94,8 @@ export const Game = () => {
               />
             </motion.div>
           ) : (
-            <div className="w-full p-5 flex justify-center">
-              <div className="animate-pulse rounded bg-slate-500 m-5 h-96 w-9/12 md:ms-10 md:mt-7" />
+            <div className="w-full p-5 flex justify-center h-96 mb-2 md:h-96 lg:h-[calc(100vh-4rem)]">
+              <div className="animate-pulse rounded bg-slate-500 m-5 w-full h-full md:ms-10 md:mt-7" />
             </div>
           )}
 
