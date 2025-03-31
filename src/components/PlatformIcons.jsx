@@ -9,13 +9,18 @@ export const PlatformIcons = ({ platforms }) => {
     if (platformName.includes("PlayStation")) return "PlayStation";
     if (platformName.includes("Xbox")) return "Xbox";
     if (platformName.includes("Nintendo")) return "Nintendo";
-    if (platformName.includes("iOS")) return "macOS";
+    if (platformName.includes("iOS") || platformName.includes("macOS"))
+      return "macOS";
     return platformName; // Devuelve el nombre original si no necesita normalización
   };
 
-  // Obtener plataformas únicas con nombres normalizados
+  // Obtener plataformas únicas con nombres normalizados y filtrar las que no tienen íconos específicos
   const uniquePlatforms = Array.from(
-    new Set(platforms?.map((p) => normalizePlatformName(p.platform.name)))
+    new Set(
+      platforms
+        ?.map((p) => normalizePlatformName(p.platform.name))
+        .filter((platformName) => platformIcons[platformName]) // Filtrar solo plataformas con íconos definidos
+    )
   );
 
   return (
@@ -26,7 +31,7 @@ export const PlatformIcons = ({ platforms }) => {
           <FontAwesomeIcon
             key={platformName}
             icon={icon}
-            className="text-stone-500 text-lg"
+            className="text-stone-500 text-sm md:text-xl"
             title={platformName}
           />
         );
