@@ -205,7 +205,7 @@ export const Game = () => {
         </div>
 
         {/* Contenido adicional */}
-        <div className="pb-10 text-center bg-black">
+        <div className="pb-10 pt-5 md:pt-1 px-3 text-center bg-black">
           {/* Plataformas */}
           <Platforms data={data} />
           {/* Géneros */}
