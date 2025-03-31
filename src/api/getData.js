@@ -46,10 +46,30 @@ export const getGameById = async (id) => {
 
     const screenshotsData = await screenshotsResponse.json();
 
-    // Combinar los datos del juego con los screenshots
+    // Realizar la tercera solicitud para obtener los videos del juego
+    const videosResponse = await fetch(
+      `https://api.rawg.io/api/games/${id}/movies?key=${key}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!videosResponse.ok) {
+      throw new Error(
+        `Error en la solicitud de videos: ${videosResponse.status} ${videosResponse.statusText}`
+      );
+    }
+
+    const videosData = await videosResponse.json();
+
+    // Combinar los datos del juego con los screenshots y videos
     const combinedData = {
       ...gameData,
       screenshots: screenshotsData.results || [], // Agregar screenshots al objeto
+      videos: videosData.results || [], // Agregar videos al objeto
     };
 
     gameCache.set(id, combinedData); // Guardar en caché

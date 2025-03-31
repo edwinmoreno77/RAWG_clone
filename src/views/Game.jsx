@@ -205,10 +205,9 @@ export const Game = () => {
         </div>
 
         {/* Contenido adicional */}
-        <div className="py-10 text-center bg-black">
+        <div className="pb-10 text-center bg-black">
           {/* Plataformas */}
           <Platforms data={data} />
-
           {/* Géneros */}
           <div className="font-bold mt-2">
             {data ? (
@@ -230,6 +229,28 @@ export const Game = () => {
               </>
             ) : (
               <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
+            )}
+          </div>
+          {/* Video del juego */}
+          <div className=" w-full">
+            {data?.videos?.length > 0 ? (
+              <div className="w-full flex justify-center">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  controls
+                  className="w-10/12 h-auto rounded-xl shadow-lg"
+                  poster={data.videos[0].preview} // Imagen de vista previa
+                >
+                  <source src={data.videos[0].data.max} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ) : (
+              <p className="text-stone-300">
+                No video available for this game.
+              </p>
             )}
           </div>
 
@@ -257,13 +278,43 @@ export const Game = () => {
             )}
           </div>
 
+          {/* Tiendas */}
+          <div className="font-bold mt-2 p-2">
+            {data?.stores ? (
+              data.stores.length > 0 ? (
+                <>
+                  <span className="text-stone-300 text-base">Stores:</span>{" "}
+                  <div className="flex flex-wrap justify-center items-center gap-2 mt-1">
+                    {data.stores.map((store) => (
+                      <a
+                        key={store.store.id}
+                        href={`https://${store.store.domain}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-white text-sm underline hover:text-amber-400 transition-colors"
+                      >
+                        {store.store.name}
+                      </a>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p className="text-stone-300">
+                  No stores available for this game.
+                </p>
+              )
+            ) : (
+              <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
+            )}
+          </div>
+
           {/* Website */}
           {data?.website && (
             <a
               href={data?.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary animate-pulse mt-2 inline-block"
+              className="btn-primary px-4 py-2 bg-stone-800 rounded animate-pulse mt-2 inline-block"
             >
               Website: {data?.website}
             </a>
