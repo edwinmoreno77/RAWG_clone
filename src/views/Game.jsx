@@ -21,8 +21,6 @@ export const Game = () => {
   const isFavorite = favorites.some((favorite) => favorite.id == id);
   const [like, setLike] = useState(isFavorite);
 
-  const [showFullDescription, setShowFullDescription] = useState(false);
-
   const handlerLikes = (like, id) => {
     if (!favorites.some((favorite) => favorite.id == id)) {
       addFavorites(data);
@@ -51,10 +49,6 @@ export const Game = () => {
     ? data.developers.map((dev) => dev.name).join(", ")
     : "Unknown";
 
-  const toggleDescription = () => {
-    setShowFullDescription(!showFullDescription);
-  };
-
   // mantener el scroll en la parte superior
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -73,18 +67,18 @@ export const Game = () => {
         <Navbar />
         <div className="relative z-10 flex flex-col bg-gradient-to-t from-black via-black/50 to-transparent min-h-screen">
           {/* contenido principal */}
-          <div className="flex flex-col lg:flex-row">
+          <div className="flex flex-col lg:flex-row justify-between items-center w-full lg:w-12/12 mx-auto mt-5 lg:mt-0 lg:px-5">
             {/* Imagen principal */}
             {data ? (
               <motion.div
                 initial={{ opacity: 0.2 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2.5 }}
-                className="w-full p-5 flex justify-center h-96 md:h-96 lg:h-[calc(100vh-4rem)]"
+                className="w-11/12  m-0 p-0 sm:mt-7  flex flex-col md:p-5 md:my-2 justify-center h-96 md:h-96 lg:h-[calc(100vh-4rem)]"
               >
                 <img
                   src={data?.background_image}
-                  className="rounded-lg border border-stone-600 w-full h-full shadow-lg object-cover transition-[all_400ms_cubic-bezier(0.03,0.98,0.52,0.99)_0s] will-change-transform"
+                  className="rounded-lg border mb-4 border-stone-600 w-full h-full shadow-lg object-cover transition-[all_400ms_cubic-bezier(0.03,0.98,0.52,0.99)_0s] will-change-transform"
                   alt={data?.name}
                   loading="lazy"
                   onMouseMove={onMouseMove}
@@ -95,9 +89,35 @@ export const Game = () => {
                       "all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s",
                   }}
                 />
+                <Platforms data={data} />
+
+                {/* Rating y Metacritic */}
+                <div className="flex justify-center gap-4 text-xs font-bold text-amber-400 mt-2">
+                  {data ? (
+                    <>
+                      <span>Rating: {data?.rating}</span>
+                      <span>
+                        Metacritic: {data?.metacritic ?? "Not available"}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="animate-pulse bg-slate-500 h-4 w-20 rounded" />
+                      <div className="animate-pulse bg-slate-500 h-4 w-24 rounded" />
+                    </>
+                  )}
+                </div>
+                {/* Fecha de lanzamiento */}
+                <div className="text-sm text-center pt-2 mb-5">
+                  {data ? (
+                    `Released: ${data?.released}`
+                  ) : (
+                    <div className="animate-pulse bg-slate-500 h-4 w-36 mx-auto rounded" />
+                  )}
+                </div>
               </motion.div>
             ) : (
-              <div className="w-full p-5 flex justify-center h-96 mb-2 md:h-96 lg:h-[calc(100vh-4rem)]">
+              <div className="w-full p-5 flex justify-center h-96 mb-2 md:h-96 lg:h-[calc(100vh-14rem)]">
                 <div className="animate-pulse rounded bg-slate-500 m-5 w-full h-full md:ms-10 md:mt-7" />
               </div>
             )}
@@ -110,48 +130,51 @@ export const Game = () => {
                   initial={{ opacity: 0.2 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1.5 }}
-                  className="text-5xl font-extrabold text-white"
+                  className="text-5xl font-extrabold text-white py-5 lg:py-0"
                 >
                   {data?.name}
                 </motion.h3>
               ) : (
-                <div className="animate-pulse bg-slate-500 h-12 w-1/2 mx-auto rounded mb-4" />
+                <div className="animate-pulse bg-slate-500 h-12 w-1/2 mx-auto rounded mt-16 mb-4" />
               )}
 
               {/* Descripción */}
-              <div className="mt-4 p-1 font-serif text-sm text-stone-100 prose prose-invert">
+              <div className="flex flex-col items-center mt-4 p-1 font-serif text-sm text-stone-100 prose prose-invert">
                 {data ? (
                   <>
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{
                         opacity: 1,
-                        height: showFullDescription ? "auto" : "15rem",
+                        height: "auto",
                       }}
                       transition={{ duration: 0.5, ease: "easeInOut" }}
                       className="overflow-hidden whitespace-pre-line text-xs"
                     >
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: showFullDescription
-                            ? data?.description
-                            : data?.description?.substring(0, 1100) + "...",
+                          __html: data?.description,
                         }}
                       />
                     </motion.div>
-                    <button
-                      onClick={toggleDescription}
-                      className="text-stone-300 font-bold text-xs underline mt-2 hover:text-white transition-colors"
-                    >
-                      {showFullDescription ? "Read less" : "Read more"}
-                    </button>
                   </>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-2 w-full px-5">
+                    {/* Skeleton de la descripción */}
                     <div className="animate-pulse bg-slate-500 h-4 w-full rounded" />
                     <div className="animate-pulse bg-slate-500 h-4 w-5/6 rounded" />
                     <div className="animate-pulse bg-slate-500 h-4 w-3/4 rounded" />
-                    <div className="animate-pulse bg-slate-500 h-4 w-1/2 rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-2/3 rounded" />
+                    <br />
+                    <div className="animate-pulse bg-slate-500 h-4 w-full rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-5/6 rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-3/4 rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-2/3 rounded" />
+                    <br />
+                    <div className="animate-pulse bg-slate-500 h-4 w-full rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-5/6 rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-3/4 rounded" />
+                    <div className="animate-pulse bg-slate-500 h-4 w-2/3 rounded" />
                   </div>
                 )}
               </div>
@@ -181,18 +204,41 @@ export const Game = () => {
           <div className="flex flex-col items-center justify-center">
             {/* Contenido adicional */}
             <div className="pb-10 pt-5 md:pt-1 text-center w-full">
-              <div className="flex flex-col lg:flex-row mb-3 pb-5 w-full items-center justify-between">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full px-5">
+                {/* Video del juego */}
+                <div className="w-full flex justify-center items-center h-full">
+                  {data?.videos?.length > 0 ? (
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      controls
+                      className="w-full h-auto rounded-xl shadow-lg"
+                      poster={data.videos[0].preview} // Imagen de vista previa
+                    >
+                      <source src={data.videos[0].data.max} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <div className="flex justify-center items-center w-full h-64  rounded-xl">
+                      <p className="text-stone-300 text-lg font-bold">
+                        No video available for this game.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
                 {/* Grid de screenshots */}
-                <div className=" px-4 w-full">
+                <div className="flex px-4 w-full">
                   {data ? (
                     data?.screenshots?.length > 0 && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
                         {data.screenshots.map((screenshot) => (
                           <div key={screenshot.id} className="relative group">
                             <img
                               src={screenshot.image}
                               alt={`Screenshot ${screenshot.id}`}
-                              className="w-full h-48 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 border border-stone-600 hover:border-2 hover:border-stone-200"
+                              className="w-full h-40 md:h-48 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 border border-stone-600 hover:border-2 hover:border-stone-200"
                             />
                           </div>
                         ))}
@@ -209,85 +255,17 @@ export const Game = () => {
                     </div>
                   )}
                 </div>
-
-                {/* Video del juego */}
-                <div className="w-full">
-                  {data?.videos?.length > 0 ? (
-                    <div className="w-full flex justify-center">
-                      <video
-                        autoPlay
-                        muted
-                        loop
-                        controls
-                        className="w-10/12 h-auto rounded-xl shadow-lg"
-                        poster={data.videos[0].preview} // Imagen de vista previa
-                      >
-                        <source
-                          src={data.videos[0].data.max}
-                          type="video/mp4"
-                        />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  ) : (
-                    <p className="text-stone-300">
-                      No video available for this game.
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Plataformas */}
-              <Platforms data={data} />
-              {/* Géneros */}
-              <div className="font-bold mt-2">
-                {data ? (
-                  <>
-                    <span className="text-stone-300 text-base">Genres:</span>{" "}
-                    <span className="text-white text-base">{genres}</span>
-                  </>
-                ) : (
-                  <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
-                )}
               </div>
 
               {/* Desarrolladores */}
-              <div className="font-bold mt-2">
+              <div className="flex flex-col font-bold mt-16 pt-5 w-6/12 text-center mx-auto">
+                <span className="text-stone-300 text-xs">Developers:</span>{" "}
                 {data ? (
                   <>
-                    <span className="text-stone-300 text-base">
-                      Developers:
-                    </span>{" "}
                     <span className="text-white text-base">{developers}</span>
                   </>
                 ) : (
                   <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
-                )}
-              </div>
-
-              {/* Rating y Metacritic */}
-              <div className="flex justify-center gap-4 text-xs font-bold text-amber-400 mt-2">
-                {data ? (
-                  <>
-                    <span>Rating: {data?.rating}</span>
-                    <span>
-                      Metacritic: {data?.metacritic ?? "Not available"}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <div className="animate-pulse bg-slate-500 h-4 w-20 rounded" />
-                    <div className="animate-pulse bg-slate-500 h-4 w-24 rounded" />
-                  </>
-                )}
-              </div>
-
-              {/* Fecha de lanzamiento */}
-              <div className="text-sm pt-2">
-                {data ? (
-                  `Released: ${data?.released}`
-                ) : (
-                  <div className="animate-pulse bg-slate-500 h-4 w-36 mx-auto rounded" />
                 )}
               </div>
 
@@ -296,17 +274,32 @@ export const Game = () => {
                 {data?.stores ? (
                   data.stores.length > 0 ? (
                     <>
-                      <span className="text-stone-300 text-base">Stores:</span>{" "}
-                      <div className="flex flex-wrap justify-center items-center gap-2 mt-1">
+                      <span className="text-stone-300 py-3 text-base">
+                        Stores:
+                      </span>{" "}
+                      <div className="flex flex-wrap justify-center items-center gap-4 mt-2">
                         {data.stores.map((store) => (
                           <a
                             key={store.store.id}
                             href={`https://${store.store.domain}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white text-sm underline hover:text-amber-400 transition-colors"
+                            className="flex flex-col items-center text-white text-sm underline hover:text-amber-400 transition-colors"
                           >
-                            {store.store.name}
+                            {store.store.logo ? (
+                              <img
+                                src={store.store.logo} // URL del logotipo de la tienda
+                                alt={store.store.name}
+                                className="w-12 h-12 object-contain rounded-full shadow-md"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center">
+                                <span className="text-xs text-white">
+                                  {store.store.name[0]}
+                                </span>
+                              </div>
+                            )}
+                            <span className="mt-1">{store.store.name}</span>
                           </a>
                         ))}
                       </div>
@@ -321,15 +314,27 @@ export const Game = () => {
                 )}
               </div>
 
+              {/* Géneros */}
+              <div className="font-bold mt-5">
+                {data ? (
+                  <>
+                    <span className="text-stone-300 text-base">Genres:</span>{" "}
+                    <span className="text-white text-base">{genres}</span>
+                  </>
+                ) : (
+                  <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
+                )}
+              </div>
+
               {/* Website */}
               {data?.website && (
                 <a
                   href={data?.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary px-4 py-2 bg-stone-800 rounded animate-pulse mt-2 inline-block"
+                  className="btn-primary underline rounded animate-pulse mt-2 inline-block"
                 >
-                  Website: {data?.website}
+                  {data?.website}
                 </a>
               )}
             </div>
