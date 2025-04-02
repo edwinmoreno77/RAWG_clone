@@ -231,7 +231,7 @@ export const Game = () => {
                 {/* Grid de screenshots */}
                 <div className="flex px-4 w-full">
                   {data ? (
-                    data?.screenshots?.length > 0 && (
+                    data?.screenshots?.length > 0 ? (
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
                         {data.screenshots.map((screenshot) => (
                           <div key={screenshot.id} className="relative group">
@@ -243,9 +243,13 @@ export const Game = () => {
                           </div>
                         ))}
                       </div>
+                    ) : (
+                      <p className="text-stone-300 text-center w-full">
+                        No screenshots available for this game.
+                      </p>
                     )
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
                       {[...Array(6)].map((_, index) => (
                         <div
                           key={index}
