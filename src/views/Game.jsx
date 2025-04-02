@@ -65,7 +65,7 @@ export const Game = () => {
         }}
       >
         <Navbar />
-        <div className="relative z-10 flex flex-col bg-gradient-to-t from-black via-black/50 to-transparent min-h-screen">
+        <div className="relative z-10 flex flex-col bg-gradient-to-t from-black via-black/50 to-transparent min-h-screen xl:px-10">
           {/* contenido principal */}
           <div className="flex flex-col lg:flex-row justify-between items-center w-full lg:w-12/12 mx-auto mt-5 lg:mt-0 lg:px-5">
             {/* Imagen principal */}
@@ -74,7 +74,7 @@ export const Game = () => {
                 initial={{ opacity: 0.2 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2.5 }}
-                className="w-11/12  m-0 p-0 sm:mt-7  flex flex-col md:p-5 md:my-2 justify-center h-96 md:h-96 lg:h-[calc(100vh-4rem)]"
+                className="flex flex-col justify-center w-11/12 h-96 m-0 p-0 sm:mt-7 md:p-5 md:my-2 md:h-96 lg:h-[calc(100vh-4rem)]"
               >
                 <img
                   src={data?.background_image}
@@ -130,7 +130,7 @@ export const Game = () => {
                   initial={{ opacity: 0.2 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1.5 }}
-                  className="text-5xl font-extrabold text-white py-5 lg:py-0"
+                  className="text-3xl md:text-5xl font-extrabold text-white py-2-1 md:py-5 lg:py-0"
                 >
                   {data?.name}
                 </motion.h3>
@@ -204,9 +204,9 @@ export const Game = () => {
           <div className="flex flex-col items-center justify-center">
             {/* Contenido adicional */}
             <div className="pb-10 pt-5 md:pt-1 text-center w-full">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full px-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full px-2 lg:px-5">
                 {/* Video del juego */}
-                <div className="w-full flex justify-center items-center h-full">
+                <div className="w-full h-full flex justify-center items-center ">
                   {data?.videos?.length > 0 ? (
                     <video
                       autoPlay
@@ -229,7 +229,7 @@ export const Game = () => {
                 </div>
 
                 {/* Grid de screenshots */}
-                <div className="flex px-4 w-full">
+                <div className="flex px-0 md:px-4 w-full">
                   {data ? (
                     data?.screenshots?.length > 0 ? (
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
