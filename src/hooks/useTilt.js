@@ -23,8 +23,8 @@ export const useTilt = () => {
       const y = e.clientY - box.top;
       const centerX = box.width / 2;
       const centerY = box.height / 2;
-      const rotateX = (y - centerY) / 4;
-      const rotateY = (centerX - x) / 4;
+      const rotateX = (y - centerY) / 20;
+      const rotateY = (centerX - x) / 20;
 
       setRotate({ x: rotateX, y: rotateY });
     }, 100),
