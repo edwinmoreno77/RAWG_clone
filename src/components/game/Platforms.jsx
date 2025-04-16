@@ -1,6 +1,6 @@
 import { PropTypes } from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { platformIcons } from "../constants/icons";
+import { platformIcons } from "../../constants/icons";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 
 export const Platforms = ({ data }) => {

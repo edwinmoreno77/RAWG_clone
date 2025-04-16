@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
-import { Context } from "../store/appContext";
-import { filterOptions } from "../constants/filterOptions";
-import { SpotlightSelect } from "./SpotlightSelect";
+import { Context } from "../../store/appContext";
+import { filterOptions } from "../../constants/filterOptions";
+import { SpotlightSelect } from "../SpotlightSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 

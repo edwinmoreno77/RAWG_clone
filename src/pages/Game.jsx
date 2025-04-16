@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Navbar } from "../components/ui/Navbar";
 import { getGameById } from "../api/getData";
-import { Navbar } from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useTilt } from "../hooks/useTilt";
-import { Platforms } from "../components/Platforms";
+import { Platforms } from "../components/game/Platforms";
 
 export const Game = () => {
   const { id } = useParams();

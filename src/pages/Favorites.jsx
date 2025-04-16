@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Context } from "../store/appContext";
-import { Navbar } from "../components/Navbar";
 import { Card } from "../components/Card";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
+import { Navbar } from "../components/ui/Navbar";
 
 export const Favorites = () => {
   const { store } = useContext(Context);

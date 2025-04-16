@@ -1,8 +1,8 @@
-import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
+import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 import PropTypes from "prop-types";
-import { OrderingSelect } from "./OrderingSelect";
+import { OrderingSelect } from "../OrderingSelect";
 
 export const Layout = ({ children }) => {
   const {

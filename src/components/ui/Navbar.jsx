@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useContext } from "react";
-import { Context } from "../store/appContext";
+import { Context } from "../../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,

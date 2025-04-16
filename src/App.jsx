@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Favorites } from "./views/Favorites";
-import { Game } from "./views/Game";
-import { PageList } from "./views/PageList";
-import { NotFound } from "./views/NotFound";
-import { Search } from "./views/Search";
+import { Favorites } from "./pages/Favorites";
+import { Game } from "./pages/Game";
+import { PageList } from "./pages/PageList";
+import { NotFound } from "./pages/NotFound";
+import { Search } from "./pages/Search";
 import injectContext from "./store/appContext";
 import "./App.css";
 
