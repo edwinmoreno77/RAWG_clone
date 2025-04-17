@@ -1,82 +1,71 @@
 const key = import.meta.env.VITE_RAWG_API_KEY;
 
 const gameCache = new Map();
+const CACHE_TTL = 1000 * 60 * 10; // 10 minutos
 
+/**
+ * Obtiene datos combinados de un juego (info general, capturas y vídeos),
+ * usando caché local con expiración y peticiones en paralelo.
+ *
+ * @param {string|number} id  – ID del juego en RAWG API
+ * @returns {Promise<Object|null>}  – Datos combinados o null en caso de error
+ */
 export const getGameById = async (id) => {
-  if (gameCache.has(id)) {
-    return gameCache.get(id); // Devuelve los datos en caché si están disponibles
+  // Comprobar caché
+  const cached = gameCache.get(id);
+  if (cached && Date.now() - cached.fetchedAt < CACHE_TTL) {
+    return cached.data;
   }
 
   try {
-    // Realizar la primera solicitud para obtener la información general del juego
-    const gameResponse = await fetch(
-      `https://api.rawg.io/api/games/${id}?key=${key}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const BASE_URL = `https://api.rawg.io/api/games/${id}`;
+    const commonHeaders = { "Content-Type": "application/json" };
+
+    // Lanzar las tres peticiones a la vez
+    const [gameRes, screenshotsRes, videosRes] = await Promise.all([
+      fetch(
+        `${BASE_URL}?key=${key}&fields=id,name,description,background_image`,
+        { headers: commonHeaders }
+      ),
+      fetch(`${BASE_URL}/screenshots?key=${key}&page_size=5`, {
+        headers: commonHeaders,
+      }),
+      fetch(`${BASE_URL}/movies?key=${key}&page_size=3`, {
+        headers: commonHeaders,
+      }),
+    ]);
+
+    // Comprobar status de cada respuesta
+    [gameRes, screenshotsRes, videosRes].forEach((res) => {
+      if (!res.ok) {
+        throw new Error(`Error ${res.status} en ${res.url}`);
       }
-    );
+    });
 
-    if (!gameResponse.ok) {
-      throw new Error(
-        `Error en la solicitud del juego: ${gameResponse.status} ${gameResponse.statusText}`
-      );
-    }
+    // Parsear JSON en paralelo
+    const [gameData, screenshotsData, videosData] = await Promise.all([
+      gameRes.json(),
+      screenshotsRes.json(),
+      videosRes.json(),
+    ]);
 
-    const gameData = await gameResponse.json();
-
-    // Realizar la segunda solicitud para obtener los screenshots del juego
-    const screenshotsResponse = await fetch(
-      `https://api.rawg.io/api/games/${id}/screenshots?key=${key}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!screenshotsResponse.ok) {
-      throw new Error(
-        `Error en la solicitud de screenshots: ${screenshotsResponse.status} ${screenshotsResponse.statusText}`
-      );
-    }
-
-    const screenshotsData = await screenshotsResponse.json();
-
-    // Realizar la tercera solicitud para obtener los videos del juego
-    const videosResponse = await fetch(
-      `https://api.rawg.io/api/games/${id}/movies?key=${key}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!videosResponse.ok) {
-      throw new Error(
-        `Error en la solicitud de videos: ${videosResponse.status} ${videosResponse.statusText}`
-      );
-    }
-
-    const videosData = await videosResponse.json();
-
-    // Combinar los datos del juego con los screenshots y videos
+    // Combinar datos
     const combinedData = {
       ...gameData,
-      screenshots: screenshotsData.results || [], // Agregar screenshots al objeto
-      videos: videosData.results || [], // Agregar videos al objeto
+      screenshots: screenshotsData.results || [],
+      videos: videosData.results || [],
     };
 
-    gameCache.set(id, combinedData); // Guardar en caché
+    // Guardar en caché con timestamp
+    gameCache.set(id, {
+      data: combinedData,
+      fetchedAt: Date.now(),
+    });
+
     return combinedData;
   } catch (error) {
-    console.log("Error capturado en getGameById", error);
-    return null; // Devuelve null si alguna de las solicitudes falla
+    console.error("Error en getGameById:", error);
+    return null;
   }
 };
 
