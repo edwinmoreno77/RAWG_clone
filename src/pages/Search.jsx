@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Navbar } from "../components/ui/Navbar";
-import { Card } from "../components/Card";
+import { Card } from "../components/card/Card";
 import { getGameByName } from "../api/getData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

@@ -1,9 +1,9 @@
 import { Layout } from "../components/ui/Layout";
-import { Card } from "../components/Card";
+import { Card } from "../components/card/Card";
 import { Pagination } from "../components/Pagination";
 import { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { CardSkeleton } from "../components/CardSkeleton";
+import { CardSkeleton } from "../components/card/CardSkeleton";
 
 export const PageList = () => {
   const { store, actions } = useContext(Context);

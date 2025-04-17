@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Context } from "../store/appContext";
-import { Card } from "../components/Card";
+import { Card } from "../components/card/Card";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
 import { Navbar } from "../components/ui/Navbar";
 

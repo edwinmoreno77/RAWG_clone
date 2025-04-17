@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
-import { platformIcons } from "../constants/icons";
+import { platformIcons } from "../../constants/icons";
 
 export const PlatformIcons = ({ platforms }) => {
   // Normalizar nombres de plataformas para eliminar duplicados

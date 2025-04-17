@@ -1,12 +1,12 @@
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
-import { Context } from "../store/appContext";
+import { Context } from "../../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
+import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
 import { PlatformIcons } from "./PlatformIcons";
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
@@ -110,7 +110,7 @@ const CardComponent = ({ item }) => {
 };
 
 export const Card = memo(CardComponent);
-// agregar platforms
+
 CardComponent.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.number.isRequired,
