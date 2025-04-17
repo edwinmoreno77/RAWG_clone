@@ -49,7 +49,6 @@ export const SpotlightSelect = ({
               className=" text-stone-400 hover:text-white"
             />
           )}
-          {/* {label} */}
         </label>
       )}
       <div className="relative text-xs w-full">
