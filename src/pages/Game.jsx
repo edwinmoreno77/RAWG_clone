@@ -8,6 +8,12 @@ import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useTilt } from "../hooks/useTilt";
 import { Platforms } from "../components/game/Platforms";
+import { Screenshots } from "../components/game/Screenshots";
+import { Video } from "../components/game/Video";
+import { Genres } from "../components/game/Genres";
+import { Stores } from "../components/game/Stores";
+import { Website } from "../components/game/Website";
+import { Developers } from "../components/game/Developers";
 
 export const Game = () => {
   const { id } = useParams();
@@ -40,14 +46,6 @@ export const Game = () => {
   }, [id]);
 
   const { rotate, onMouseMove, onMouseLeave } = useTilt();
-
-  const genres = data?.genres
-    ? data.genres.map((g) => g.name).join(", ")
-    : "Unknown";
-
-  const developers = data?.developers
-    ? data.developers.map((dev) => dev.name).join(", ")
-    : "Unknown";
 
   // mantener el scroll en la parte superior
   useEffect(() => {
@@ -202,150 +200,19 @@ export const Game = () => {
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            {/* Contenido adicional */}
             <div className="pb-10 pt-5 md:pt-1 text-center w-full">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full px-2 lg:px-5">
-                {/* Video del juego */}
-                <div className="w-full h-full flex justify-center items-center ">
-                  {data?.videos?.length > 0 ? (
-                    <video
-                      autoPlay
-                      playsInline
-                      loop
-                      controls
-                      className="w-full h-auto rounded-xl shadow-lg"
-                      poster={data.videos[0].preview} // Imagen de vista previa
-                      ref={(video) => {
-                        if (video) {
-                          video.volume = 0.3; // Establece el volumen al 50%
-                        }
-                      }}
-                    >
-                      <source src={data.videos[0].data.max} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="flex justify-center items-center w-full h-64  rounded-xl">
-                      <p className="text-stone-300 text-lg font-bold">
-                        No video available for this game.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Grid de screenshots */}
-                <div className="flex px-0 md:px-4 w-full">
-                  {data ? (
-                    data?.screenshots?.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
-                        {data.screenshots.map((screenshot) => (
-                          <div key={screenshot.id} className="relative group">
-                            <img
-                              src={screenshot.image}
-                              alt={`Screenshot ${screenshot.id}`}
-                              className="w-full h-40 md:h-48 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 border border-stone-600 hover:border-2 hover:border-stone-200"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-stone-300 text-center w-full">
-                        No screenshots available for this game.
-                      </p>
-                    )
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
-                      {[...Array(6)].map((_, index) => (
-                        <div
-                          key={index}
-                          className="animate-pulse bg-slate-500 h-36 w-full rounded-lg"
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <Video data={data} />
+                <Screenshots data={data} />
               </div>
 
-              {/* Desarrolladores */}
-              <div className="flex flex-col font-bold mt-16 pt-5 w-6/12 text-center mx-auto">
-                <span className="text-stone-300 text-xs">Developers:</span>{" "}
-                {data ? (
-                  <>
-                    <span className="text-white text-base">{developers}</span>
-                  </>
-                ) : (
-                  <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
-                )}
-              </div>
+              <Developers data={data} />
 
-              {/* Tiendas */}
-              <div className="font-bold mt-2 p-2">
-                {data?.stores ? (
-                  data.stores.length > 0 ? (
-                    <>
-                      <span className="text-stone-300 py-3 text-base">
-                        Stores:
-                      </span>{" "}
-                      <div className="flex flex-wrap justify-center items-center gap-4 mt-2">
-                        {data.stores.map((store) => (
-                          <a
-                            key={store.store.id}
-                            href={`https://${store.store.domain}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex flex-col items-center text-white text-sm underline hover:text-amber-400 transition-colors"
-                          >
-                            {store.store.logo ? (
-                              <img
-                                src={store.store.logo} // URL del logotipo de la tienda
-                                alt={store.store.name}
-                                className="w-12 h-12 object-contain rounded-full shadow-md"
-                              />
-                            ) : (
-                              <div className="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center">
-                                <span className="text-xs text-white">
-                                  {store.store.name[0]}
-                                </span>
-                              </div>
-                            )}
-                            <span className="mt-1">{store.store.name}</span>
-                          </a>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-stone-300">
-                      No stores available for this game.
-                    </p>
-                  )
-                ) : (
-                  <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
-                )}
-              </div>
+              <Stores data={data} />
 
-              {/* Géneros */}
-              <div className="font-bold mt-5">
-                {data ? (
-                  <>
-                    <span className="text-stone-300 text-base">Genres:</span>{" "}
-                    <span className="text-white text-base">{genres}</span>
-                  </>
-                ) : (
-                  <div className="animate-pulse bg-slate-500 h-4 w-48 mx-auto rounded" />
-                )}
-              </div>
+              <Genres data={data} />
 
-              {/* Website */}
-              {data?.website && (
-                <a
-                  href={data?.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary underline rounded animate-pulse mt-2 inline-block"
-                >
-                  {data?.website}
-                </a>
-              )}
+              <Website data={data} />
             </div>
           </div>
         </div>
