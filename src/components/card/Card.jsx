@@ -61,6 +61,7 @@ const CardComponent = ({ item }) => {
             opacity: cardOpacity,
             border: "1.5px solid #ffffff",
             WebkitMaskImage: `radial-gradient(50% 200px at ${cardPosition.x}px ${cardPosition.y}px, black 50%, transparent)`,
+            background: `radial-gradient(circle at ${cardPosition.x}px ${cardPosition.y}px, rgba(234, 234, 234, 0.06), transparent 50%)`,
           }}
         />
         <Link to={`${item?.id}`}>

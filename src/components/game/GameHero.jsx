@@ -15,7 +15,7 @@ export const GameHero = ({ data, rotate, onMouseMove, onMouseLeave }) => {
         >
           <img
             src={data?.background_image}
-            className="rounded-lg hover:border mb-4 border-stone-600 w-full h-full shadow-lg object-cover transition-[all_400ms_cubic-bezier(0.03,0.98,0.52,0.99)_0s] will-change-transform brightness-90 hover:brightness-105"
+            className="rounded-lg  mb-4  w-full h-full shadow-lg object-cover transition-[all_400ms_cubic-bezier(0.03,0.98,0.52,0.99)_0s] will-change-transform brightness-90 hover:brightness-110"
             alt={data?.name}
             loading="lazy"
             onMouseMove={onMouseMove}
