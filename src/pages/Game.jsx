@@ -95,7 +95,6 @@ export const Game = () => {
               onMouseMove={onMouseMove}
               onMouseLeave={onMouseLeave}
             />
-            {/* Información del juego */}
             <GameInfo
               data={data}
               navigate={navigate}
