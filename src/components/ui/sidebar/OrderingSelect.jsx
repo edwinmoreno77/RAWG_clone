@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "../store/appContext";
+import { Context } from "../../../store/appContext";
 
 export const OrderingSelect = () => {
   const { store, actions } = useContext(Context);

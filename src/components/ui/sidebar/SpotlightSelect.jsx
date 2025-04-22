@@ -1,4 +1,3 @@
-import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,6 +7,7 @@ import {
   faTags,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { useSpotlightBorder } from "../../../hooks/useSpotlightBorder";
 
 export const SpotlightSelect = ({
   name,
