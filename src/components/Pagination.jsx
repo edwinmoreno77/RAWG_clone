@@ -24,7 +24,7 @@ export const Pagination = () => {
   };
 
   return (
-    <div className="flex justify-center my-3 text-xs">
+    <div className="flex bg-transparent justify-center my-2 text-xs">
       <nav>
         <ul className="inline-flex items-center user-select-none">
           {/* Botón "Previous" */}
@@ -37,7 +37,7 @@ export const Pagination = () => {
             className="user-select-none bg-white"
           >
             <a
-              className={`py-2 px-3 ml-0 shadow-lg leading-tight text-black bg-white border border-gray-300 rounded-l-lg cursor-pointer user-select-none hover:brightness-90 ${
+              className={`py-1 px-3 ml-0 shadow-lg leading-tight text-white bg-stone-700 hover:bg-black border border-gray-300 rounded-l-lg cursor-pointer user-select-none ${
                 page <= 1 ? "bg-lime-900 text-gray-500 cursor-not-allowed" : ""
               }`}
             >
@@ -50,10 +50,10 @@ export const Pagination = () => {
             <li
               key={pageNumber}
               onClick={() => setPage(pageNumber)}
-              className={`py-2 px-3 leading-tight border border-gray-300 hover:brightness-90 cursor-pointer shadow-lg user-select-none ${
+              className={`py-1 px-3 leading-tight border border-gray-300 hover:brightness-90 cursor-pointer shadow-lg user-select-none ${
                 pageNumber === page
                   ? "bg-black text-white"
-                  : "bg-white text-black"
+                  : "bg-stone-700 text-white"
               }`}
             >
               <a>{pageNumber}</a>
@@ -67,7 +67,7 @@ export const Pagination = () => {
                 increasePage();
               }
             }}
-            className={`py-2 px-3 shadow-lg user-select-none leading-tight text-black bg-white border border-gray-300 hover:brightness-90 rounded-r-lg cursor-pointer user-select-none ${
+            className={`py-1 px-3 shadow-lg user-select-none leading-tight text-white bg-stone-700 hover:bg-black border border-gray-300  rounded-r-lg cursor-pointer user-select-none ${
               page >= totalPages
                 ? "bg-lime-900 text-gray-500 cursor-not-allowed"
                 : ""

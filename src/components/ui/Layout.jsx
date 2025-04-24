@@ -3,6 +3,7 @@ import { Navbar } from "./Navbar";
 import PropTypes from "prop-types";
 import { Sidebar } from "./sidebar/Sidebar";
 import { OrderingSelect } from "./OrderingSelect";
+import { Pagination } from "../Pagination";
 
 export const Layout = ({ children }) => {
   const {
@@ -31,12 +32,17 @@ export const Layout = ({ children }) => {
         }}
       />
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden ">
         <Sidebar />
-        <main className="flex-1 bg-stone-950 p-4 overflow-y-auto">
-          <OrderingSelect />
-          {children}
-        </main>
+        <div className="flex flex-col flex-1 bg-transparent overflow-hidden ">
+          <main className="flex-1 bg-transparent p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
+            <OrderingSelect />
+            {children}
+          </main>
+          <div className="bg-transparent">
+            <Pagination />
+          </div>
+        </div>
       </div>
     </main>
   );

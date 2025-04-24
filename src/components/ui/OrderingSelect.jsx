@@ -13,7 +13,7 @@ export const OrderingSelect = () => {
   return (
     <div className="group">
       <select
-        className="text-white px-6 py-2 cursor-pointer rounded-xl bg-stone-800 group-hover:bg-stone-600 transition-colors duration-300"
+        className="text-white px-6 py-1 cursor-pointer rounded-xl bg-stone-800 group-hover:bg-stone-600 transition-colors duration-300"
         value={ordering}
         onChange={handleOrderingChange}
       >
