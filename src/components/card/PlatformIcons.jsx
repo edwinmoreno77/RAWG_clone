@@ -26,7 +26,7 @@ export const PlatformIcons = ({ platforms }) => {
   return (
     <div className="flex gap-2">
       {uniquePlatforms.map((platformName) => {
-        const icon = platformIcons[platformName] || faGamepad; // Ícono por defecto si no se encuentra
+        const icon = platformIcons[platformName] || faGamepad;
         return (
           <FontAwesomeIcon
             key={platformName}
