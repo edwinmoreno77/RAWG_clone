@@ -96,6 +96,8 @@ export const Sidebar = () => {
     { name: "Shooter", id: 2, slug: "shooter" },
     { name: "Puzzle", id: 7, slug: "puzzle" },
     { name: "Sports", id: 11, slug: "sports" },
+    { name: "Racing", id: 31, slug: "racing" },
+    { name: "Arcade", id: 15, slug: "arcade" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
@@ -132,13 +134,6 @@ export const Sidebar = () => {
 
   return (
     <aside
-      //using scrollbar for better performance
-      // className={`fixed z-50 top-0 left-0 h-full w-80 bg-stone-950 lg:bg-transparent text-white p-3 transform overflow-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900 ${
-      //     store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      //   } transition-transform duration-300 lg:relative lg:translate-x-0`}
-      // >
-
-      // without scrollbar
       className={`fixed z-50 top-0 left-0 h-full w-80 bg-stone-950 lg:bg-transparent text-white p-3 transform  ${
         store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform duration-300 lg:relative lg:translate-x-0`}
@@ -184,20 +179,20 @@ export const Sidebar = () => {
           {/* Vista básica con íconos */}
           <div className="mb-6">
             <h3 className="text-sm font-bold mb-2">Platforms</h3>
-            <div className="flex flex-wrap gap-1">
+            <div className="grid grid-cols-3 gap-2">
               {platforms.map((platform) => (
                 <button
                   key={platform.id}
                   onClick={() => togglePlatform(platform.id)}
-                  className={`flex flex-col items-center w-28 h-16 ${
+                  className={`flex flex-col items-center w-24 h-12 ${
                     selectedPlatforms.includes(platform.id)
                       ? "bg-lime-600 hover:bg-lime-400"
                       : "bg-stone-800 hover:bg-stone-700"
-                  }  rounded-lg shadow-md p-2 transition-colors`}
+                  }  rounded-lg shadow-md p-1 transition-colors`}
                 >
                   <FontAwesomeIcon
                     icon={platformIcons[platform.name] || faGamepad} // Fallback a un ícono genérico
-                    className="text-white text-2xl"
+                    className="text-white text-lg"
                   />
                   <span className="text-xs mt-1">{platform.name}</span>
                 </button>
@@ -207,12 +202,12 @@ export const Sidebar = () => {
 
           <div className="mb-6">
             <h3 className="text-sm font-bold mb-2">Genres</h3>
-            <div className="flex flex-wrap gap-1">
+            <div className="grid grid-cols-4 gap-2">
               {genres.map((genre) => (
                 <button
                   key={genre.id}
                   onClick={() => toggleGenre(genre.slug)}
-                  className={`flex flex-col items-center w-16 h-16 ${
+                  className={`flex flex-col items-center w-16 h-10 ${
                     selectedGenres.includes(genre.slug)
                       ? "bg-lime-600 hover:bg-lime-400"
                       : "bg-stone-800 hover:bg-stone-700"
