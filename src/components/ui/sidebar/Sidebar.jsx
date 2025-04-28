@@ -79,12 +79,15 @@ export const Sidebar = () => {
 
   const platforms = [
     { name: "PC", id: 4 },
-    { name: "Xbox One", id: 1 },
     { name: "Xbox Series S/X", id: 186 },
+    { name: "Xbox One", id: 1 },
     { name: "PlayStation 5", id: 187 },
     { name: "PlayStation 4", id: 18 },
     { name: "PlayStation 3", id: 16 },
+    { name: "PlayStation 2", id: 15, slug: "playstation2" },
+    { name: "PlayStation", id: 27, slug: "playstation1" },
     { name: "Nintendo Switch", id: 7 },
+    { name: "Wii", id: 11, slug: "wii" },
     { name: "iOS", id: 3 },
     { name: "Android", id: 21 },
   ];
