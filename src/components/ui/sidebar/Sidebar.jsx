@@ -105,7 +105,6 @@ export const Sidebar = () => {
     { name: "Fighting", id: 6, slug: "fighting" },
     { name: "Simulation", id: 14, slug: "simulation" },
     { name: "Educational", id: 34, slug: "educational" },
-    { name: "Survival Horror", id: 46, slug: "survival-horror" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
