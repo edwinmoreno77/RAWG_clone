@@ -105,6 +105,10 @@ export const Sidebar = () => {
     { name: "Fighting", id: 6, slug: "fighting" },
     { name: "Simulation", id: 14, slug: "simulation" },
     { name: "Educational", id: 34, slug: "educational" },
+    { name: "Trivia", id: 50, slug: "trivia" },
+    { name: "Pinball", id: 51, slug: "pinball" },
+    { name: "Fitness", id: 52, slug: "fitness" },
+    { name: "Artillery", id: 56, slug: "artillery" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
