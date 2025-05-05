@@ -12,6 +12,7 @@ export const Sidebar = () => {
   const [advancedSearch, setAdvancedSearch] = useState(false); // Estado para alternar vistas
   const [selectedPlatforms, setSelectedPlatforms] = useState([]); // Estado para plataformas seleccionadas
   const [selectedGenres, setSelectedGenres] = useState([]); // Estado para géneros seleccionados
+  const [selectedTags, setSelectedTags] = useState([]); // Estado para etiquetas seleccionadas
 
   // Generar años desde 1980 hasta el actual
   const startYear = 1980;
@@ -53,6 +54,24 @@ export const Sidebar = () => {
     actions.setFilters({
       name: "platform",
       value: isSelected ? null : platformId,
+    });
+
+    // Ejecutar la búsqueda con los filtros aplicados
+    await actions.setFilteredData();
+  };
+
+  const toggleTags = async (tagSlug) => {
+    const isSelected = selectedTags.includes(tagSlug);
+    const updatedTags = isSelected
+      ? selectedTags.filter((slug) => slug !== tagSlug)
+      : [...selectedTags, tagSlug];
+
+    setSelectedTags(updatedTags);
+
+    // Aplicar o quitar el filtro
+    actions.setFilters({
+      name: "tag",
+      value: isSelected ? null : tagSlug,
     });
 
     // Ejecutar la búsqueda con los filtros aplicados
@@ -105,6 +124,13 @@ export const Sidebar = () => {
     { name: "Fighting", id: 6, slug: "fighting" },
     { name: "Simulation", id: 14, slug: "simulation" },
     { name: "Educational", id: 34, slug: "educational" },
+  ];
+
+  //tags
+  const tags = [
+    { name: "Multiplayer", id: 1, slug: "multiplayer" },
+    { name: "Singleplayer", id: 2, slug: "singleplayer" },
+    { name: "Tower Defense", id: 105, slug: "tower-defense" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
@@ -207,7 +233,7 @@ export const Sidebar = () => {
             </div>
           </div>
 
-          <div className="mb-6">
+          <div className="mb-5">
             <h3 className="text-sm font-bold mb-2">Genres</h3>
             <div className="grid grid-cols-4 gap-2">
               {genres.map((genre) => (
@@ -221,6 +247,29 @@ export const Sidebar = () => {
                   }  rounded-lg shadow-md p-2 transition-colors`}
                 >
                   <span className="text-xs mt-1">{genre.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <h3 className="text-sm font-bold mb-2">Tags</h3>
+            <div className="grid grid-cols-4 gap-10">
+              {tags.map((tag) => (
+                <button
+                  key={tag.id}
+                  onClick={() => toggleTags(tag.slug)}
+                  className={`flex flex-col items-center justify-center rounded-lg shadow-md p-2 ml-6 transition-colors`}
+                >
+                  <span
+                    className={`text-xs rounded-lg shadow-md p-2 ${
+                      selectedTags.includes(tag.slug)
+                        ? "bg-lime-600 hover:bg-lime-400"
+                        : "bg-stone-800 hover:bg-stone-700"
+                    } `}
+                  >
+                    {tag.name}
+                  </span>
                 </button>
               ))}
             </div>
