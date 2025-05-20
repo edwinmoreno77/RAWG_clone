@@ -130,7 +130,6 @@ export const Sidebar = () => {
   const tags = [
     { name: "Multiplayer", id: 1, slug: "multiplayer" },
     { name: "Singleplayer", id: 2, slug: "singleplayer" },
-    { name: "Tower Defense", id: 105, slug: "tower-defense" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
