@@ -20,6 +20,7 @@ const CardComponent = ({ item }) => {
 
   const isFavorite = favorites.some((favorite) => favorite.id === item.id);
   const [like, setLike] = useState(isFavorite);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Hook para el efecto en el card
   const {
@@ -55,22 +56,29 @@ const CardComponent = ({ item }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3 }}
+      style={{ position: "relative", zIndex: isHovered ? 50 : 1 }}
     >
+      {" "}
       <div
         ref={cardRef}
         onMouseMove={(e) => {
           handleMouseMoveCard(e);
           cardOnMouseMove(e);
         }}
-        onMouseEnter={handleMouseEnterCard}
+        onMouseEnter={(e) => {
+          handleMouseEnterCard(e);
+          setIsHovered(true);
+        }}
         onMouseLeave={(e) => {
           handleMouseLeaveCard(e);
           cardOnMouseLeave(e);
+          setIsHovered(false);
         }}
         style={{
           transform: `perspective(800px) rotateX(${cardRotate.x}deg) rotateY(${cardRotate.y}deg)`,
+          position: "relative",
         }}
-        className="relative w-auto h-auto transition ease-in-out duration-300 bg-stone-900 hover:bg-stone-800 text-white  scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
+        className="relative w-[280px] transition ease-in-out duration-300 bg-stone-900 hover:bg-stone-800 text-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
       >
         {/* Efecto de borde animado igual que en el input */}
         <div
@@ -89,7 +97,7 @@ const CardComponent = ({ item }) => {
             alt={item.name}
           />
         </Link>
-        <div className="p-4 brightness-110 relative z-10">
+        <div className="p-4 brightness-110">
           <PlatformIcons platforms={item?.platforms} />
           <h5 className="text-lg font-bold">{item?.name}</h5>
           <div className="flex justify-between">
@@ -122,7 +130,61 @@ const CardComponent = ({ item }) => {
               />
             </button>
           </div>
-        </div>
+        </div>{" "}
+        {/* Contenido expandido */}
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-full left-0 w-full overflow-hidden border border-stone-700 rounded-lg mt-2 z-50"
+          >
+            <div className="p-4 bg-stone-900 backdrop-blur-sm bg-opacity-95">
+              {item.released && (
+                <div className="text-xs mb-2 text-stone-300">
+                  <span className="font-semibold">Release:</span>{" "}
+                  {item.released}
+                </div>
+              )}
+              {item.genres && item.genres.length > 0 && (
+                <div className="text-xs mb-2 text-stone-300">
+                  <span className="font-semibold">Genres:</span>{" "}
+                  {item.genres.map((g) => g.name).join(", ")}
+                </div>
+              )}
+              {item.publishers && item.publishers.length > 0 && (
+                <div className="text-xs mb-2 text-stone-300">
+                  <span className="font-semibold">Publisher:</span>{" "}
+                  {item.publishers.map((p) => p.name).join(", ")}
+                </div>
+              )}
+              {item.developers && item.developers.length > 0 && (
+                <div className="text-xs mb-2 text-stone-300">
+                  <span className="font-semibold">Developer:</span>{" "}
+                  {item.developers.map((d) => d.name).join(", ")}
+                </div>
+              )}
+              {item.description_raw && (
+                <div className="text-xs mb-2 text-stone-300 line-clamp-3">
+                  <span className="font-semibold">Description:</span>{" "}
+                  {item.description_raw}
+                </div>
+              )}
+              <div className="flex flex-wrap gap-1 mt-2">
+                {item.tags &&
+                  item.tags.slice(0, 4).map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="bg-stone-800 text-xs px-2 py-0.5 rounded-full text-stone-300"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
     </motion.article>
   );
@@ -132,17 +194,36 @@ export const Card = memo(CardComponent);
 
 CardComponent.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    name: PropTypes.string,
     background_image: PropTypes.string,
-    species: PropTypes.string,
-    rating: PropTypes.number,
+    platforms: PropTypes.array,
     metacritic: PropTypes.number,
-    platforms: PropTypes.arrayOf(
+    rating: PropTypes.number,
+    released: PropTypes.string,
+    genres: PropTypes.arrayOf(
       PropTypes.shape({
-        platform: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-        }).isRequired,
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
+    publishers: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
+    developers: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
+    description_raw: PropTypes.string,
+    tags: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
       })
     ),
   }).isRequired,

@@ -22,8 +22,9 @@ export const useSpotlightBorder = () => {
     setIsFocused(false);
     setOpacity(0);
   };
-
-  const handleMouseEnter = () => setOpacity(1);
+  const handleMouseEnter = () => {
+    setOpacity(1);
+  };
   const handleMouseLeave = () => setOpacity(0);
 
   return {
