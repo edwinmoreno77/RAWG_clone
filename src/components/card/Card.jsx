@@ -8,6 +8,8 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
 import { PlatformIcons } from "./PlatformIcons";
+import { useTilt } from "../../hooks/useTilt";
+
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
@@ -29,6 +31,13 @@ const CardComponent = ({ item }) => {
     handleMouseLeave: handleMouseLeaveCard,
   } = useSpotlightBorder();
 
+  // Hook para el efecto tilt sutil en la tarjeta
+  const {
+    rotate: cardRotate,
+    onMouseMove: cardOnMouseMove,
+    onMouseLeave: cardOnMouseLeave,
+  } = useTilt({ max: 6 }); // max menor para menos movimiento
+
   const handlerLikes = (like, id) => {
     if (!favorites.some((favorite) => favorite.id === id)) {
       addFavorites(item);
@@ -49,9 +58,18 @@ const CardComponent = ({ item }) => {
     >
       <div
         ref={cardRef}
-        onMouseMove={handleMouseMoveCard}
+        onMouseMove={(e) => {
+          handleMouseMoveCard(e);
+          cardOnMouseMove(e);
+        }}
         onMouseEnter={handleMouseEnterCard}
-        onMouseLeave={handleMouseLeaveCard}
+        onMouseLeave={(e) => {
+          handleMouseLeaveCard(e);
+          cardOnMouseLeave(e);
+        }}
+        style={{
+          transform: `perspective(800px) rotateX(${cardRotate.x}deg) rotateY(${cardRotate.y}deg)`,
+        }}
         className="relative w-auto h-auto transition ease-in-out duration-300 bg-stone-900 hover:bg-stone-800 text-white  scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
       >
         {/* Efecto de borde animado igual que en el input */}
