@@ -109,9 +109,16 @@ export const getFilteredGames = async (filters, page) => {
         `${filters.year}-01-01,${filters.year}-12-31`
       );
     }
-    if (filters.genre) queryParams.append("genres", filters.genre);
-    if (filters.platform) queryParams.append("platforms", filters.platform);
-    if (filters.tag) queryParams.append("tags", filters.tag);
+    // Soporte para arrays y nombres en plural
+    if (filters.genres && filters.genres.length > 0) {
+      queryParams.append("genres", filters.genres.join(","));
+    }
+    if (filters.platforms && filters.platforms.length > 0) {
+      queryParams.append("platforms", filters.platforms.join(","));
+    }
+    if (filters.tags && filters.tags.length > 0) {
+      queryParams.append("tags", filters.tags.join(","));
+    }
     if (filters.developer) queryParams.append("developers", filters.developer);
     if (filters.ordering) queryParams.append("ordering", filters.ordering);
     if (page) queryParams.append("page", page);

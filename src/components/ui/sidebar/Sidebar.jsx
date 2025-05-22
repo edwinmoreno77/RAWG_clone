@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Context } from "../../../store/appContext";
 import { filterOptions } from "../../../constants/filterOptions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,10 +9,25 @@ import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 export const Sidebar = () => {
   const { store, actions } = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
-  const [advancedSearch, setAdvancedSearch] = useState(false); // Estado para alternar vistas
-  const [selectedPlatforms, setSelectedPlatforms] = useState([]); // Estado para plataformas seleccionadas
-  const [selectedGenres, setSelectedGenres] = useState([]); // Estado para géneros seleccionados
-  const [selectedTags, setSelectedTags] = useState([]); // Estado para etiquetas seleccionadas
+  const [advancedSearch, setAdvancedSearch] = useState(false);
+  const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  // Sincronizar el estado local con el store global
+  useEffect(() => {
+    if (store.filters) {
+      if (store.filters.platforms) {
+        setSelectedPlatforms(store.filters.platforms);
+      }
+      if (store.filters.genres) {
+        setSelectedGenres(store.filters.genres);
+      }
+      if (store.filters.tags) {
+        setSelectedTags(store.filters.tags);
+      }
+    }
+  }, [store.filters]);
 
   // Generar años desde 1980 hasta el actual
   const startYear = 1980;
@@ -37,8 +52,9 @@ export const Sidebar = () => {
 
   const handleReset = () => {
     actions.resetFilters();
-    setSelectedPlatforms([]); // Reiniciar plataformas seleccionadas
-    setSelectedGenres([]); // Reiniciar géneros seleccionados
+    setSelectedPlatforms([]);
+    setSelectedGenres([]);
+    setSelectedTags([]);
     actions.closeSidebar();
   };
 
@@ -47,16 +63,11 @@ export const Sidebar = () => {
     const updatedPlatforms = isSelected
       ? selectedPlatforms.filter((id) => id !== platformId)
       : [...selectedPlatforms, platformId];
-
     setSelectedPlatforms(updatedPlatforms);
-
-    // Aplicar o quitar el filtro
     actions.setFilters({
-      name: "platform",
-      value: isSelected ? null : platformId,
+      name: "platforms",
+      value: updatedPlatforms.length > 0 ? updatedPlatforms : [],
     });
-
-    // Ejecutar la búsqueda con los filtros aplicados
     await actions.setFilteredData();
   };
 
@@ -65,16 +76,11 @@ export const Sidebar = () => {
     const updatedTags = isSelected
       ? selectedTags.filter((slug) => slug !== tagSlug)
       : [...selectedTags, tagSlug];
-
     setSelectedTags(updatedTags);
-
-    // Aplicar o quitar el filtro
     actions.setFilters({
-      name: "tag",
-      value: isSelected ? null : tagSlug,
+      name: "tags",
+      value: updatedTags.length > 0 ? updatedTags : [],
     });
-
-    // Ejecutar la búsqueda con los filtros aplicados
     await actions.setFilteredData();
   };
 
@@ -83,16 +89,11 @@ export const Sidebar = () => {
     const updatedGenres = isSelected
       ? selectedGenres.filter((slug) => slug !== genreSlug)
       : [...selectedGenres, genreSlug];
-
     setSelectedGenres(updatedGenres);
-
-    // Aplicar o quitar el filtro
     actions.setFilters({
-      name: "genre",
-      value: isSelected ? null : genreSlug,
+      name: "genres",
+      value: updatedGenres.length > 0 ? updatedGenres : [],
     });
-
-    // Ejecutar la búsqueda con los filtros aplicados
     await actions.setFilteredData();
   };
 
@@ -130,6 +131,7 @@ export const Sidebar = () => {
   const tags = [
     { name: "Multiplayer", id: 1, slug: "multiplayer" },
     { name: "Singleplayer", id: 2, slug: "singleplayer" },
+    { name: "Tower Defense", id: 105, slug: "tower-defense" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
@@ -141,7 +143,10 @@ export const Sidebar = () => {
     >
       <option value="">All {label}</option>
       {optionsList.map((item) => (
-        <option key={item.id} value={name === "platform" ? item.id : item.slug}>
+        <option
+          key={item.id}
+          value={name === "platforms" ? item.id : item.slug}
+        >
           {item.name}
         </option>
       ))}
@@ -200,10 +205,10 @@ export const Sidebar = () => {
             </button>
           </div>
           {/* Vista de búsqueda avanzada */}
-          {renderSelect("platform", "Platforms", filterOptions.platforms)}
-          {renderSelect("genre", "Genres", filterOptions.genres)}
+          {renderSelect("platforms", "Platforms", filterOptions.platforms)}
+          {renderSelect("genres", "Genres", filterOptions.genres)}
           {renderSelect("developer", "Developers", filterOptions.developers)}
-          {renderSelect("tag", "Tags", filterOptions.tags)}
+          {renderSelect("tags", "Tags", filterOptions.tags)}
           {renderYearSelect()}
         </>
       ) : (
