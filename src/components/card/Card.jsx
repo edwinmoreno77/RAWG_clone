@@ -99,7 +99,7 @@ const CardComponent = ({ item }) => {
           willChange: "transform",
           transition: "transform 0.1s ease-out",
         }}
-        className="relative w-[280px] transition-colors duration-200 bg-stone-900 hover:bg-stone-800 text-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
+        className="relative w-[500px] md:max-w-96 transition-colors duration-200 bg-stone-900 hover:bg-stone-800 text-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
       >
         {/* Efecto de borde animado igual que en el input */}
         <div
@@ -114,7 +114,7 @@ const CardComponent = ({ item }) => {
         <Link to={`${item?.id}`}>
           <img
             src={item?.background_image || DEFAULT_IMAGE}
-            className="w-full h-36 md:h-40 lg:h-44 object-cover rounded-t-lg"
+            className="w-full h-72 md:h-52 lg:h-44 object-cover rounded-t-lg"
             alt={item.name}
           />
         </Link>

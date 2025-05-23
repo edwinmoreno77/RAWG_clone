@@ -26,7 +26,7 @@ export const PageList = () => {
     <Layout>
       {isLoading ? (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-1">
             {[...Array(12)].map((_, index) => (
               <CardSkeleton key={index} />
             ))}
@@ -38,7 +38,7 @@ export const PageList = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-1">
             {itemsWithLastRow.map((item) => (
               <Card key={item.id} item={item} />
             ))}
