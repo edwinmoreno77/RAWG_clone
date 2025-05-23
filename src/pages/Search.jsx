@@ -120,7 +120,7 @@ export const Search = () => {
             <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-white"></div>
           </div>
         ) : (
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 pt-5">
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-1 pt-5">
             {data?.map((game) => (
               <Card key={game.id} item={game} />
             ))}
