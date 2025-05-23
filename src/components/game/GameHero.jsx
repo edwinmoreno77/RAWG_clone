@@ -21,8 +21,8 @@ export const GameHero = ({ data, rotate, onMouseMove, onMouseLeave }) => {
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
             style={{
-              transform: `perspective(1200px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1, 1, 2)`,
-              transition: "all 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s",
+              transform: `perspective(1200px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1, 1, 1.5)`,
+              transition: "all 200ms cubic-bezier(0.03, 0.98, 0.52, 0.99) 0s",
             }}
           />
           <Platforms data={data} />

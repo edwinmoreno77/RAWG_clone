@@ -43,8 +43,7 @@ export const Game = () => {
 
     fetchData();
   }, [id]);
-
-  const { rotate, onMouseMove, onMouseLeave } = useTilt();
+  const { rotate, onMouseMove, onMouseLeave } = useTilt({ max: 8 }); // Reducir el movimiento para la imagen principal
 
   const {
     inputRef,
