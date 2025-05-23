@@ -1,39 +1,43 @@
 import { useState, useCallback } from "react";
 
-function throttle(func, delay) {
-  let lastCall = 0;
-  return (...args) => {
-    const now = new Date().getTime();
-    if (now - lastCall < delay) {
-      return;
-    }
-    lastCall = now;
-    return func(...args);
-  };
-}
-
-export const useTilt = () => {
+export const useTilt = ({ max = 25 } = {}) => {
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
 
-  const onMouseMove = useCallback(
-    throttle((e) => {
-      const card = e.currentTarget;
-      const box = card.getBoundingClientRect();
-      const x = e.clientX - box.left;
-      const y = e.clientY - box.top;
-      const centerX = box.width / 2;
-      const centerY = box.height / 2;
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
+  const calculateTilt = useCallback(
+    (e) => {
+      if (!e.currentTarget) return;
 
-      setRotate({ x: rotateX, y: rotateY });
-    }, 100),
-    []
+      const rect = e.currentTarget.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+      const centerX = rect.left + width / 2;
+      const centerY = rect.top + height / 2;
+
+      // Cálculo directo para un efecto más inmediato
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      const tiltX = ((mouseY - centerY) / (height / 2)) * -max;
+      const tiltY = ((mouseX - centerX) / (width / 2)) * max;
+
+      return { x: tiltX, y: tiltY };
+    },
+    [max]
   );
 
-  const onMouseLeave = () => {
+  const onMouseMove = useCallback(
+    (e) => {
+      const tilt = calculateTilt(e);
+      if (tilt) {
+        setRotate(tilt);
+      }
+    },
+    [calculateTilt]
+  );
+
+  const onMouseLeave = useCallback(() => {
     setRotate({ x: 0, y: 0 });
-  };
+  }, []);
 
   return { rotate, onMouseMove, onMouseLeave };
 };

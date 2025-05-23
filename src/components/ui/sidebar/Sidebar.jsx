@@ -14,20 +14,41 @@ export const Sidebar = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
-  // Sincronizar el estado local con el store global
+  // Sincronizar estados locales con el store
   useEffect(() => {
     if (store.filters) {
-      if (store.filters.platforms) {
-        setSelectedPlatforms(store.filters.platforms);
+      // Para plataformas, convertir a número ya que vienen como string del select
+      if (store.filters.platform) {
+        const platformId =
+          typeof store.filters.platform === "string"
+            ? parseInt(store.filters.platform, 10)
+            : store.filters.platform;
+        setSelectedPlatforms([platformId]);
+      } else {
+        setSelectedPlatforms([]);
       }
-      if (store.filters.genres) {
-        setSelectedGenres(store.filters.genres);
+
+      // Para géneros
+      if (store.filters.genre) {
+        setSelectedGenres([store.filters.genre]);
+      } else {
+        setSelectedGenres([]);
       }
-      if (store.filters.tags) {
-        setSelectedTags(store.filters.tags);
+
+      // Para tags
+      if (store.filters.tag) {
+        setSelectedTags([store.filters.tag]);
+      } else {
+        setSelectedTags([]);
       }
     }
-  }, [store.filters]);
+  }, [store.filters, advancedSearch]);
+
+  // Manejar el cambio entre vistas
+  const toggleAdvancedSearch = () => {
+    setAdvancedSearch(!advancedSearch);
+    // No resetear los filtros al cambiar de vista
+  };
 
   // Generar años desde 1980 hasta el actual
   const startYear = 1980;
@@ -39,7 +60,6 @@ export const Sidebar = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("Selected value:", value); // Agregado para depuración
     actions.setFilters({ name, value });
   };
 
@@ -52,9 +72,8 @@ export const Sidebar = () => {
 
   const handleReset = () => {
     actions.resetFilters();
-    setSelectedPlatforms([]);
-    setSelectedGenres([]);
-    setSelectedTags([]);
+    setSelectedPlatforms([]); // Reiniciar plataformas seleccionadas
+    setSelectedGenres([]); // Reiniciar géneros seleccionados
     actions.closeSidebar();
   };
 
@@ -63,11 +82,16 @@ export const Sidebar = () => {
     const updatedPlatforms = isSelected
       ? selectedPlatforms.filter((id) => id !== platformId)
       : [...selectedPlatforms, platformId];
+
     setSelectedPlatforms(updatedPlatforms);
+
+    // Aplicar o quitar el filtro
     actions.setFilters({
-      name: "platforms",
-      value: updatedPlatforms.length > 0 ? updatedPlatforms : [],
+      name: "platform",
+      value: isSelected ? null : platformId,
     });
+
+    // Ejecutar la búsqueda con los filtros aplicados
     await actions.setFilteredData();
   };
 
@@ -76,11 +100,16 @@ export const Sidebar = () => {
     const updatedTags = isSelected
       ? selectedTags.filter((slug) => slug !== tagSlug)
       : [...selectedTags, tagSlug];
+
     setSelectedTags(updatedTags);
+
+    // Aplicar o quitar el filtro
     actions.setFilters({
-      name: "tags",
-      value: updatedTags.length > 0 ? updatedTags : [],
+      name: "tag",
+      value: isSelected ? null : tagSlug,
     });
+
+    // Ejecutar la búsqueda con los filtros aplicados
     await actions.setFilteredData();
   };
 
@@ -89,11 +118,16 @@ export const Sidebar = () => {
     const updatedGenres = isSelected
       ? selectedGenres.filter((slug) => slug !== genreSlug)
       : [...selectedGenres, genreSlug];
+
     setSelectedGenres(updatedGenres);
+
+    // Aplicar o quitar el filtro
     actions.setFilters({
-      name: "genres",
-      value: updatedGenres.length > 0 ? updatedGenres : [],
+      name: "genre",
+      value: isSelected ? null : genreSlug,
     });
+
+    // Ejecutar la búsqueda con los filtros aplicados
     await actions.setFilteredData();
   };
 
@@ -127,11 +161,11 @@ export const Sidebar = () => {
     { name: "Educational", id: 34, slug: "educational" },
   ];
 
-  //tags
+  //tagss
   const tags = [
     { name: "Multiplayer", id: 1, slug: "multiplayer" },
     { name: "Singleplayer", id: 2, slug: "singleplayer" },
-    { name: "Tower Defense", id: 105, slug: "tower-defense" },
+    { name: "Tower Defense", id: 3, slug: "tower-defense" },
   ];
 
   const renderSelect = (name, label, optionsList) => (
@@ -143,10 +177,7 @@ export const Sidebar = () => {
     >
       <option value="">All {label}</option>
       {optionsList.map((item) => (
-        <option
-          key={item.id}
-          value={name === "platforms" ? item.id : item.slug}
-        >
+        <option key={item.id} value={name === "platform" ? item.id : item.slug}>
           {item.name}
         </option>
       ))}
@@ -177,7 +208,7 @@ export const Sidebar = () => {
     >
       {/* Botón de búsqueda avanzada */}
       <button
-        onClick={() => setAdvancedSearch(!advancedSearch)}
+        onClick={toggleAdvancedSearch}
         className="w-full bg-stone-800 hover:bg-stone-600 text-white py-1 px-1 mt-1 rounded transition-colors mb-4"
       >
         {advancedSearch ? "Basic Search" : "Advanced Search"}
@@ -205,10 +236,10 @@ export const Sidebar = () => {
             </button>
           </div>
           {/* Vista de búsqueda avanzada */}
-          {renderSelect("platforms", "Platforms", filterOptions.platforms)}
-          {renderSelect("genres", "Genres", filterOptions.genres)}
+          {renderSelect("platform", "Platforms", filterOptions.platforms)}
+          {renderSelect("genre", "Genres", filterOptions.genres)}
           {renderSelect("developer", "Developers", filterOptions.developers)}
-          {renderSelect("tags", "Tags", filterOptions.tags)}
+          {renderSelect("tag", "Tags", filterOptions.tags)}
           {renderYearSelect()}
         </>
       ) : (

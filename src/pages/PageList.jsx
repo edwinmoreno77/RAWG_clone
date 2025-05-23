@@ -1,6 +1,6 @@
 import { Layout } from "../components/ui/Layout";
 import { Card } from "../components/card/Card";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Context } from "../store/appContext";
 import { CardSkeleton } from "../components/card/CardSkeleton";
 
@@ -12,6 +12,15 @@ export const PageList = () => {
     actions.getPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const itemsWithLastRow = useMemo(() => {
+    if (!filteredData) return [];
+    const lastRowItems = 4;
+    return filteredData.map((item, index) => ({
+      ...item,
+      isLastRow: index >= filteredData.length - lastRowItems,
+    }));
+  }, [filteredData]);
 
   return (
     <Layout>
@@ -30,7 +39,7 @@ export const PageList = () => {
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-1 ">
-            {filteredData.map((item) => (
+            {itemsWithLastRow.map((item) => (
               <Card key={item.id} item={item} />
             ))}
           </div>

@@ -9,9 +9,9 @@ const getState = ({ getStore, getActions, setStore }) => {
       isSidebarOpen: false,
       filters: {
         year: "",
-        genres: [],
-        platforms: [],
-        tags: [],
+        genre: "",
+        platform: "",
+        tag: "",
         developer: "",
         ordering: "",
       },
@@ -104,9 +104,9 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({
           filters: {
             year: "",
-            genres: [],
-            platforms: [],
-            tags: [],
+            genre: "",
+            platform: "",
+            tag: "",
             developer: "",
             ordering: "",
           },
