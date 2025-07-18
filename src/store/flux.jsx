@@ -8,7 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       favorites: JSON.parse(localStorage.getItem("favorites")) || [],
       isSidebarOpen: false,
       filters: {
-        year: "2025",
+        year: "",
         genre: "",
         platform: "",
         tag: "",
