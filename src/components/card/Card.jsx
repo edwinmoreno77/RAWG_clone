@@ -38,7 +38,7 @@ const CardComponent = ({ item }) => {
     rotate: cardRotate,
     onMouseMove: cardOnMouseMove,
     onMouseLeave: cardOnMouseLeave,
-  } = useTilt({ max: 10 });
+  } = useTilt({ max: 4 });
 
   // Optimizar el manejo de eventos del mouse
   const handleMouseMove = useCallback(
@@ -108,7 +108,7 @@ const CardComponent = ({ item }) => {
             opacity: cardOpacity,
             border: "1.5px solid #ffffff",
             WebkitMaskImage: `radial-gradient(50% 200px at ${cardPosition.x}px ${cardPosition.y}px, black 50%, transparent)`,
-            background: `radial-gradient(circle at ${cardPosition.x}px ${cardPosition.y}px, rgba(100, 204, 22, 0.07), rgba(201, 163, 13, 0.07), transparent 80%)`,
+            background: `radial-gradient(circle at ${cardPosition.x}px ${cardPosition.y}px, rgba(100, 204, 22, 0.06), rgba(201, 163, 13, 0.06), transparent 80%)`,
           }}
         />
         <Link to={`${item?.id}`}>
@@ -145,8 +145,8 @@ const CardComponent = ({ item }) => {
             <button onClick={handlerLikes}>
               <FontAwesomeIcon
                 icon={faBookmark}
-                className={`cursor-pointer text-lg transition ease-in-out hover:scale-125 ${
-                  like ? "text-lime-600" : "text-stone-700"
+                className={`cursor-pointer text-lg transition-all duration-300 ease-in-out hover:scale-125 ${
+                  like ? "text-lime-600" : "text-stone-600 hover:text-stone-400"
                 }`}
               />
             </button>
