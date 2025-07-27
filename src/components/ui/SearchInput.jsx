@@ -98,7 +98,7 @@ export const SearchInput = () => {
   };
 
   return (
-    <div className="relative w-full max-w-3xl" ref={dropdownRef}>
+    <div className="relative w-full max-w-5xl" ref={dropdownRef}>
       <div className="relative w-full group">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}
@@ -115,9 +115,9 @@ export const SearchInput = () => {
         />
 
         <input
-          className="form-input w-full p-2 pl-10 pr-10 bg-stone-800 text-white rounded-lg shadow-lg focus:bg-black focus:text-white hover:placeholder-white text-sm border border-stone-600 focus:border-lime-400 transition-all duration-300"
+          className="form-input w-full p-3 pl-10 pr-10 bg-stone-900 hover:bg-black text-white rounded-2xl shadow-lg focus:bg-black focus:text-white hover:placeholder-white text-sm border border-stone-600 focus:border-stone-400 transition-all duration-300"
           type="text"
-          placeholder="Buscar juegos..."
+          placeholder="Search..."
           value={searchTerm}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
@@ -131,7 +131,7 @@ export const SearchInput = () => {
 
         {/* Efecto spotlight overlay */}
         <div
-          className="pointer-events-none absolute inset-0 rounded-lg transition-opacity duration-300"
+          className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
           style={{
             opacity: opacity,
             WebkitMaskImage: `radial-gradient(30% 30px at ${position.x}px ${position.y}px, black 45%, transparent)`,
@@ -142,7 +142,7 @@ export const SearchInput = () => {
 
       {/* Dropdown de resultados */}
       {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-stone-800 rounded-lg shadow-xl border border-stone-700 z-50 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-stone-800 rounded-lg shadow-xl border border-stone-700 z-[9999] max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
           {isLoading ? (
             <div className="p-4 text-center text-stone-400">
               <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white mx-auto"></div>

@@ -24,15 +24,18 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center justify-between">
           {/* Logo a la izquierda */}
           <div className="flex-shrink-0">
-            <Link to="/">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-lime-400 via-lime-600 to-lime-700 hover:from-lime-200 hover:via-lime-500 hover:to-lime-600 bg-clip-text text-transparent font-mono">
-                RAWG Clone
+            <Link className="flex items-center" to="/">
+              <h1 className="text-2xl bg-stone-300 bg-clip-text text-transparent hover:bg-white transition-all duration-300 font-extrabold hover:brightness-150">
+                R A W G
               </h1>
+              <span className="text-sm ml-2 text-stone-400 hover:text-stone-200 transition-all duration-300">
+                Clone
+              </span>
             </Link>
           </div>
 
           {/* Input de búsqueda en el centro */}
-          <div className="flex-1 flex justify-center px-8 max-w-2xl">
+          <div className="flex-1 flex justify-center px-8 max-w-7xl">
             <SearchInput />
           </div>
 
@@ -88,10 +91,13 @@ export const Navbar = () => {
         <div className="md:hidden flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-lime-400 via-lime-600 to-lime-700 hover:from-lime-200 hover:via-lime-500 hover:to-lime-600 bg-clip-text text-transparent font-mono">
-                RAWG Clone
+            <Link className="flex items-center" to="/">
+              <h1 className="text-xl bg-stone-100 bg-clip-text text-transparent font-extrabold">
+                R A W G
               </h1>
+              <span className="text-sm ml-2 text-stone-400 hover:text-stone-200 transition-all duration-300">
+                Clone
+              </span>
             </Link>
 
             {/* Iconos */}
