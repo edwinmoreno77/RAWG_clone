@@ -13,6 +13,7 @@ const router = createBrowserRouter(
     { path: "/favorites", element: <Favorites /> },
     { path: "/search", element: <Search /> },
     { path: "/search/:id", element: <Game /> },
+    { path: "/game/:id", element: <Game /> },
     { path: "/favorites/:id", element: <Game /> },
     { path: "/:id", element: <Game /> },
     { path: "*", element: <NotFound /> },
