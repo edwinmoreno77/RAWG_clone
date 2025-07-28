@@ -1,8 +1,9 @@
 import { Layout } from "../components/ui/Layout";
 import { Card } from "../components/card/Card";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { CardSkeleton } from "../components/card/CardSkeleton";
+import { useLastRowCards } from "../hooks/useLastRowCards";
 
 export const PageList = () => {
   const { store, actions } = useContext(Context);
@@ -13,14 +14,7 @@ export const PageList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const itemsWithLastRow = useMemo(() => {
-    if (!filteredData) return [];
-    const lastRowItems = 4;
-    return filteredData.map((item, index) => ({
-      ...item,
-      isLastRow: index >= filteredData.length - lastRowItems,
-    }));
-  }, [filteredData]);
+  const itemsWithLastRow = useLastRowCards(filteredData, 4, true);
 
   return (
     <Layout>

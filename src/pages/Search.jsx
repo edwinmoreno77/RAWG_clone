@@ -4,12 +4,15 @@ import { Card } from "../components/card/Card";
 import { getGameByName } from "../api/getData";
 import { useSearchParams } from "react-router-dom";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
+import { useLastRowCards } from "../hooks/useLastRowCards";
 
 export const Search = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") || "call of duty";
+
+  const itemsWithLastRow = useLastRowCards(data, 5, true);
 
   // Hook para el efecto en el fondo (ambient)
   const {
@@ -30,7 +33,7 @@ export const Search = () => {
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [handleMouseEnterBg]);
+  }, [handleMouseEnterBg, bgRef]);
 
   const searchByName = async (name) => {
     setIsLoading(true);
@@ -51,7 +54,7 @@ export const Search = () => {
         onMouseMove={handleMouseMoveBg}
         onMouseEnter={handleMouseEnterBg}
         onMouseLeave={handleMouseLeaveBg}
-        className="relative container-fluid min-h-screen bg-stone-950 overflow-hidden"
+        className="flex flex-col h-screen bg-stone-950"
       >
         {/* Efecto de fondo ambient */}
         <div
@@ -63,25 +66,29 @@ export const Search = () => {
         />
         <Navbar />
 
-        {/* Título de búsqueda */}
-        <div className="relative z-10 flex flex-col items-center justify-center mt-8 mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-            Resultados de búsqueda
-          </h1>
-          <p className="text-stone-400 text-lg">&ldquo;{searchQuery}&rdquo;</p>
-        </div>
+        <main className="flex-1 bg-stone-950 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
+          {/* Título de búsqueda */}
+          <div className="relative z-10 flex flex-row items-center justify-center mt-3 mb-1 gap-5">
+            <h1 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-stone-500 via-stone-100 to-stone-500 bg-clip-text text-transparent mb-1">
+              Search results:
+            </h1>
+            <span className="text-stone-200 text-lg font-bold">
+              &ldquo;{searchQuery}&rdquo;
+            </span>
+          </div>
 
-        {isLoading ? (
-          <div className="relative z-10 flex justify-center items-center h-40 pt-10">
-            <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-white"></div>
-          </div>
-        ) : (
-          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-1 pt-5 px-4">
-            {data?.map((game) => (
-              <Card key={game.id} item={game} />
-            ))}
-          </div>
-        )}
+          {isLoading ? (
+            <div className="relative z-10 flex justify-center items-center h-40 pt-10">
+              <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-white"></div>
+            </div>
+          ) : (
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-1 pt-5 px-4">
+              {itemsWithLastRow?.map((game) => (
+                <Card key={game.id} item={game} />
+              ))}
+            </div>
+          )}
+        </main>
       </div>
     </>
   );

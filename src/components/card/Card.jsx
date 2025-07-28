@@ -17,7 +17,6 @@ const CardComponent = ({ item }) => {
   const { actions, store } = useContext(Context);
   const { addFavorites, removeFavorites } = actions;
   const { favorites } = store;
-
   // Primero declarar los estados que no dependen de otros
   const [isHovered, setIsHovered] = useState(false);
   const [like, setLike] = useState(() =>
@@ -99,7 +98,7 @@ const CardComponent = ({ item }) => {
           willChange: "transform",
           transition: "transform 0.1s ease-out",
         }}
-        className="relative w-[500px] md:max-w-96 transition-colors duration-200 bg-stone-900 hover:bg-stone-800 text-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
+        className="relative group w-[500px] md:max-w-96 transition-colors duration-200 bg-stone-900 hover:bg-stone-800 text-white scale-95 hover:scale-105 rounded-lg shadow-md hover:shadow-2xl brightness-95 hover:brightness-105"
       >
         {/* Efecto de borde animado igual que en el input */}
         <div
@@ -120,7 +119,9 @@ const CardComponent = ({ item }) => {
         </Link>
         <div className="p-4 brightness-110">
           <PlatformIcons platforms={item?.platforms} />
-          <h5 className="text-lg font-bold">{item?.name}</h5>
+          <h5 className="text-lg font-bold bg-gradient-to-r from-stone-400 via-white to-stone-500 group-hover:from-stone-200 group-hover:via-white group-hover:to-stone-200 transition-all duration-300 bg-clip-text text-transparent">
+            {item?.name}
+          </h5>
           <div className="flex justify-between">
             <div className="text-xs">
               <span className="">

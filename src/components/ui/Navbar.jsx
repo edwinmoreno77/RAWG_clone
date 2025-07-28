@@ -22,7 +22,7 @@ export const Navbar = () => {
           {/* Logo a la izquierda */}
           <div className="flex-shrink-0">
             <Link className="flex items-center" to="/">
-              <h1 className="text-xl bg-stone-300 bg-clip-text text-transparent hover:bg-white transition-all duration-300 font-extrabold hover:brightness-150">
+              <h1 className="text-xl hover:animate-pulse bg-stone-300 bg-clip-text text-transparent hover:bg-white transition-all duration-300 font-extrabold hover:brightness-150">
                 R A W G
               </h1>
               <span className="text-sm ml-2 text-stone-400 hover:text-stone-200 transition-all duration-300">
@@ -55,7 +55,7 @@ export const Navbar = () => {
               </span>
             </NavLink>
 
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center hover:animate-pulse">
               <FontAwesomeIcon
                 icon={faUser}
                 className="text-lg cursor-pointer hover:text-white hover:scale-125 transition-all duration-300"
