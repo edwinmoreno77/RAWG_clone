@@ -20,6 +20,7 @@ export const Background = ({ children, className = "" }) => {
       }, 100);
       return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleMouseEnterBg]);
 
   return (
