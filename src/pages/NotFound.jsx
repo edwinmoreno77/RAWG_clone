@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { Navbar } from "../components/ui/Navbar";
+import { BasicLayout } from "../layouts/BasicLayout";
 
 export const NotFound = () => {
   return (
-    <>
-      <Navbar />
+    <BasicLayout>
       <main className="container mx-auto min-h-screen flex flex-col justify-center items-center bg-stone-950">
         <div className="text-center mt-5">
           <h1 className="text-4xl font-bold mb-5">Not Found</h1>
@@ -16,6 +15,6 @@ export const NotFound = () => {
           </Link>
         </div>
       </main>
-    </>
+    </BasicLayout>
   );
 };

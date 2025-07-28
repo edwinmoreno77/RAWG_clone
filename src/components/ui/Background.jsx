@@ -1,12 +1,8 @@
 import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
-import { Navbar } from "./Navbar";
-import PropTypes from "prop-types";
-import { Sidebar } from "./sidebar/Sidebar";
-import { OrderingSelect } from "./OrderingSelect";
-import { Pagination } from "../Pagination";
 import { useEffect } from "react";
+import { childrenPropType, classNamePropType } from "../../constants/propTypes";
 
-export const Layout = ({ children }) => {
+export const Background = ({ children, className = "" }) => {
   const {
     inputRef: bgRef,
     position: bgPosition,
@@ -19,7 +15,6 @@ export const Layout = ({ children }) => {
   // Asegurar que el efecto se inicialice correctamente
   useEffect(() => {
     if (bgRef.current) {
-      // Forzar un re-render del efecto después de que el componente esté montado
       const timer = setTimeout(() => {
         handleMouseEnterBg();
       }, 100);
@@ -28,12 +23,12 @@ export const Layout = ({ children }) => {
   }, [handleMouseEnterBg]);
 
   return (
-    <main
+    <div
       ref={bgRef}
       onMouseMove={handleMouseMoveBg}
       onMouseEnter={handleMouseEnterBg}
       onMouseLeave={handleMouseLeaveBg}
-      className="flex flex-col h-screen"
+      className={`flex flex-col h-screen bg-stone-950 ${className}`}
     >
       {/* Efecto de fondo ambient */}
       <div
@@ -43,23 +38,12 @@ export const Layout = ({ children }) => {
           background: `radial-gradient(300px circle at ${bgPosition.x}px ${bgPosition.y}px, rgba(255,255,255,0.1), transparent)`,
         }}
       />
-      <Navbar />
-      <div className="flex flex-1 overflow-hidden ">
-        <Sidebar />
-        <div className="flex flex-col flex-1 bg-transparent overflow-hidden ">
-          <main className="flex-1 bg-transparent p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
-            <OrderingSelect />
-            {children}
-          </main>
-          <div className="bg-transparent">
-            <Pagination />
-          </div>
-        </div>
-      </div>
-    </main>
+      {children}
+    </div>
   );
 };
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
+Background.propTypes = {
+  children: childrenPropType.isRequired,
+  className: classNamePropType,
 };

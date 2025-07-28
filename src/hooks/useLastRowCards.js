@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 
 /**
- * Hook personalizado para marcar las últimas cards como isLastRow con lógica responsive
+ * Hook personalizado para marcar las últimas cards como isLastRow
  * @param {Array} items - Array de items (cards)
  * @param {number} lastRowItems - Cantidad de items en la última fila (por defecto 4)
  * @param {boolean} responsive - Si es true, ajusta automáticamente según el tamaño de pantalla

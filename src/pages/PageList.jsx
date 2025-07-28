@@ -1,4 +1,4 @@
-import { Layout } from "../components/ui/Layout";
+import { SidebarLayout } from "../layouts/SidebarLayout";
 import { Card } from "../components/card/Card";
 import { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
@@ -17,7 +17,7 @@ export const PageList = () => {
   const itemsWithLastRow = useLastRowCards(filteredData, 4, true);
 
   return (
-    <Layout>
+    <SidebarLayout>
       {isLoading ? (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-1">
@@ -39,6 +39,6 @@ export const PageList = () => {
           </div>
         </>
       )}
-    </Layout>
+    </SidebarLayout>
   );
 };
