@@ -11,7 +11,7 @@ export const GameHero = ({ data, rotate, onMouseMove, onMouseLeave }) => {
           initial={{ opacity: 0.2 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2.5 }}
-          className="flex flex-col justify-center w-11/12 h-96 m-0 p-0 sm:mt-7 md:p-5 md:my-2 md:h-96 lg:h-[calc(100vh-4rem)]"
+          className="flex flex-col justify-center w-11/12 h-96 m-0 p-0 sm:mt-7 md:p-5 md:my-2 md:h-96 lg:pt-10 lg:h-[calc(100vh-4rem)]"
         >
           <img
             src={data?.background_image}
