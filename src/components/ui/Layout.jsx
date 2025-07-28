@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Sidebar } from "./sidebar/Sidebar";
 import { OrderingSelect } from "./OrderingSelect";
 import { Pagination } from "../Pagination";
+import { useEffect } from "react";
 
 export const Layout = ({ children }) => {
   const {
@@ -14,6 +15,17 @@ export const Layout = ({ children }) => {
     handleMouseEnter: handleMouseEnterBg,
     handleMouseLeave: handleMouseLeaveBg,
   } = useSpotlightBorder();
+
+  // Asegurar que el efecto se inicialice correctamente
+  useEffect(() => {
+    if (bgRef.current) {
+      // Forzar un re-render del efecto después de que el componente esté montado
+      const timer = setTimeout(() => {
+        handleMouseEnterBg();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [handleMouseEnterBg]);
 
   return (
     <main
@@ -28,7 +40,7 @@ export const Layout = ({ children }) => {
         className="pointer-events-none absolute inset-0 transition-opacity duration-300"
         style={{
           opacity: bgOpacity,
-          background: `radial-gradient(150px circle at ${bgPosition.x}px ${bgPosition.y}px, rgba(255,255,255,0.05), transparent)`,
+          background: `radial-gradient(300px circle at ${bgPosition.x}px ${bgPosition.y}px, rgba(255,255,255,0.1), transparent)`,
         }}
       />
       <Navbar />

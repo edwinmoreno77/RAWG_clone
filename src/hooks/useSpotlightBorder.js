@@ -7,7 +7,7 @@ export const useSpotlightBorder = () => {
   const [opacity, setOpacity] = useState(0);
 
   const handleMouseMove = (e) => {
-    if (!inputRef.current || isFocused) return;
+    if (!inputRef.current) return;
 
     const rect = inputRef.current.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -22,10 +22,14 @@ export const useSpotlightBorder = () => {
     setIsFocused(false);
     setOpacity(0);
   };
+
   const handleMouseEnter = () => {
     setOpacity(1);
   };
-  const handleMouseLeave = () => setOpacity(0);
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
 
   return {
     inputRef,
