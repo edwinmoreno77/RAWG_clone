@@ -18,7 +18,7 @@ export const OrderingSelect = () => {
         onChange={handleOrderingChange}
       >
         {/*Relevancia (orden por defecto de RAWG) */}
-        <option className="text-xs" value="">
+        <option className="text-xs" value="-added">
           Relevance
         </option>
         {/*Fecha de añadido (orden inverso) */}
