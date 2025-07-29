@@ -8,10 +8,12 @@ export const routes = [
   { path: "/", element: <PageList /> },
   { path: "/favorites", element: <Favorites /> },
   { path: "/search", element: <Search /> },
-  { path: "/search/:id", element: <GameWrapper /> },
-  { path: "/game/:id", element: <GameWrapper /> },
-  { path: "/favorites/:id", element: <GameWrapper /> },
-  { path: "/:id", element: <GameWrapper /> },
+  // Rutas de GameWrapper con ruta específica
+  { path: "/search/:id", element: <GameWrapper route="/search/:id" /> },
+  { path: "/game/:id", element: <GameWrapper route="/game/:id" /> },
+  { path: "/favorites/:id", element: <GameWrapper route="/favorites/:id" /> },
+  { path: "/:id", element: <GameWrapper route="/:id" /> },
+  // Ruta específica para NotFound
   { path: "/not-found", element: <NotFound /> },
   // Ruta catch-all para NotFound
   { path: "*", element: <NotFound /> },
