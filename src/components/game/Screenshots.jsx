@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { ScreenshotItem } from "./ScreenshotItem";
 
 export const Screenshots = ({ data }) => {
   return (
@@ -7,13 +8,7 @@ export const Screenshots = ({ data }) => {
         data?.screenshots?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 w-full">
             {data.screenshots.map((screenshot) => (
-              <div key={screenshot.id} className="relative group">
-                <img
-                  src={screenshot.image}
-                  alt={`Screenshot ${screenshot.id}`}
-                  className="w-full h-40 md:h-48 object-cover rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 border border-stone-600 hover:border-2 hover:border-stone-200"
-                />
-              </div>
+              <ScreenshotItem key={screenshot.id} screenshot={screenshot} />
             ))}
           </div>
         ) : (

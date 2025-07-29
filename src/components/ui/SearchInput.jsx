@@ -7,6 +7,7 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
+import { SearchResultItem } from "./SearchResultItem";
 
 export const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,7 +38,7 @@ export const SearchInput = () => {
         setSearchResults([]);
         setShowDropdown(false);
       }
-    }, 300);
+    }, 100);
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm]);
@@ -58,7 +59,7 @@ export const SearchInput = () => {
     setIsLoading(true);
     try {
       const results = await getGameByName(term);
-      setSearchResults(results?.slice(0, 8) || []); // Solo mostrar 5 resultados
+      setSearchResults(results?.slice(0, 8) || []);
       setShowDropdown(true);
     } catch (error) {
       console.error("Error en búsqueda:", error);
@@ -151,33 +152,11 @@ export const SearchInput = () => {
           ) : searchResults.length > 0 ? (
             <>
               {searchResults.map((game) => (
-                <div
+                <SearchResultItem
                   key={game.id}
-                  className="p-3 hover:bg-stone-700 cursor-pointer transition-colors border-b border-stone-700 last:border-b-0 "
-                  onClick={() => handleGameClick(game)}
-                >
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={game.background_image}
-                      alt={game.name}
-                      className="w-12 h-8 object-cover rounded"
-                      onError={(e) => {
-                        e.target.src =
-                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='32' viewBox='0 0 48 32'%3E%3Crect width='48' height='32' fill='%23374151'/%3E%3Ctext x='24' y='20' text-anchor='middle' fill='white' font-size='8'%3ENo img%3C/text%3E%3C/svg%3E";
-                      }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-white text-sm font-medium truncate">
-                        {game.name}
-                      </h4>
-                      <p className="text-stone-400 text-xs truncate">
-                        {game.released
-                          ? new Date(game.released).getFullYear()
-                          : "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  game={game}
+                  onClick={handleGameClick}
+                />
               ))}
               <div
                 className="p-3 hover:bg-stone-700 cursor-pointer transition-colors text-center border-t border-stone-700"

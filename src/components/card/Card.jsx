@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
 import { PlatformIcons } from "./PlatformIcons";
 import { useTilt } from "../../hooks/useTilt";
+import { useImageOptimizer } from "../../hooks/useImageOptimizer";
 
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
@@ -112,7 +113,14 @@ const CardComponent = ({ item }) => {
         />
         <Link to={`${item?.id}`}>
           <img
-            src={item?.background_image || DEFAULT_IMAGE}
+            src={useImageOptimizer(
+              item?.background_image || DEFAULT_IMAGE,
+              "card"
+            )}
+            onError={(e) => {
+              e.target.src =
+                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='32' viewBox='0 0 48 32'%3E%3Crect width='48' height='32' fill='%23374151'/%3E%3Ctext x='24' y='20' text-anchor='middle' fill='white' font-size='8'%3ENo img%3C/text%3E%3C/svg%3E";
+            }}
             className="w-full h-72 md:h-52 lg:h-44 object-cover rounded-t-lg"
             alt={item.name}
           />
