@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import { useContext, useState, useCallback } from "react";
 import { Context } from "../../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faPause } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useSpotlightBorder } from "../../hooks/useSpotlightBorder";
 import { PlatformIcons } from "./PlatformIcons";
 import { useTilt } from "../../hooks/useTilt";
 import { useImageOptimizer } from "../../hooks/useImageOptimizer";
+import { useCardMedia } from "../../hooks/useCardMedia";
 
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
@@ -22,6 +23,26 @@ const CardComponent = ({ item }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [like, setLike] = useState(() =>
     favorites.some((favorite) => favorite.id === item.id)
+  );
+
+  // Hook para manejar media (videos y screenshots)
+  const {
+    currentImage,
+    currentVideo,
+    hasVideo,
+    hasScreenshots,
+    isVideoPlaying,
+    videoRef,
+    imageContainerRef,
+    pauseVideo,
+    handleImageMouseMove,
+    currentImageIndex,
+    totalImages,
+  } = useCardMedia(
+    item.screenshots || [],
+    item.videos || [],
+    isHovered,
+    item?.background_image
   );
 
   // Hook para el efecto en el card
@@ -111,20 +132,75 @@ const CardComponent = ({ item }) => {
             background: `radial-gradient(circle at ${cardPosition.x}px ${cardPosition.y}px, rgba(100, 204, 22, 0.06), rgba(201, 163, 13, 0.06), transparent 80%)`,
           }}
         />
-        <Link to={`${item?.id}`}>
+        <div
+          ref={imageContainerRef}
+          onMouseMove={handleImageMouseMove}
+          className="relative w-full h-72 md:h-52 lg:h-44 overflow-hidden rounded-t-lg cursor-pointer"
+        >
+          {/* Video overlay */}
+          {hasVideo && isHovered && (
+            <video
+              ref={videoRef}
+              src={currentVideo}
+              className="absolute inset-0 w-full h-full object-cover"
+              muted
+              loop
+              onPlay={() => {
+                // El estado se maneja en el hook useCardMedia
+              }}
+              onPause={() => {
+                // El estado se maneja en el hook useCardMedia
+              }}
+            />
+          )}
+
+          {/* Imagen de fondo o slideshow */}
           <img
-            src={useImageOptimizer(
-              item?.background_image || DEFAULT_IMAGE,
-              "card"
-            )}
+            src={useImageOptimizer(currentImage || DEFAULT_IMAGE, "card")}
             onError={(e) => {
               e.target.src =
                 "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='32' viewBox='0 0 48 32'%3E%3Crect width='48' height='32' fill='%23374151'/%3E%3Ctext x='24' y='20' text-anchor='middle' fill='white' font-size='8'%3ENo img%3C/text%3E%3C/svg%3E";
             }}
-            className="w-full h-72 md:h-52 lg:h-44 object-cover rounded-t-lg"
+            className={`w-full h-full object-cover transition-opacity duration-300 ${
+              hasVideo && isHovered ? "opacity-0" : "opacity-100"
+            }`}
             alt={item.name}
           />
-        </Link>
+
+          {/* Indicadores de slideshow */}
+          {hasScreenshots && totalImages > 1 && !hasVideo && (
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+              {Array.from({ length: totalImages }, (_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentImageIndex ? "bg-white" : "bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Indicador de scroll horizontal */}
+          {hasScreenshots && totalImages > 1 && !hasVideo && isHovered && (
+            <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+              Mover mouse para cambiar imagen
+            </div>
+          )}
+
+          {/* Botón de pause para video (opcional) */}
+          {hasVideo && isVideoPlaying && isHovered && (
+            <button
+              onClick={pauseVideo}
+              className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-300"
+            >
+              <FontAwesomeIcon icon={faPause} className="text-white text-lg" />
+            </button>
+          )}
+
+          {/* Link overlay para navegación */}
+          <Link to={`${item?.id}`} className="absolute inset-0 z-10" />
+        </div>
         <div className="p-4 brightness-110">
           <PlatformIcons platforms={item?.platforms} />
           <h5 className="text-lg font-bold bg-gradient-to-r from-stone-400 via-white to-stone-500 group-hover:from-stone-200 group-hover:via-white group-hover:to-stone-200 transition-all duration-300 bg-clip-text text-transparent">
@@ -213,6 +289,19 @@ CardComponent.propTypes = {
     rating: PropTypes.number,
     released: PropTypes.string,
     isLastRow: PropTypes.bool,
+    screenshots: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        image: PropTypes.string,
+        url: PropTypes.string,
+      })
+    ),
+    videos: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        data: PropTypes.object,
+      })
+    ),
     genres: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,

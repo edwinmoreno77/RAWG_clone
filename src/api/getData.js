@@ -125,8 +125,43 @@ export const getFilteredGames = async (filters, page) => {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    filteredGamesCache.set(cacheKey, data.results); // Guarda los datos en caché
-    return data.results;
+
+    // Obtener videos y screenshots para cada juego en paralelo
+    const gamesWithMedia = await Promise.all(
+      data.results.map(async (game) => {
+        try {
+          const [screenshotsRes, videosRes] = await Promise.all([
+            fetch(
+              `https://api.rawg.io/api/games/${game.id}/screenshots?key=${key}&page_size=3`
+            ),
+            fetch(
+              `https://api.rawg.io/api/games/${game.id}/movies?key=${key}&page_size=1`
+            ),
+          ]);
+
+          const screenshots = screenshotsRes.ok
+            ? (await screenshotsRes.json()).results
+            : [];
+          const videos = videosRes.ok ? (await videosRes.json()).results : [];
+
+          return {
+            ...game,
+            screenshots,
+            videos,
+          };
+        } catch (error) {
+          console.error(`Error fetching media for game ${game.id}:`, error);
+          return {
+            ...game,
+            screenshots: [],
+            videos: [],
+          };
+        }
+      })
+    );
+
+    filteredGamesCache.set(cacheKey, gamesWithMedia); // Guarda los datos en caché
+    return gamesWithMedia;
   } catch (error) {
     console.log("Error en getFilteredGames", error);
     return [];
