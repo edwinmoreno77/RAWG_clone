@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { preloadScreenshots } from "./useImageOptimizer";
 
 export const useCardMedia = (
@@ -17,13 +17,13 @@ export const useCardMedia = (
     ? [backgroundImage, ...screenshots]
     : screenshots;
 
-  // Precargar screenshots cuando estén disponibles (solo las primeras 3 para no sobrecargar)
+  // Precargar TODOS los screenshots cuando se detecte hover por primera vez
   useEffect(() => {
-    if (screenshots && screenshots.length > 0) {
-      const firstScreenshots = screenshots.slice(0, 3);
-      preloadScreenshots(firstScreenshots, "screenshot");
+    if (isHovered && screenshots && screenshots.length > 0) {
+      // Precargar todos los screenshots de una vez cuando se hace hover
+      preloadScreenshots(screenshots, "screenshot");
     }
-  }, [screenshots]);
+  }, [isHovered, screenshots]);
 
   // Función para obtener la imagen actual
   const getCurrentImage = () => {
@@ -40,6 +40,12 @@ export const useCardMedia = (
       screenshots[screenshotIndex]?.image || screenshots[screenshotIndex]?.url
     );
   };
+
+  // Memoizar la imagen actual para evitar recálculos innecesarios
+  const currentImage = useMemo(
+    () => getCurrentImage(),
+    [currentImageIndex, backgroundImage, screenshots]
+  );
 
   // Función para obtener el primer video disponible
   const getFirstVideo = () => {
@@ -94,14 +100,7 @@ export const useCardMedia = (
     }
   }, [isHovered, videos.length]);
 
-  // Precargar imágenes cuando se detecte hover y hay screenshots
-  useEffect(() => {
-    if (isHovered && screenshots.length > 0) {
-      // Precargar las próximas 2 imágenes para una transición más suave
-      const nextScreenshots = screenshots.slice(0, 2);
-      preloadScreenshots(nextScreenshots, "screenshot");
-    }
-  }, [isHovered, screenshots]);
+  // No necesitamos precargar en hover porque ya está todo precargado desde el inicio
 
   // Función para reproducir video
   const playVideo = () => {
@@ -120,7 +119,7 @@ export const useCardMedia = (
   };
 
   return {
-    currentImage: getCurrentImage(),
+    currentImage: currentImage,
     currentVideo: getFirstVideo(),
     hasVideo: videos.length > 0,
     hasScreenshots: allImages.length > 1,

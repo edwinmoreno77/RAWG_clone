@@ -11,7 +11,6 @@ import { PlatformIcons } from "./PlatformIcons";
 import { useTilt } from "../../hooks/useTilt";
 import { useImageOptimizer } from "../../hooks/useImageOptimizer";
 import { useCardMedia } from "../../hooks/useCardMedia";
-import { preloadScreenshots } from "../../hooks/useImageOptimizer";
 
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
@@ -75,13 +74,8 @@ const CardComponent = ({ item }) => {
     (e) => {
       handleMouseEnterCard(e);
       setIsHovered(true);
-
-      // Precargar screenshots cuando se hace hover
-      if (item.screenshots && item.screenshots.length > 0) {
-        preloadScreenshots(item.screenshots, "screenshot");
-      }
     },
-    [handleMouseEnterCard, item.screenshots]
+    [handleMouseEnterCard]
   );
 
   const handleMouseLeave = useCallback(
@@ -130,7 +124,7 @@ const CardComponent = ({ item }) => {
       >
         {/* Efecto de borde animado igual que en el input */}
         <div
-          className="pointer-events-none absolute inset-0 rounded-lg transition-opacity duration-500"
+          className="pointer-events-none absolute inset-0 rounded-lg transition-opacity duration-500 z-50"
           style={{
             opacity: cardOpacity,
             border: "1.5px solid #ffffff",

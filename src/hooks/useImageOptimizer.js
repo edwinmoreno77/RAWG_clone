@@ -1,8 +1,11 @@
 import { useMemo, useEffect } from "react";
 
-// Cache global para imágenes precargadas
+// Cache global para imágenes precargadas (persiste entre navegaciones)
 const imageCache = new Map();
 const preloadQueue = new Set();
+
+// Cache de cards que ya han sido precargadas para evitar precargas duplicadas
+const cardPreloadCache = new Set();
 
 /**
  * Función utilitaria para optimizar URLs de imágenes
@@ -78,6 +81,22 @@ export const preloadImages = async (urls) => {
 };
 
 /**
+ * Función para generar ID único de card basado en screenshots
+ * @param {Array} screenshots - Array de objetos screenshot
+ * @returns {string} - ID único de la card
+ */
+const generateCardId = (screenshots) => {
+  if (!screenshots || screenshots.length === 0) return null;
+
+  const urls = screenshots
+    .map((screenshot) => screenshot.image || screenshot.url)
+    .filter(Boolean)
+    .sort(); // Ordenar para consistencia
+
+  return urls.join("|");
+};
+
+/**
  * Función para precargar screenshots optimizados
  * @param {Array} screenshots - Array de objetos screenshot
  * @param {string} context - Contexto de optimización
@@ -88,13 +107,31 @@ export const preloadScreenshots = async (
 ) => {
   if (!screenshots || screenshots.length === 0) return;
 
+  const cardId = generateCardId(screenshots);
+
+  // Si esta card ya fue precargada, no hacer nada
+  if (cardId && cardPreloadCache.has(cardId)) {
+    return;
+  }
+
   const urls = screenshots
     .map((screenshot) => screenshot.image || screenshot.url)
     .filter(Boolean);
 
   if (urls.length > 0) {
     const optimizedUrls = urls.map((url) => optimizeImageUrl(url, context));
-    await preloadImages(optimizedUrls);
+
+    // Filtrar URLs que ya están en cache para evitar peticiones duplicadas
+    const urlsToPreload = optimizedUrls.filter((url) => !imageCache.has(url));
+
+    if (urlsToPreload.length > 0) {
+      await preloadImages(urlsToPreload);
+    }
+
+    // Marcar esta card como precargada
+    if (cardId) {
+      cardPreloadCache.add(cardId);
+    }
   }
 };
 
@@ -109,7 +146,7 @@ export const useImageOptimizer = (originalUrl, context = "default") => {
     return optimizeImageUrl(originalUrl, context);
   }, [originalUrl, context]);
 
-  // Precargar la imagen cuando cambie la URL
+  // Precargar la imagen cuando cambie la URL (solo una vez)
   useEffect(() => {
     if (!optimizedUrl) return;
 
@@ -118,17 +155,20 @@ export const useImageOptimizer = (originalUrl, context = "default") => {
       return;
     }
 
-    // Si no está en cache, precargarla
-    if (!preloadQueue.has(optimizedUrl)) {
-      preloadQueue.add(optimizedUrl);
-      preloadImage(optimizedUrl)
-        .then(() => {
-          preloadQueue.delete(optimizedUrl);
-        })
-        .catch(() => {
-          preloadQueue.delete(optimizedUrl);
-        });
+    // Si ya está en cola de precarga, no hacer nada
+    if (preloadQueue.has(optimizedUrl)) {
+      return;
     }
+
+    // Precargar solo si no está en cache ni en cola
+    preloadQueue.add(optimizedUrl);
+    preloadImage(optimizedUrl)
+      .then(() => {
+        preloadQueue.delete(optimizedUrl);
+      })
+      .catch(() => {
+        preloadQueue.delete(optimizedUrl);
+      });
   }, [optimizedUrl]);
 
   return optimizedUrl;
