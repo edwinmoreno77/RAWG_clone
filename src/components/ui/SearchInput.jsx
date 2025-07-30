@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getGameByName } from "../../api/getData";
+import { getGameByNameQuick } from "../../api/getData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -58,7 +58,8 @@ export const SearchInput = () => {
   const performSearch = async (term) => {
     setIsLoading(true);
     try {
-      const results = await getGameByName(term);
+      // Usar búsqueda rápida para el dropdown (sin screenshots/videos)
+      const results = await getGameByNameQuick(term);
       setSearchResults(results?.slice(0, 8) || []);
       setShowDropdown(true);
     } catch (error) {

@@ -1,4 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
+
+// Cache global para imágenes precargadas
+const imageCache = new Map();
+const preloadQueue = new Set();
 
 /**
  * Función utilitaria para optimizar URLs de imágenes
@@ -32,13 +36,123 @@ export const optimizeImageUrl = (originalUrl, context = "default") => {
 };
 
 /**
+ * Función para precargar una imagen
+ * @param {string} url - URL de la imagen a precargar
+ * @returns {Promise} - Promise que se resuelve cuando la imagen está cargada
+ */
+const preloadImage = (url) => {
+  return new Promise((resolve, reject) => {
+    if (imageCache.has(url)) {
+      resolve(url);
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      imageCache.set(url, true);
+      resolve(url);
+    };
+    img.onerror = () => {
+      imageCache.set(url, false);
+      reject(new Error(`Failed to load image: ${url}`));
+    };
+    img.src = url;
+  });
+};
+
+/**
+ * Función para precargar múltiples imágenes
+ * @param {string[]} urls - Array de URLs a precargar
+ */
+export const preloadImages = async (urls) => {
+  const validUrls = urls.filter((url) => url && !imageCache.has(url));
+
+  if (validUrls.length === 0) return;
+
+  // Precargar en paralelo, pero limitar a 3 simultáneas para no sobrecargar
+  const batchSize = 3;
+  for (let i = 0; i < validUrls.length; i += batchSize) {
+    const batch = validUrls.slice(i, i + batchSize);
+    await Promise.allSettled(batch.map((url) => preloadImage(url)));
+  }
+};
+
+/**
+ * Función para precargar screenshots optimizados
+ * @param {Array} screenshots - Array de objetos screenshot
+ * @param {string} context - Contexto de optimización
+ */
+export const preloadScreenshots = async (
+  screenshots,
+  context = "screenshot"
+) => {
+  if (!screenshots || screenshots.length === 0) return;
+
+  const urls = screenshots
+    .map((screenshot) => screenshot.image || screenshot.url)
+    .filter(Boolean);
+
+  if (urls.length > 0) {
+    const optimizedUrls = urls.map((url) => optimizeImageUrl(url, context));
+    await preloadImages(optimizedUrls);
+  }
+};
+
+/**
  * Hook personalizado para optimizar imágenes usando el servicio images.weserv.nl
  * @param {string} originalUrl - URL original de la imagen
  * @param {string} context - Contexto de uso: 'card', 'hero', 'background', 'search', 'screenshot'
  * @returns {string} - URL optimizada
  */
 export const useImageOptimizer = (originalUrl, context = "default") => {
-  return useMemo(() => {
+  const optimizedUrl = useMemo(() => {
     return optimizeImageUrl(originalUrl, context);
   }, [originalUrl, context]);
+
+  // Precargar la imagen cuando cambie la URL
+  useEffect(() => {
+    if (!optimizedUrl) return;
+
+    // Si ya está en cache, no hacer nada
+    if (imageCache.has(optimizedUrl)) {
+      return;
+    }
+
+    // Si no está en cache, precargarla
+    if (!preloadQueue.has(optimizedUrl)) {
+      preloadQueue.add(optimizedUrl);
+      preloadImage(optimizedUrl)
+        .then(() => {
+          preloadQueue.delete(optimizedUrl);
+        })
+        .catch(() => {
+          preloadQueue.delete(optimizedUrl);
+        });
+    }
+  }, [optimizedUrl]);
+
+  return optimizedUrl;
+};
+
+/**
+ * Hook para precargar imágenes de screenshots
+ * @param {Array} screenshots - Array de objetos screenshot
+ * @param {string} context - Contexto de optimización
+ */
+export const usePreloadScreenshots = (
+  screenshots = [],
+  context = "screenshot"
+) => {
+  useEffect(() => {
+    if (!screenshots || screenshots.length === 0) return;
+
+    const urls = screenshots
+      .map((screenshot) => screenshot.image || screenshot.url)
+      .filter(Boolean);
+
+    if (urls.length > 0) {
+      // Precargar screenshots en segundo plano
+      preloadImages(urls.map((url) => optimizeImageUrl(url, context)));
+    }
+  }, [screenshots, context]);
 };

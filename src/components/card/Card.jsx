@@ -11,6 +11,7 @@ import { PlatformIcons } from "./PlatformIcons";
 import { useTilt } from "../../hooks/useTilt";
 import { useImageOptimizer } from "../../hooks/useImageOptimizer";
 import { useCardMedia } from "../../hooks/useCardMedia";
+import { preloadScreenshots } from "../../hooks/useImageOptimizer";
 
 const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
@@ -74,8 +75,13 @@ const CardComponent = ({ item }) => {
     (e) => {
       handleMouseEnterCard(e);
       setIsHovered(true);
+
+      // Precargar screenshots cuando se hace hover
+      if (item.screenshots && item.screenshots.length > 0) {
+        preloadScreenshots(item.screenshots, "screenshot");
+      }
     },
-    [handleMouseEnterCard]
+    [handleMouseEnterCard, item.screenshots]
   );
 
   const handleMouseLeave = useCallback(
@@ -173,8 +179,8 @@ const CardComponent = ({ item }) => {
               {Array.from({ length: totalImages }, (_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentImageIndex ? "bg-white" : "bg-white/50"
+                  className={`hidden group-hover:block w-9 h-1 mb-1 rounded-full transition-all duration-100 ${
+                    index === currentImageIndex ? "bg-white/90" : "bg-white/30"
                   }`}
                 />
               ))}
@@ -184,7 +190,7 @@ const CardComponent = ({ item }) => {
           {/* Indicador de scroll horizontal */}
           {hasScreenshots && totalImages > 1 && !hasVideo && isHovered && (
             <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-              Mover mouse para cambiar imagen
+              move mouse to change image
             </div>
           )}
 

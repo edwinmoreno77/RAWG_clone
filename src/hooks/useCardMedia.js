@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { preloadScreenshots } from "./useImageOptimizer";
 
 export const useCardMedia = (
   screenshots = [],
@@ -15,6 +16,14 @@ export const useCardMedia = (
   const allImages = backgroundImage
     ? [backgroundImage, ...screenshots]
     : screenshots;
+
+  // Precargar screenshots cuando estén disponibles (solo las primeras 3 para no sobrecargar)
+  useEffect(() => {
+    if (screenshots && screenshots.length > 0) {
+      const firstScreenshots = screenshots.slice(0, 3);
+      preloadScreenshots(firstScreenshots, "screenshot");
+    }
+  }, [screenshots]);
 
   // Función para obtener la imagen actual
   const getCurrentImage = () => {
@@ -84,6 +93,15 @@ export const useCardMedia = (
       }
     }
   }, [isHovered, videos.length]);
+
+  // Precargar imágenes cuando se detecte hover y hay screenshots
+  useEffect(() => {
+    if (isHovered && screenshots.length > 0) {
+      // Precargar las próximas 2 imágenes para una transición más suave
+      const nextScreenshots = screenshots.slice(0, 2);
+      preloadScreenshots(nextScreenshots, "screenshot");
+    }
+  }, [isHovered, screenshots]);
 
   // Función para reproducir video
   const playVideo = () => {

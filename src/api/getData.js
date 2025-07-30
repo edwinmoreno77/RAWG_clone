@@ -27,7 +27,7 @@ export const getGameById = async (id) => {
         `${BASE_URL}?key=${key}&fields=id,name,description,background_image`,
         { headers: commonHeaders }
       ),
-      fetch(`${BASE_URL}/screenshots?key=${key}&page_size=5`, {
+      fetch(`${BASE_URL}/screenshots?key=${key}&page_size=7`, {
         headers: commonHeaders,
       }),
       fetch(`${BASE_URL}/movies?key=${key}&page_size=3`, {
@@ -69,7 +69,12 @@ export const getGameById = async (id) => {
   }
 };
 
-export const getGameByName = async (name) => {
+/**
+ * Búsqueda rápida sin media (para resultados inmediatos)
+ * Usado en el dropdown de búsqueda para mostrar resultados instantáneos
+ * sin cargar screenshots ni videos
+ */
+export const getGameByNameQuick = async (name) => {
   try {
     const response = await fetch(
       `https://api.rawg.io/api/games?search=${name}&key=${key}`,
@@ -86,6 +91,68 @@ export const getGameByName = async (name) => {
     const data = await response.json();
 
     return data.results;
+  } catch (error) {
+    console.log("Error capturado en el fetch", error);
+    return null;
+  }
+};
+
+/**
+ * Búsqueda completa con media (para página de resultados)
+ * Usado en la página de Search para mostrar cards con screenshots y videos
+ * Incluye hasta 7 screenshots y 1 video por juego
+ */
+export const getGameByName = async (name) => {
+  try {
+    const response = await fetch(
+      `https://api.rawg.io/api/games?search=${name}&key=${key}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+
+    // Obtener videos y screenshots para cada juego en paralelo
+    const gamesWithMedia = await Promise.all(
+      data.results.map(async (game) => {
+        try {
+          const [screenshotsRes, videosRes] = await Promise.all([
+            fetch(
+              `https://api.rawg.io/api/games/${game.id}/screenshots?key=${key}&page_size=7`
+            ),
+            fetch(
+              `https://api.rawg.io/api/games/${game.id}/movies?key=${key}&page_size=1`
+            ),
+          ]);
+
+          const screenshots = screenshotsRes.ok
+            ? (await screenshotsRes.json()).results
+            : [];
+          const videos = videosRes.ok ? (await videosRes.json()).results : [];
+
+          return {
+            ...game,
+            screenshots,
+            videos,
+          };
+        } catch (error) {
+          console.error(`Error fetching media for game ${game.id}:`, error);
+          return {
+            ...game,
+            screenshots: [],
+            videos: [],
+          };
+        }
+      })
+    );
+
+    return gamesWithMedia;
   } catch (error) {
     console.log("Error capturado en el fetch", error);
     return null;
@@ -132,7 +199,7 @@ export const getFilteredGames = async (filters, page) => {
         try {
           const [screenshotsRes, videosRes] = await Promise.all([
             fetch(
-              `https://api.rawg.io/api/games/${game.id}/screenshots?key=${key}&page_size=3`
+              `https://api.rawg.io/api/games/${game.id}/screenshots?key=${key}&page_size=7`
             ),
             fetch(
               `https://api.rawg.io/api/games/${game.id}/movies?key=${key}&page_size=1`
