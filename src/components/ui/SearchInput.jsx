@@ -60,7 +60,7 @@ export const SearchInput = () => {
     try {
       // Usar búsqueda rápida para el dropdown (sin screenshots/videos)
       const results = await getGameByNameQuick(term);
-      setSearchResults(results?.slice(0, 8) || []);
+      setSearchResults(results?.slice(0, 9) || []);
       setShowDropdown(true);
     } catch (error) {
       console.error("Error en búsqueda:", error);
