@@ -173,7 +173,7 @@ const CardComponent = ({ item }) => {
               {Array.from({ length: totalImages }, (_, index) => (
                 <div
                   key={index}
-                  className={`hidden group-hover:block w-9 h-1 mb-1 rounded-full transition-all duration-100 ${
+                  className={`hidden group-hover:block w-8 h-1 mb-1 rounded-full transition-all duration-100 ${
                     index === currentImageIndex ? "bg-white/90" : "bg-white/30"
                   }`}
                 />
