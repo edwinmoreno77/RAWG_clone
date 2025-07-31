@@ -15,7 +15,7 @@ export const PageList = () => {
   }, []);
 
   // Ajustar el número de cards por fila según el estado del sidebar
-  const cardsPerRow = isSidebarOpen ? 3 : 4;
+  const cardsPerRow = isSidebarOpen ? 4 : 5;
   const itemsWithLastRow = useLastRowCards(filteredData, cardsPerRow, true);
 
   return (
