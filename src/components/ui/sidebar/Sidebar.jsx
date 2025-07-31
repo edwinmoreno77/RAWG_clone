@@ -204,7 +204,11 @@ export const Sidebar = () => {
     <aside
       className={`fixed z-30 top-0 left-0 h-full w-80 bg-stone-950 lg:bg-transparent text-white p-3 transform  ${
         store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } transition-transform duration-300 lg:relative lg:translate-x-0`}
+      } transition-all duration-300 ease-in-out lg:absolute lg:transform lg:transition-all lg:duration-300 lg:ease-in-out ${
+        store.isSidebarOpen
+          ? "lg:translate-x-0 lg:w-80 lg:opacity-100"
+          : "lg:-translate-x-full lg:w-0 lg:opacity-0 lg:overflow-hidden"
+      }`}
     >
       {/* Botón de búsqueda avanzada */}
       <button

@@ -95,6 +95,10 @@ const getState = ({ getStore, getActions, setStore }) => {
         setStore({ isSidebarOpen: false });
       },
 
+      openSidebar: () => {
+        setStore({ isSidebarOpen: true });
+      },
+
       setFilters: ({ name, value }) => {
         const { filters } = getStore();
         setStore({ filters: { ...filters, [name]: value } });

@@ -7,20 +7,26 @@ import { useLastRowCards } from "../hooks/useLastRowCards";
 
 export const PageList = () => {
   const { store, actions } = useContext(Context);
-  const { filteredData, isLoading } = store;
+  const { filteredData, isLoading, isSidebarOpen } = store;
 
   useEffect(() => {
     actions.getPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const itemsWithLastRow = useLastRowCards(filteredData, 4, true);
+  // Ajustar el número de cards por fila según el estado del sidebar
+  const cardsPerRow = isSidebarOpen ? 3 : 4;
+  const itemsWithLastRow = useLastRowCards(filteredData, cardsPerRow, true);
 
   return (
     <SidebarLayout>
       {isLoading ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-1">
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-${
+              isSidebarOpen ? "4" : "5"
+            } gap-1 transition-all duration-300`}
+          >
             {[...Array(12)].map((_, index) => (
               <CardSkeleton key={index} />
             ))}
@@ -32,7 +38,11 @@ export const PageList = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-1">
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-${
+              isSidebarOpen ? "4" : "5"
+            } gap-1 transition-all duration-300`}
+          >
             {itemsWithLastRow.map((item) => (
               <Card key={item.id} item={item} />
             ))}
