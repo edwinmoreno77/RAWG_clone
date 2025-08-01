@@ -31,7 +31,7 @@ export const PlatformIcons = ({ platforms }) => {
           <FontAwesomeIcon
             key={platformName}
             icon={icon}
-            className="text-stone-600 group-hover:text-stone-400 transition-all duration-200 text-xs md:text-lg"
+            className="text-stone-600 group-hover:text-stone-400 transition-all duration-200 text-lg "
             title={platformName}
           />
         );

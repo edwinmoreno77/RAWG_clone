@@ -193,15 +193,12 @@ const CardComponent = ({ item }) => {
               <FontAwesomeIcon icon={faPause} className="text-white text-lg" />
             </button>
           )}
-
-          {/* Link overlay para navegación */}
-          {/* <Link to={`${item?.id}`} className="absolute inset-0 z-10" /> */}
         </div>
         <div className="p-4 brightness-110">
           <PlatformIcons platforms={item?.platforms} />
           <Link to={`${item?.id}`} className="block">
-            <h5 className="text-lg font-bold bg-gradient-to-r from-stone-400 via-white to-stone-500 group-hover:from-stone-200 group-hover:via-white group-hover:to-stone-200 transition-all duration-300 bg-clip-text text-transparent cursor-pointer relative">
-              {item?.name}
+            <h5 className="text-lg font-bold bg-gradient-to-r from-stone-400 via-white to-stone-500 group-hover:from-stone-200 group-hover:via-white group-hover:to-stone-200 transition-all duration-300 bg-clip-text text-transparent cursor-pointer relative h-12 flex items-center">
+              <span className="line-clamp-2 overflow-hidden">{item?.name}</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-br from-lime-400 via-white to-lime-200 transition-all duration-500 group-hover:w-10/12"></span>
             </h5>
           </Link>
