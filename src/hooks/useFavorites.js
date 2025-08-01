@@ -1,9 +1,7 @@
-import { useContext } from "react";
-import { Context } from "../store/appContext";
+import { useGameStore } from "../store/gameStore";
 
 export const useFavorites = () => {
-  const { store } = useContext(Context);
-  const { favorites } = store;
+  const { favorites } = useGameStore();
 
   // Calcular estadísticas de favoritos
   const favoritesCount = favorites.length;

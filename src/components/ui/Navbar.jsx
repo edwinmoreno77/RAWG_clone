@@ -1,17 +1,16 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useContext } from "react";
-import { Context } from "../../store/appContext";
+import { useGameStore } from "../../store/gameStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { SearchInput } from "./SearchInput";
 
 export const Navbar = () => {
-  const { actions } = useContext(Context);
+  const { toggleSidebar } = useGameStore();
   const location = useLocation();
 
   const handleMenuClick = () => {
-    actions.toggleSidebar();
+    toggleSidebar();
   };
 
   return (

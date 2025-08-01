@@ -1,16 +1,15 @@
 import { SidebarLayout } from "../layouts/SidebarLayout";
 import { Card } from "../components/card/Card";
-import { useContext, useEffect } from "react";
-import { Context } from "../store/appContext";
+import { useEffect } from "react";
+import { useGameStore } from "../store/gameStore";
 import { CardSkeleton } from "../components/card/CardSkeleton";
 import { useLastRowCards } from "../hooks/useLastRowCards";
 
 export const PageList = () => {
-  const { store, actions } = useContext(Context);
-  const { filteredData, isLoading, isSidebarOpen } = store;
+  const { filteredData, isLoading, isSidebarOpen, getPages } = useGameStore();
 
   useEffect(() => {
-    actions.getPages();
+    getPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

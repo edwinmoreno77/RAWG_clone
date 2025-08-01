@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Context } from "../store/appContext";
+import { useGameStore } from "../store/gameStore";
 import { Navbar } from "../components/ui/Navbar";
 import { getGameById } from "../api/getData";
 import { useTilt } from "../hooks/useTilt";
@@ -18,10 +18,7 @@ export const Game = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
-  const { store, actions } = useContext(Context);
-
-  const { addFavorites, removeFavorites } = actions;
-  const { favorites } = store;
+  const { addFavorites, removeFavorites, favorites } = useGameStore();
 
   const isFavorite = favorites.some((favorite) => favorite.id == id);
   const [like, setLike] = useState(isFavorite);

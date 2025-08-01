@@ -1,7 +1,7 @@
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
-import { useContext, useState, useCallback } from "react";
-import { Context } from "../../store/appContext";
+import { useState, useCallback } from "react";
+import { useGameStore } from "../../store/gameStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faPause } from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
@@ -16,9 +16,7 @@ const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
 const CardComponent = ({ item }) => {
-  const { actions, store } = useContext(Context);
-  const { addFavorites, removeFavorites } = actions;
-  const { favorites } = store;
+  const { addFavorites, removeFavorites, favorites } = useGameStore();
   // Primero declarar los estados que no dependen de otros
   const [isHovered, setIsHovered] = useState(false);
   const [like, setLike] = useState(() =>

@@ -1,15 +1,10 @@
-import { useContext } from "react";
-import { Context } from "../../../store/appContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import { useGameStore } from "../../../store/gameStore";
 
 export const SidebarToggle = () => {
-  const { store, actions } = useContext(Context);
-
-  const toggleSidebar = () => {
-    actions.toggleSidebar();
-  };
+  const { isSidebarOpen, toggleSidebar } = useGameStore();
 
   return (
     <motion.button
@@ -23,20 +18,20 @@ export const SidebarToggle = () => {
       style={{
         transform: "translateY(-50%)",
         transition: "all 0.3s ease-in-out",
-        left: store.isSidebarOpen ? "320px" : "16px",
+        left: isSidebarOpen ? "320px" : "16px",
         top: "50%",
         position: "fixed",
       }}
     >
       <motion.div
-        animate={{ rotate: store.isSidebarOpen ? 0 : 180 }}
+        animate={{ rotate: isSidebarOpen ? 0 : 180 }}
         transition={{ duration: 0.3 }}
-        title={store.isSidebarOpen ? "Cerrar sidebar" : "Abrir sidebar"}
+        title={isSidebarOpen ? "Cerrar sidebar" : "Abrir sidebar"}
       >
         <FontAwesomeIcon
           icon={faChevronLeft}
           className={`text-lg ${
-            store.isSidebarOpen ? "" : "animate-pulse text-lime-300"
+            isSidebarOpen ? "" : "animate-pulse text-lime-300"
           }`}
         />
       </motion.div>

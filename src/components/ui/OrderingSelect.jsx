@@ -1,13 +1,12 @@
-import { useContext } from "react";
-import { Context } from "../../store/appContext";
+import { useGameStore } from "../../store/gameStore";
 
 export const OrderingSelect = () => {
-  const { store, actions } = useContext(Context);
-  const { ordering } = store.filters;
+  const { setOrdering, filters } = useGameStore();
+  const { ordering } = filters;
 
   const handleOrderingChange = (event) => {
     const selectedOrdering = event.target.value;
-    actions.setOrdering(selectedOrdering);
+    setOrdering(selectedOrdering);
   };
 
   return (

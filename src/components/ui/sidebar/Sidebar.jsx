@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from "react";
-import { Context } from "../../../store/appContext";
+import { useState, useEffect } from "react";
+import { useGameStore } from "../../../store/gameStore";
 import { filterOptions } from "../../../constants/filterOptions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { platformIcons } from "../../../constants/icons";
@@ -7,7 +7,14 @@ import { SpotlightSelect } from "./SpotlightSelect";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 
 export const Sidebar = () => {
-  const { store, actions } = useContext(Context);
+  const {
+    filters,
+    isSidebarOpen,
+    setFilters,
+    setFilteredData,
+    resetFilters,
+    closeSidebar,
+  } = useGameStore();
   const [isLoading, setIsLoading] = useState(false);
   const [advancedSearch, setAdvancedSearch] = useState(false);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
@@ -16,33 +23,33 @@ export const Sidebar = () => {
 
   // Sincronizar estados locales con el store
   useEffect(() => {
-    if (store.filters) {
+    if (filters) {
       // Para plataformas, convertir a número ya que vienen como string del select
-      if (store.filters.platform) {
+      if (filters.platform) {
         const platformId =
-          typeof store.filters.platform === "string"
-            ? parseInt(store.filters.platform, 10)
-            : store.filters.platform;
+          typeof filters.platform === "string"
+            ? parseInt(filters.platform, 10)
+            : filters.platform;
         setSelectedPlatforms([platformId]);
       } else {
         setSelectedPlatforms([]);
       }
 
       // Para géneros
-      if (store.filters.genre) {
-        setSelectedGenres([store.filters.genre]);
+      if (filters.genre) {
+        setSelectedGenres([filters.genre]);
       } else {
         setSelectedGenres([]);
       }
 
       // Para tags
-      if (store.filters.tag) {
-        setSelectedTags([store.filters.tag]);
+      if (filters.tag) {
+        setSelectedTags([filters.tag]);
       } else {
         setSelectedTags([]);
       }
     }
-  }, [store.filters, advancedSearch]);
+  }, [filters, advancedSearch]);
 
   // Manejar el cambio entre vistas
   const toggleAdvancedSearch = () => {
@@ -60,21 +67,21 @@ export const Sidebar = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    actions.setFilters({ name, value });
+    setFilters({ name, value });
   };
 
   const handleApplyFilters = async () => {
     setIsLoading(true);
-    await actions.setFilteredData();
+    await setFilteredData();
     setIsLoading(false);
-    actions.closeSidebar();
+    closeSidebar();
   };
 
   const handleReset = () => {
-    actions.resetFilters();
+    resetFilters();
     setSelectedPlatforms([]); // Reiniciar plataformas seleccionadas
     setSelectedGenres([]); // Reiniciar géneros seleccionados
-    actions.closeSidebar();
+    closeSidebar();
   };
 
   const togglePlatform = async (platformId) => {
@@ -86,13 +93,13 @@ export const Sidebar = () => {
     setSelectedPlatforms(updatedPlatforms);
 
     // Aplicar o quitar el filtro
-    actions.setFilters({
+    setFilters({
       name: "platform",
       value: isSelected ? null : platformId,
     });
 
     // Ejecutar la búsqueda con los filtros aplicados
-    await actions.setFilteredData();
+    await setFilteredData();
   };
 
   const toggleTags = async (tagSlug) => {
@@ -104,13 +111,13 @@ export const Sidebar = () => {
     setSelectedTags(updatedTags);
 
     // Aplicar o quitar el filtro
-    actions.setFilters({
+    setFilters({
       name: "tag",
       value: isSelected ? null : tagSlug,
     });
 
     // Ejecutar la búsqueda con los filtros aplicados
-    await actions.setFilteredData();
+    await setFilteredData();
   };
 
   const toggleGenre = async (genreSlug) => {
@@ -122,13 +129,13 @@ export const Sidebar = () => {
     setSelectedGenres(updatedGenres);
 
     // Aplicar o quitar el filtro
-    actions.setFilters({
+    setFilters({
       name: "genre",
       value: isSelected ? null : genreSlug,
     });
 
     // Ejecutar la búsqueda con los filtros aplicados
-    await actions.setFilteredData();
+    await setFilteredData();
   };
 
   const platforms = [
@@ -172,7 +179,7 @@ export const Sidebar = () => {
     <SpotlightSelect
       name={name}
       label={label}
-      value={store.filters[name] || ""}
+      value={filters[name] || ""}
       onChange={handleChange}
     >
       <option value="">All {label}</option>
@@ -188,7 +195,7 @@ export const Sidebar = () => {
     <SpotlightSelect
       name="year"
       label="Year"
-      value={store.filters.year || ""}
+      value={filters.year || ""}
       onChange={handleChange}
     >
       <option value="">All Years</option>
@@ -203,9 +210,9 @@ export const Sidebar = () => {
   return (
     <aside
       className={`fixed z-30 top-0 left-0 h-full w-80 bg-stone-950 lg:bg-transparent text-white p-3 transform  ${
-        store.isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } transition-all duration-300 ease-in-out lg:absolute lg:transform lg:transition-all lg:duration-300 lg:ease-in-out ${
-        store.isSidebarOpen
+        isSidebarOpen
           ? "lg:translate-x-0 lg:w-80 lg:opacity-100"
           : "lg:-translate-x-full lg:w-0 lg:opacity-0 lg:overflow-hidden"
       }`}

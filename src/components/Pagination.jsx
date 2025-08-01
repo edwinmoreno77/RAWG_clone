@@ -1,13 +1,12 @@
-import { useContext, useEffect } from "react";
-import { Context } from "../store/appContext";
+import { useEffect } from "react";
+import { useGameStore } from "../store/gameStore";
 
 export const Pagination = () => {
-  const { store, actions } = useContext(Context);
-  const { increasePage, decreasePage, setPage } = actions;
-  const { page } = store;
+  const { page, increasePage, decreasePage, setPage, getPages } =
+    useGameStore();
 
   useEffect(() => {
-    actions.getPages();
+    getPages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
