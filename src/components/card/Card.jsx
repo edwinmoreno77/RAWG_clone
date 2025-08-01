@@ -16,12 +16,10 @@ const DEFAULT_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
 const CardComponent = ({ item }) => {
-  const { addFavorites, removeFavorites, favorites } = useGameStore();
+  const { addFavorites, removeFavorites, isFavorite } = useGameStore();
   // Primero declarar los estados que no dependen de otros
   const [isHovered, setIsHovered] = useState(false);
-  const [like, setLike] = useState(() =>
-    favorites.some((favorite) => favorite.id === item.id)
-  );
+  const [like, setLike] = useState(() => isFavorite(item.id));
 
   // Hook para manejar media (videos y screenshots)
   const {

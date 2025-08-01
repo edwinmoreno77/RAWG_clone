@@ -18,13 +18,12 @@ export const Game = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
-  const { addFavorites, removeFavorites, favorites } = useGameStore();
+  const { addFavorites, removeFavorites, isFavorite } = useGameStore();
 
-  const isFavorite = favorites.some((favorite) => favorite.id == id);
-  const [like, setLike] = useState(isFavorite);
+  const [like, setLike] = useState(() => isFavorite(id));
 
   const handlerLikes = (like, id) => {
-    if (!favorites.some((favorite) => favorite.id == id)) {
+    if (!isFavorite(id)) {
       addFavorites(data);
     } else {
       removeFavorites(data);

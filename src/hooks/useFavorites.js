@@ -1,10 +1,10 @@
 import { useGameStore } from "../store/gameStore";
 
 export const useFavorites = () => {
-  const { favorites } = useGameStore();
+  const { favorites, getFavoritesCount } = useGameStore();
 
   // Calcular estadísticas de favoritos
-  const favoritesCount = favorites.length;
+  const favoritesCount = getFavoritesCount();
   const hasFavorites = favoritesCount > 0;
 
   // Calcular lastRowItems para la grilla

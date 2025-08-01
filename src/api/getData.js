@@ -227,10 +227,17 @@ export const getFilteredGames = async (filters, page) => {
       })
     );
 
-    filteredGamesCache.set(cacheKey, gamesWithMedia); // Guarda los datos en caché
-    return gamesWithMedia;
+    const result = {
+      results: gamesWithMedia,
+      count: data.count,
+      next: data.next,
+      previous: data.previous,
+    };
+
+    filteredGamesCache.set(cacheKey, result); // Guarda los datos en caché
+    return result;
   } catch (error) {
     console.log("Error en getFilteredGames", error);
-    return [];
+    return { results: [], count: 0, next: null, previous: null };
   }
 };
