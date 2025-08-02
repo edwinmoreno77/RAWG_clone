@@ -173,26 +173,3 @@ export const useImageOptimizer = (originalUrl, context = "default") => {
 
   return optimizedUrl;
 };
-
-/**
- * Hook para precargar imágenes de screenshots
- * @param {Array} screenshots - Array de objetos screenshot
- * @param {string} context - Contexto de optimización
- */
-export const usePreloadScreenshots = (
-  screenshots = [],
-  context = "screenshot"
-) => {
-  useEffect(() => {
-    if (!screenshots || screenshots.length === 0) return;
-
-    const urls = screenshots
-      .map((screenshot) => screenshot.image || screenshot.url)
-      .filter(Boolean);
-
-    if (urls.length > 0) {
-      // Precargar screenshots en segundo plano
-      preloadImages(urls.map((url) => optimizeImageUrl(url, context)));
-    }
-  }, [screenshots, context]);
-};
