@@ -7,6 +7,48 @@ const preloadQueue = new Set();
 // Cache de cards que ya han sido precargadas para evitar precargas duplicadas
 const cardPreloadCache = new Set();
 
+// Configuración de limpieza inteligente
+const CLEANUP_INTERVAL = 1000 * 60 * 5; // 5 minutos
+const MAX_CACHE_SIZE = 250; // Máximo 250 imágenes en caché
+const CACHE_TTL = 1000 * 60 * 15; // 15 minutos TTL
+
+// Variables para control de limpieza
+let lastCleanup = Date.now();
+
+/**
+ * Función de limpieza inteligente que se ejecuta en segundo plano
+ */
+const smartCleanup = () => {
+  const now = Date.now();
+
+  // Solo limpiar si han pasado 5 minutos desde la última limpieza
+  if (now - lastCleanup < CLEANUP_INTERVAL) {
+    return;
+  }
+
+  // Solo limpiar si el caché supera el tamaño máximo
+  if (imageCache.size <= MAX_CACHE_SIZE) {
+    return;
+  }
+
+  // Limpiar entradas expiradas
+  for (const [url, timestamp] of imageCache.entries()) {
+    if (now - timestamp >= CACHE_TTL) {
+      imageCache.delete(url);
+    }
+  }
+
+  // Limpiar cardPreloadCache si es muy grande
+  if (cardPreloadCache.size > 80) {
+    cardPreloadCache.clear();
+  }
+
+  lastCleanup = now;
+  console.log(
+    `🧹 Cache cleanup: ${imageCache.size} images, ${cardPreloadCache.size} cards`
+  );
+};
+
 /**
  * Función utilitaria para optimizar URLs de imágenes
  * @param {string} originalUrl - URL original de la imagen
@@ -45,6 +87,7 @@ export const optimizeImageUrl = (originalUrl, context = "default") => {
  */
 const preloadImage = (url) => {
   return new Promise((resolve, reject) => {
+    // Verificar caché simple (sin TTL en cada acceso)
     if (imageCache.has(url)) {
       resolve(url);
       return;
@@ -52,11 +95,13 @@ const preloadImage = (url) => {
 
     const img = new Image();
     img.onload = () => {
-      imageCache.set(url, true);
+      // Guardar timestamp para limpieza futura
+      imageCache.set(url, Date.now());
       resolve(url);
     };
     img.onerror = () => {
-      imageCache.set(url, false);
+      // También guardar errores con timestamp
+      imageCache.set(url, Date.now());
       reject(new Error(`Failed to load image: ${url}`));
     };
     img.src = url;
@@ -71,6 +116,9 @@ export const preloadImages = async (urls) => {
   const validUrls = urls.filter((url) => url && !imageCache.has(url));
 
   if (validUrls.length === 0) return;
+
+  // Ejecutar limpieza inteligente en segundo plano
+  setTimeout(smartCleanup, 0);
 
   // Precargar en paralelo, pero limitar a 3 simultáneas para no sobrecargar
   const batchSize = 3;
@@ -172,27 +220,4 @@ export const useImageOptimizer = (originalUrl, context = "default") => {
   }, [optimizedUrl]);
 
   return optimizedUrl;
-};
-
-/**
- * Hook para precargar imágenes de screenshots
- * @param {Array} screenshots - Array de objetos screenshot
- * @param {string} context - Contexto de optimización
- */
-export const usePreloadScreenshots = (
-  screenshots = [],
-  context = "screenshot"
-) => {
-  useEffect(() => {
-    if (!screenshots || screenshots.length === 0) return;
-
-    const urls = screenshots
-      .map((screenshot) => screenshot.image || screenshot.url)
-      .filter(Boolean);
-
-    if (urls.length > 0) {
-      // Precargar screenshots en segundo plano
-      preloadImages(urls.map((url) => optimizeImageUrl(url, context)));
-    }
-  }, [screenshots, context]);
 };
