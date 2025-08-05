@@ -74,7 +74,7 @@ export class AIService {
             {
               role: "system",
               content:
-                "Eres un experto analista de videojuegos. Analiza el juego proporcionado y devuelve insights útiles en formato JSON.",
+                "You are an expert video game analyst. Analyze the provided game and return useful insights in JSON format.",
             },
             {
               role: "user",
@@ -82,7 +82,7 @@ export class AIService {
             },
           ],
           temperature: 0.7,
-          max_tokens: 1000,
+          max_tokens: 500,
         }),
       }
     );
@@ -99,15 +99,9 @@ export class AIService {
       const parsedResponse = JSON.parse(aiResponse);
 
       // Verificar que la respuesta tenga la estructura esperada
-      if (
-        !parsedResponse.analysis ||
-        !parsedResponse.recommendations ||
-        !parsedResponse.tips ||
-        !parsedResponse.tricks ||
-        !parsedResponse.summary
-      ) {
+      if (!parsedResponse.recommendations || !parsedResponse.tricks) {
         throw new Error(
-          "La IA no generó una respuesta con la estructura esperada"
+          "The AI did not generate a response with the expected structure"
         );
       }
 
@@ -119,22 +113,16 @@ export class AIService {
         const parsedResponse = JSON.parse(fixedResponse);
 
         // Verificar que la respuesta tenga la estructura esperada
-        if (
-          !parsedResponse.analysis ||
-          !parsedResponse.recommendations ||
-          !parsedResponse.tips ||
-          !parsedResponse.tricks ||
-          !parsedResponse.summary
-        ) {
+        if (!parsedResponse.recommendations || !parsedResponse.tricks) {
           throw new Error(
-            "La IA no generó una respuesta con la estructura esperada"
+            "The AI did not generate a response with the expected structure"
           );
         }
 
         return parsedResponse;
       } catch {
         throw new Error(
-          "La IA no generó datos válidos. Respuesta recibida: " +
+          "The AI did not generate valid data. Response received: " +
             aiResponse.substring(0, 200)
         );
       }
@@ -162,35 +150,14 @@ export class AIService {
       ]`;
     }
 
-    if (!cleaned.includes('"tips"')) {
-      cleaned += `,
-      "tips": [
-        "Practice weapon recoil control",
-        "Learn spawn positions and rotations",
-        "Communicate effectively with your team"
-      ]`;
-    }
-
     if (!cleaned.includes('"tricks"')) {
       cleaned += `,
       "tricks": [
         "Use peeking to gain combat advantage",
         "Learn enemy spawn patterns",
         "Master advanced movement mechanics",
-        "Practice recoil control for all weapons",
-        "Memorize map object positions",
-        "Learn to read radar and minimap efficiently",
-        "Develop your own unique playstyle"
+        "Practice recoil control for all weapons"
       ]`;
-    }
-
-    if (!cleaned.includes('"summary"')) {
-      cleaned += `,
-      "summary": {
-        "pros": ["Precise shooting mechanics", "Team strategy", "Intense competitiveness"],
-        "cons": ["High learning curve", "Community toxicity"],
-        "verdict": "highly recommended"
-      }`;
     }
 
     // Cerrar el JSON si falta
@@ -207,16 +174,10 @@ export class AIService {
 Name: ${gameData.name}
 Rating: ${gameData.rating || "N/A"}
 Genres: ${gameData.genres?.map((g) => g.name).join(", ") || "N/A"}
-Description: ${gameData.description_raw?.substring(0, 300) || "N/A"}
+Description: ${gameData.description_raw?.substring(0, 200) || "N/A"}
 
 Return ONLY JSON with this structure:
 {
-  "analysis": {
-    "sentiment": "positive/neutral/negative",
-    "difficulty": "easy/moderate/hard",
-    "replayability": "low/moderate/high",
-    "targetAudience": "brief description"
-  },
   "recommendations": [
     {
       "name": "Similar Games",
@@ -229,27 +190,14 @@ Return ONLY JSON with this structure:
       "reason": "brief reason"
     }
   ],
-  "tips": [
-    "tip1",
-    "tip2", 
-    "tip3"
-  ],
   "tricks": [
     "trick1",
     "trick2", 
     "trick3",
-    "trick4",
-    "trick5",
-    "trick6",
-    "trick7"
-  ],
-  "summary": {
-    "pros": ["pro1", "pro2", "pro3"],
-    "cons": ["con1", "con2"],
-    "verdict": "recommended/not recommended/highly recommended"
-  }
+    "trick4"
+  ]
 }
 
-Rules: Include ALL sections, use real game names, specific advice, 7 advanced tricks.`;
+Rules: Include ALL sections, use real game names, specific advice, 4 advanced tricks.`;
   }
 }
