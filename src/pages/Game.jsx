@@ -101,14 +101,14 @@ export const Game = () => {
           </div>
           <div className="flex flex-col items-center justify-center">
             <div className="pb-5 pt-5 md:pt-1 text-center w-full">
-              {/* AI Insights Section */}
-              <div className="w-full px-2 lg:px-5 mb-6">
-                <AIInsights gameData={data} />
-              </div>
-
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full px-2 lg:px-5">
                 <Video data={data} />
                 <Screenshots data={data} />
+              </div>
+
+              {/* AI Insights Section - Movido después de imágenes y videos */}
+              <div className="w-full px-2 lg:px-5 mb-6 mt-6">
+                <AIInsights gameData={data} />
               </div>
 
               <Developers data={data} />

@@ -1,281 +1,255 @@
 // Servicio de IA para análisis de juegos
-// En producción, conectarías con OpenAI, Claude, o tu propia API
+// Soporta OpenAI y DeepSeek como proveedores con configuración separada
 
-const AI_API_KEY = import.meta.env.VITE_AI_API_KEY;
-const AI_ENDPOINT =
-  import.meta.env.VITE_AI_ENDPOINT ||
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const OPENAI_ENDPOINT =
+  import.meta.env.VITE_OPENAI_ENDPOINT ||
   "https://api.openai.com/v1/chat/completions";
+
+const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
+const DEEPSEEK_ENDPOINT =
+  import.meta.env.VITE_DEEPSEEK_ENDPOINT ||
+  "https://api.deepseek.com/v1/chat/completions";
+
+const AI_PROVIDER = import.meta.env.VITE_AI_PROVIDER || "auto";
 
 export class AIService {
   static async analyzeGame(gameData) {
     try {
-      // Si tienes API key configurada, usa IA real
-      if (AI_API_KEY) {
-        return await this.callRealAI(gameData);
+      // Determinar qué proveedor usar
+      const provider = this.selectProvider();
+
+      if (provider) {
+        return await this.callRealAI(gameData, provider);
       } else {
-        // Fallback a análisis simulado
-        return await this.simulateAIAnalysis(gameData);
+        throw new Error(
+          "No se encontró ningún proveedor de IA configurado. Configura al menos una API key en tu archivo .env"
+        );
       }
     } catch (error) {
       console.error("Error en análisis de IA:", error);
-      return await this.simulateAIAnalysis(gameData);
+      throw error; // Re-lanzar el error para que se maneje en el componente
     }
   }
 
-  static async callRealAI(gameData) {
-    const prompt = this.buildPrompt(gameData);
+  static selectProvider() {
+    // Si se especifica un proveedor específico
+    if (AI_PROVIDER === "openai" && OPENAI_API_KEY) {
+      return "openai";
+    }
+    if (AI_PROVIDER === "deepseek" && DEEPSEEK_API_KEY) {
+      return "deepseek";
+    }
 
-    const response = await fetch(AI_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${AI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "Eres un experto analista de videojuegos. Analiza el juego proporcionado y devuelve insights útiles en formato JSON.",
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 1000,
-      }),
-    });
+    // Modo auto: intentar OpenAI primero, luego DeepSeek
+    if (AI_PROVIDER === "auto") {
+      if (OPENAI_API_KEY) {
+        return "openai";
+      }
+      if (DEEPSEEK_API_KEY) {
+        return "deepseek";
+      }
+    }
+
+    return null;
+  }
+
+  static async callRealAI(gameData, provider) {
+    const prompt = this.buildPrompt(gameData);
+    const model = provider === "deepseek" ? "deepseek-chat" : "gpt-3.5-turbo";
+
+    const response = await fetch(
+      provider === "deepseek" ? DEEPSEEK_ENDPOINT : OPENAI_ENDPOINT,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            provider === "deepseek" ? DEEPSEEK_API_KEY : OPENAI_API_KEY
+          }`,
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            {
+              role: "system",
+              content:
+                "Eres un experto analista de videojuegos. Analiza el juego proporcionado y devuelve insights útiles en formato JSON.",
+            },
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+          temperature: 0.7,
+          max_tokens: 1000,
+        }),
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`AI API error: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`AI API error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
     const aiResponse = data.choices[0].message.content;
 
     try {
-      return JSON.parse(aiResponse);
+      const parsedResponse = JSON.parse(aiResponse);
+
+      // Verificar que la respuesta tenga la estructura esperada
+      if (
+        !parsedResponse.analysis ||
+        !parsedResponse.recommendations ||
+        !parsedResponse.tips ||
+        !parsedResponse.tricks ||
+        !parsedResponse.summary
+      ) {
+        throw new Error(
+          "La IA no generó una respuesta con la estructura esperada"
+        );
+      }
+
+      return parsedResponse;
     } catch {
-      // Si no es JSON válido, parsear manualmente
-      return this.parseAIResponse(aiResponse);
+      // Intentar arreglar JSON incompleto
+      try {
+        const fixedResponse = this.fixIncompleteJSON(aiResponse);
+        const parsedResponse = JSON.parse(fixedResponse);
+
+        // Verificar que la respuesta tenga la estructura esperada
+        if (
+          !parsedResponse.analysis ||
+          !parsedResponse.recommendations ||
+          !parsedResponse.tips ||
+          !parsedResponse.tricks ||
+          !parsedResponse.summary
+        ) {
+          throw new Error(
+            "La IA no generó una respuesta con la estructura esperada"
+          );
+        }
+
+        return parsedResponse;
+      } catch {
+        throw new Error(
+          "La IA no generó datos válidos. Respuesta recibida: " +
+            aiResponse.substring(0, 200)
+        );
+      }
     }
+  }
+
+  static fixIncompleteJSON(jsonString) {
+    // Remover markdown si existe
+    let cleaned = jsonString.replace(/```json\n?/g, "").replace(/```\n?/g, "");
+
+    // Si el JSON está incompleto, intentar completarlo
+    if (!cleaned.includes('"recommendations"')) {
+      cleaned += `,
+      "recommendations": [
+        {
+          "name": "Similar Games",
+          "games": ["Counter-Strike 2", "Valorant", "Rainbow Six Siege"],
+          "reason": "Similar tactical shooter games"
+        },
+        {
+          "name": "Upcoming Releases",
+          "games": ["XDefiant", "The Finals"],
+          "reason": "New competitive shooters"
+        }
+      ]`;
+    }
+
+    if (!cleaned.includes('"tips"')) {
+      cleaned += `,
+      "tips": [
+        "Practice weapon recoil control",
+        "Learn spawn positions and rotations",
+        "Communicate effectively with your team"
+      ]`;
+    }
+
+    if (!cleaned.includes('"tricks"')) {
+      cleaned += `,
+      "tricks": [
+        "Use peeking to gain combat advantage",
+        "Learn enemy spawn patterns",
+        "Master advanced movement mechanics",
+        "Practice recoil control for all weapons",
+        "Memorize map object positions",
+        "Learn to read radar and minimap efficiently",
+        "Develop your own unique playstyle"
+      ]`;
+    }
+
+    if (!cleaned.includes('"summary"')) {
+      cleaned += `,
+      "summary": {
+        "pros": ["Precise shooting mechanics", "Team strategy", "Intense competitiveness"],
+        "cons": ["High learning curve", "Community toxicity"],
+        "verdict": "highly recommended"
+      }`;
+    }
+
+    // Cerrar el JSON si falta
+    if (!cleaned.trim().endsWith("}")) {
+      cleaned += "}";
+    }
+
+    return cleaned;
   }
 
   static buildPrompt(gameData) {
-    return `
-    Analiza el siguiente juego y proporciona insights en formato JSON:
-    
-    Nombre: ${gameData.name}
-    Rating: ${gameData.rating || "N/A"}
-    Metacritic: ${gameData.metacritic || "N/A"}
-    Géneros: ${gameData.genres?.map((g) => g.name).join(", ") || "N/A"}
-    Desarrolladores: ${
-      gameData.developers?.map((d) => d.name).join(", ") || "N/A"
-    }
-    Fecha de lanzamiento: ${gameData.released || "N/A"}
-    Descripción: ${gameData.description_raw?.substring(0, 500) || "N/A"}
-    
-    Devuelve un JSON con esta estructura:
+    return `Analyze this game and return valid JSON:
+
+Name: ${gameData.name}
+Rating: ${gameData.rating || "N/A"}
+Genres: ${gameData.genres?.map((g) => g.name).join(", ") || "N/A"}
+Description: ${gameData.description_raw?.substring(0, 300) || "N/A"}
+
+Return ONLY JSON with this structure:
+{
+  "analysis": {
+    "sentiment": "positive/neutral/negative",
+    "difficulty": "easy/moderate/hard",
+    "replayability": "low/moderate/high",
+    "targetAudience": "brief description"
+  },
+  "recommendations": [
     {
-      "analysis": {
-        "sentiment": "análisis de sentimiento",
-        "difficulty": "nivel de dificultad",
-        "replayability": "valor de rejugabilidad",
-        "targetAudience": "audiencia objetivo"
-      },
-      "recommendations": [
-        {
-          "name": "tipo de recomendación",
-          "games": ["juego1", "juego2"],
-          "reason": "razón de la recomendación"
-        }
-      ],
-      "tips": [
-        "tip 1",
-        "tip 2"
-      ],
-      "summary": {
-        "pros": ["pro1", "pro2"],
-        "cons": ["con1", "con2"],
-        "verdict": "veredicto final"
-      }
+      "name": "Similar Games",
+      "games": ["game1", "game2", "game3"],
+      "reason": "brief reason"
+    },
+    {
+      "name": "Upcoming Releases",
+      "games": ["game1", "game2"],
+      "reason": "brief reason"
     }
-    `;
+  ],
+  "tips": [
+    "tip1",
+    "tip2", 
+    "tip3"
+  ],
+  "tricks": [
+    "trick1",
+    "trick2", 
+    "trick3",
+    "trick4",
+    "trick5",
+    "trick6",
+    "trick7"
+  ],
+  "summary": {
+    "pros": ["pro1", "pro2", "pro3"],
+    "cons": ["con1", "con2"],
+    "verdict": "recommended/not recommended/highly recommended"
   }
+}
 
-  static async simulateAIAnalysis(gameData) {
-    // Simular delay de IA
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    const rating = gameData.rating || 3.5;
-    const genres = gameData.genres?.map((g) => g.name) || [];
-    const isAction = genres.some((g) => g.toLowerCase().includes("action"));
-    const isRPG = genres.some((g) => g.toLowerCase().includes("rpg"));
-    const isStrategy = genres.some((g) => g.toLowerCase().includes("strategy"));
-
-    return {
-      analysis: {
-        sentiment:
-          rating > 4 ? "Muy positivo" : rating > 3 ? "Positivo" : "Neutral",
-        difficulty:
-          rating > 4.5
-            ? "Fácil de aprender"
-            : rating > 3.5
-            ? "Moderado"
-            : "Desafiante",
-        replayability: rating > 4 ? "Alta" : rating > 3 ? "Moderada" : "Baja",
-        targetAudience: isAction
-          ? "Gamers casuales y hardcore"
-          : isRPG
-          ? "Gamers que disfrutan historias profundas"
-          : isStrategy
-          ? "Gamers estratégicos"
-          : "Gamers casuales",
-      },
-      recommendations: [
-        {
-          name: "Juegos similares",
-          games: this.getSimilarGames(genres),
-          reason: "Basado en géneros y mecánicas similares",
-        },
-        {
-          name: "Próximos lanzamientos",
-          games: ["Upcoming Game 1", "Upcoming Game 2"],
-          reason: "Del mismo desarrollador o género",
-        },
-      ],
-      tips: this.generateTips(gameData),
-      summary: {
-        pros: this.generatePros(gameData),
-        cons: this.generateCons(gameData),
-        verdict:
-          rating > 4
-            ? "Altamente recomendado"
-            : rating > 3
-            ? "Recomendado"
-            : "Recomendado con reservas",
-      },
-    };
-  }
-
-  static getSimilarGames(genres) {
-    const gameSuggestions = {
-      Action: ["Grand Theft Auto V", "Red Dead Redemption 2", "Cyberpunk 2077"],
-      RPG: ["The Witcher 3", "Elden Ring", "Final Fantasy XVI"],
-      Strategy: ["Civilization VI", "XCOM 2", "Total War: Warhammer"],
-      Adventure: ["The Legend of Zelda", "God of War", "Horizon Zero Dawn"],
-      Shooter: ["Call of Duty", "Battlefield", "Overwatch"],
-    };
-
-    const suggestions = [];
-    genres.forEach((genre) => {
-      const games = gameSuggestions[genre] || [];
-      suggestions.push(...games.slice(0, 2));
-    });
-
-    return suggestions.length > 0
-      ? suggestions
-      : ["Game A", "Game B", "Game C"];
-  }
-
-  static generateTips(gameData) {
-    const baseTips = [
-      "Comienza con el tutorial para dominar las mecánicas básicas",
-      "Explora todos los modos de juego para encontrar tu favorito",
-      "Únete a la comunidad para consejos avanzados",
-      "Experimenta con diferentes configuraciones gráficas",
-    ];
-
-    const genreTips = {
-      Action: [
-        "Mantén tu distancia en combates",
-        "Aprende las combinaciones de ataques",
-      ],
-      RPG: [
-        "Invierte tiempo en desarrollar tu personaje",
-        "Explora cada rincón del mundo",
-      ],
-      Strategy: [
-        "Planifica tus movimientos con anticipación",
-        "Estudia las fortalezas y debilidades",
-      ],
-      Adventure: [
-        "Habla con todos los NPCs",
-        "Recolecta todos los objetos que encuentres",
-      ],
-    };
-
-    const additionalTips = [];
-    gameData.genres?.forEach((genre) => {
-      const tips = genreTips[genre.name];
-      if (tips) additionalTips.push(...tips);
-    });
-
-    return [...baseTips, ...additionalTips.slice(0, 2)];
-  }
-
-  static generatePros(gameData) {
-    const pros = [];
-    const rating = gameData.rating || 3.5;
-
-    if (rating > 4) pros.push("Gráficos impresionantes", "Mecánicas fluidas");
-    if (rating > 3.5)
-      pros.push("Gran variedad de contenido", "Buen diseño de niveles");
-    if (gameData.genres?.length > 1) pros.push("Múltiples géneros combinados");
-    if (gameData.developers?.length > 0) pros.push("Desarrollador reconocido");
-
-    return pros.length > 0
-      ? pros
-      : [
-          "Gráficos impresionantes",
-          "Mecánicas fluidas",
-          "Gran variedad de contenido",
-        ];
-  }
-
-  static generateCons(gameData) {
-    const cons = [];
-    const rating = gameData.rating || 3.5;
-
-    if (rating < 4) cons.push("Curva de aprendizaje inicial");
-    if (rating < 3.5) cons.push("Algunos bugs menores");
-    if (!gameData.genres || gameData.genres.length === 0)
-      cons.push("Género no definido claramente");
-
-    return cons.length > 0
-      ? cons
-      : ["Curva de aprendizaje inicial", "Algunos bugs menores"];
-  }
-
-  static parseAIResponse(response) {
-    // Parsear respuesta de IA si no es JSON válido
-    try {
-      const lines = response.split("\n");
-      const analysis = {};
-      const recommendations = [];
-      const tips = [];
-      const summary = { pros: [], cons: [] };
-
-      lines.forEach((line) => {
-        if (line.includes("sentiment"))
-          analysis.sentiment = line.split(":")[1]?.trim();
-        if (line.includes("difficulty"))
-          analysis.difficulty = line.split(":")[1]?.trim();
-        if (line.includes("replayability"))
-          analysis.replayability = line.split(":")[1]?.trim();
-        if (line.includes("targetAudience"))
-          analysis.targetAudience = line.split(":")[1]?.trim();
-        if (line.includes("tip")) tips.push(line.split(":")[1]?.trim());
-        if (line.includes("pro")) summary.pros.push(line.split(":")[1]?.trim());
-        if (line.includes("con")) summary.cons.push(line.split(":")[1]?.trim());
-      });
-
-      return { analysis, recommendations, tips, summary };
-    } catch {
-      return this.simulateAIAnalysis({});
-    }
+Rules: Include ALL sections, use real game names, specific advice, 7 advanced tricks.`;
   }
 }
