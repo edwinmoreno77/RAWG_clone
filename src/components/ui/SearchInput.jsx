@@ -144,7 +144,7 @@ export const SearchInput = () => {
 
       {/* Dropdown de resultados */}
       {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-stone-800 rounded-lg shadow-xl border border-stone-700 z-30 lg:z-50 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-stone-800 rounded-lg shadow-xl border border-stone-700 z-50 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
           {isLoading ? (
             <div className="p-4 text-center text-stone-400">
               <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white mx-auto"></div>

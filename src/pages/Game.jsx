@@ -12,6 +12,7 @@ import { Website } from "../components/game/Website";
 import { Developers } from "../components/game/Developers";
 import { GameHero } from "../components/game/GameHero";
 import { GameInfo } from "../components/game/GameInfo";
+import { AIInsights } from "../components/game/AIInsights";
 import { useSpotlightBorder } from "../hooks/useSpotlightBorder";
 
 export const Game = () => {
@@ -103,6 +104,11 @@ export const Game = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full px-2 lg:px-5">
                 <Video data={data} />
                 <Screenshots data={data} />
+              </div>
+
+              {/* AI Insights Section - Movido después de imágenes y videos */}
+              <div className="w-full px-2 lg:px-5 mb-6 mt-6">
+                <AIInsights gameData={data} />
               </div>
 
               <Developers data={data} />
