@@ -1,4 +1,4 @@
-# �� RAWG Game Finder
+# �� RAWG clone
 
 Una aplicación web moderna para explorar y descubrir videojuegos usando la API de RAWG. Incluye funcionalidades de IA para análisis inteligente de juegos.
 
