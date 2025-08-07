@@ -62,12 +62,12 @@ export const optimizeImageUrl = (originalUrl, context = "default") => {
 
   // Configuraciones según el contexto
   const contextConfigs = {
-    card: { width: 400, height: 300, quality: 75 },
+    card: { width: 600, height: 400, quality: 85 },
     hero: { width: 800, height: 600, quality: 90 },
     background: { width: 1200, height: 800, quality: 90 },
-    search: { width: 200, height: 150, quality: 60 },
-    screenshot: { width: 600, height: 400, quality: 75 },
-    default: { width: 500, height: 400, quality: 75 },
+    search: { width: 200, height: 150, quality: 75 },
+    screenshot: { width: 600, height: 400, quality: 85 },
+    default: { width: 500, height: 400, quality: 85 },
   };
 
   const config = contextConfigs[context] || contextConfigs.default;
@@ -75,7 +75,9 @@ export const optimizeImageUrl = (originalUrl, context = "default") => {
   // Usar el servicio images.weserv.nl para optimización
   const optimizedUrl = `https://images.weserv.nl/?url=${encodeURIComponent(
     originalUrl
-  )}&w=${config.width}&h=${config.height}&q=${config.quality}&output=webp`;
+  )}&w=${config.width}&h=${config.height}&q=${
+    config.quality
+  }&output=webp&fit=cover&sharp=1`;
 
   return optimizedUrl;
 };

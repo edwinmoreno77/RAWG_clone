@@ -8,10 +8,10 @@ Optimización de imágenes usando el servicio `images.weserv.nl` para mejorar el
 
 ```
 📁 hooks/useImageOptimizer.js ✅ (Punto central)
-├── Card.jsx ✅ (400x300, 75%)
+├── Card.jsx ✅ (500x375, 85%)
 ├── GameHero.jsx ✅ (800x600, 90%)
-├── ScreenshotItem.jsx ✅ (600x400, 75%)
-└── SearchResultItem.jsx ✅ (200x150, 60%)
+├── ScreenshotItem.jsx ✅ (600x400, 85%)
+└── SearchResultItem.jsx ✅ (200x150, 75%)
 ```
 
 ## 🚀 Implementación
@@ -26,10 +26,10 @@ const optimizedImageUrl = useImageOptimizer(imageUrl, "card");
 ```
 
 ### Contextos disponibles:
-- `card` - Tarjetas de juegos (400x300, 75%)
+- `card` - Tarjetas de juegos (500x375, 85%)
 - `hero` - Imagen principal (800x600, 90%)
-- `screenshot` - Capturas de pantalla (600x400, 75%)
-- `search` - Resultados de búsqueda (200x150, 60%)
+- `screenshot` - Capturas de pantalla (600x400, 85%)
+- `search` - Resultados de búsqueda (200x150, 75%)
 
 ## ⚡ Beneficios
 
@@ -37,6 +37,9 @@ const optimizedImageUrl = useImageOptimizer(imageUrl, "card");
 - **50-70% menos** consumo de datos
 - **Formato WebP** automático
 - **Memoización** con `useMemo`
+- **Mejor calidad** con parámetros optimizados
+- **Sharpening** automático para imágenes más nítidas
+- **Fit cover** para mejor recorte de imágenes
 
 ## 🎯 Estado actual
 
