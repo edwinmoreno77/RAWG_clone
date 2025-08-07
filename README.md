@@ -4,7 +4,7 @@ Una aplicación web moderna para explorar y descubrir videojuegos usando la API 
 
 ## 🖼️ Capturas de pantalla
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="https://github.com/edwinmoreno77/_game_finder_page_/blob/main/src/assets/homePage.gif" width="1200"/>
+  <img src="https://github.com/edwinmoreno77/RAWG_clone/blob/main/src/assets/homePage.gif" width="1200"/>
 </div>
 
 ## 🚀 Características
@@ -37,8 +37,8 @@ Una aplicación web moderna para explorar y descubrir videojuegos usando la API 
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/edwinmoreno77/_game_finder_page_.git
-cd _game_finder_page_
+git clone https://github.com/edwinmoreno77/RAWG_clone.git
+cd RAWG_clone
 ```
 
 ### 2. Instalar dependencias

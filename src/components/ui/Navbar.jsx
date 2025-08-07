@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useGameStore } from "../../store/gameStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { SearchInput } from "./SearchInput";
 
@@ -54,13 +54,6 @@ export const Navbar = () => {
               </span>
             </NavLink>
 
-            <div className="flex items-center justify-center hover:animate-pulse">
-              <FontAwesomeIcon
-                icon={faUser}
-                className="text-lg cursor-pointer hover:text-white hover:scale-125 transition-all duration-300"
-              />
-            </div>
-
             {location.pathname === "/" && (
               <button
                 onClick={handleMenuClick}
@@ -99,13 +92,6 @@ export const Navbar = () => {
                   className="text-lg hover:drop-shadow-md"
                 />
               </NavLink>
-
-              <div className="flex items-center justify-center">
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className="text-lg cursor-pointer hover:text-white hover:scale-125 transition-all duration-300"
-                />
-              </div>
 
               {location.pathname === "/" && (
                 <button
