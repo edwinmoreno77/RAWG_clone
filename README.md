@@ -164,7 +164,10 @@ src/
 
 ## 🌐 Despliegue
 
-**Desplegado en**: https://game-finder-page.vercel.app/
+**Desplegado en**: 
+```bash
+https://rawg-clone-theta.vercel.app
+```
 
 ## 📞 Contacto
 
