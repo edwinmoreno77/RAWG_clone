@@ -9,7 +9,9 @@ export const SidebarToggle = () => {
   return (
     <motion.button
       onClick={toggleSidebar}
-      className="hidden lg:flex fixed z-30 bg-stone-800 hover:bg-stone-700 text-white p-3 rounded-full shadow-lg border border-stone-400 transition-all duration-300 hover:scale-110 backdrop-blur-sm cursor-pointer"
+      className={`hidden lg:flex fixed z-30 bg-stone-800 hover:bg-stone-700 text-white p-2.5 rounded-full shadow-lg border transition-all duration-300 hover:scale-110 backdrop-blur-sm cursor-pointer ${
+        isSidebarOpen ? "border-stone-400 " : "border-lime-600"
+      }`}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       initial={{ opacity: 0, x: -20 }}
@@ -18,7 +20,7 @@ export const SidebarToggle = () => {
       style={{
         transform: "translateY(-50%)",
         transition: "all 0.3s ease-in-out",
-        left: isSidebarOpen ? "320px" : "16px",
+        left: isSidebarOpen ? "325px" : "16px",
         top: "50%",
         position: "fixed",
       }}

@@ -22,7 +22,11 @@ export const SidebarLayout = ({ children }) => {
             isSidebarOpen ? "lg:pl-80" : "lg:pl-0"
           }`}
         >
-          <main className="flex-1 bg-transparent p-3 ps-3 lg:ps-12 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900">
+          <main
+            className={`flex-1 bg-transparent p-1 ps-3 overflow-y-auto scrollbar-thin scrollbar-thumb-stone-700 scrollbar-track-stone-900 ${
+              isSidebarOpen ? "lg:ps-9" : "lg:ps-14"
+            }`}
+          >
             <OrderingSelect />
             {children}
           </main>
