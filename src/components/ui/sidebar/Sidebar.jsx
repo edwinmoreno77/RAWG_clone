@@ -237,7 +237,7 @@ export const Sidebar = () => {
         name="year"
         value={filters.year || ""}
         onChange={handleChange}
-        className="w-full bg-stone-800 border border-stone-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
+        className="w-full bg-stone-900 hover:bg-stone-950 border border-stone-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-transparent"
       >
         <option value="">All Years</option>
         {years.map((year) => (
@@ -284,7 +284,7 @@ export const Sidebar = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={toggleAdvancedSearch}
-            className="w-full bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 text-white py-3 px-4 rounded-xl transition-all duration-200 mb-6 flex items-center justify-center space-x-2 shadow-lg border border-stone-700/50"
+            className="w-full bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 text-white py-2 px-4 rounded-xl transition-all duration-200 mb-6 flex items-center justify-center space-x-2 shadow-lg border border-stone-700/50"
           >
             <FontAwesomeIcon
               icon={advancedSearch ? faSearch : faCog}
@@ -303,146 +303,169 @@ export const Sidebar = () => {
                 className="w-8 h-8 border-2 border-lime-400 border-t-transparent rounded-full"
               />
             </div>
-          ) : advancedSearch ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-            >
-              {/* Botones de acción */}
-              <div className="flex gap-3 mb-6">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleReset}
-                  className="flex-1 bg-stone-700/80 backdrop-blur-sm hover:bg-stone-600/80 text-white py-3 rounded-xl transition-colors font-medium shadow-lg border border-stone-600/50"
-                >
-                  Reset
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleApplyFilters}
-                  className="flex-1 bg-gradient-to-r from-lime-600/90 to-lime-500/90 hover:from-lime-500 hover:to-lime-400 text-white py-3 rounded-xl transition-colors font-medium shadow-lg border border-lime-500/50"
-                >
-                  Apply
-                </motion.button>
-              </div>
-
-              {/* Filtros avanzados */}
-              <div className="space-y-4">
-                {renderSelect("platform", "Platforms", filterOptions.platforms)}
-                {renderSelect("genre", "Genres", filterOptions.genres)}
-                {renderSelect(
-                  "developer",
-                  "Developers",
-                  filterOptions.developers
-                )}
-                {renderSelect("tag", "Tags", filterOptions.tags)}
-                {renderYearSelect()}
-              </div>
-            </motion.div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
-              {/* Plataformas */}
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <FontAwesomeIcon icon={faGamepad} className="text-lime-400" />
-                  <h3 className="text-lg font-semibold text-white">
-                    Platforms
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {platforms.map((platform) => (
+            <AnimatePresence mode="wait">
+              {advancedSearch ? (
+                <motion.div
+                  key="advanced"
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -24 }}
+                  transition={{ duration: 0.12, ease: "easeInOut" }}
+                  className="space-y-4"
+                >
+                  {/* Botones de acción */}
+                  <div className="flex gap-3 mb-6">
                     <motion.button
-                      key={platform.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => togglePlatform(platform.id)}
-                      className={`flex flex-col items-center justify-center p-1 rounded-xl transition-all duration-200 shadow-lg border ${
-                        selectedPlatforms.includes(platform.id)
-                          ? "bg-gradient-to-br from-lime-500/90 to-lime-600/90 shadow-lime-500/25 border-lime-500/50"
-                          : "bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 border-stone-700/50"
-                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleReset}
+                      className="flex-1 bg-stone-700/80 backdrop-blur-sm hover:bg-stone-600/80 text-white py-2 rounded-xl transition-colors font-medium shadow-lg border border-stone-600/50"
                     >
+                      Reset
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleApplyFilters}
+                      className="flex-1 bg-gradient-to-r from-lime-600/90 to-lime-500/90 hover:from-lime-500 hover:to-lime-400 text-white py-2 rounded-xl transition-colors font-medium shadow-lg border border-lime-500/50"
+                    >
+                      Apply
+                    </motion.button>
+                  </div>
+
+                  {/* Filtros avanzados */}
+                  <div className="space-y-4">
+                    {renderSelect(
+                      "platform",
+                      "Platforms",
+                      filterOptions.platforms
+                    )}
+                    {renderSelect("genre", "Genres", filterOptions.genres)}
+                    {renderSelect(
+                      "developer",
+                      "Developers",
+                      filterOptions.developers
+                    )}
+                    {renderSelect("tag", "Tags", filterOptions.tags)}
+                    {renderYearSelect()}
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="basic"
+                  initial={{ opacity: 0, x: -24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 24 }}
+                  transition={{ duration: 0.28, ease: "easeInOut" }}
+                  className="space-y-6"
+                >
+                  {/* Plataformas */}
+                  <div>
+                    <div className="flex items-center space-x-2 mb-4">
                       <FontAwesomeIcon
-                        icon={platformIcons[platform.name] || faGamepad}
-                        className={`text-lg mb-2 ${
-                          selectedPlatforms.includes(platform.id)
-                            ? "text-white"
-                            : "text-stone-300"
-                        }`}
+                        icon={faGamepad}
+                        className="text-lime-400"
                       />
-                      <span
-                        className={`text-xs font-medium ${
-                          selectedPlatforms.includes(platform.id)
-                            ? "text-white"
-                            : "text-stone-300"
-                        }`}
-                      >
-                        {platform.name}
-                      </span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
+                      <h3 className="text-lg font-semibold text-white">
+                        Platforms
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {platforms.map((platform) => (
+                        <motion.button
+                          key={platform.id}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => togglePlatform(platform.id)}
+                          className={`flex flex-col items-center justify-center p-1 rounded-xl transition-all duration-200 shadow-lg border ${
+                            selectedPlatforms.includes(platform.id)
+                              ? "bg-gradient-to-br from-lime-500/90 to-lime-600/90 shadow-lime-500/25 border-lime-500/50"
+                              : "bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 border-stone-700/50"
+                          }`}
+                        >
+                          <FontAwesomeIcon
+                            icon={platformIcons[platform.name] || faGamepad}
+                            className={`text-lg mb-2 ${
+                              selectedPlatforms.includes(platform.id)
+                                ? "text-white"
+                                : "text-stone-300"
+                            }`}
+                          />
+                          <span
+                            className={`text-xs font-medium ${
+                              selectedPlatforms.includes(platform.id)
+                                ? "text-white"
+                                : "text-stone-300"
+                            }`}
+                          >
+                            {platform.name}
+                          </span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
 
-              {/* Géneros */}
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <FontAwesomeIcon icon={faPlay} className="text-lime-400" />
-                  <h3 className="text-lg font-semibold text-white">Genres</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {genres.map((genre) => (
-                    <motion.button
-                      key={genre.id}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => toggleGenre(genre.slug)}
-                      className={`px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium shadow-md border ${
-                        selectedGenres.includes(genre.slug)
-                          ? "bg-gradient-to-r from-lime-500/90 to-lime-600/90 text-white shadow-lime-500/25 border-lime-500/50"
-                          : "bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 text-stone-300 border-stone-700/50"
-                      }`}
-                    >
-                      {genre.name}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
+                  {/* Géneros */}
+                  <div>
+                    <div className="flex items-center space-x-2 mb-4">
+                      <FontAwesomeIcon
+                        icon={faPlay}
+                        className="text-lime-400"
+                      />
+                      <h3 className="text-lg font-semibold text-white">
+                        Genres
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {genres.map((genre) => (
+                        <motion.button
+                          key={genre.id}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                          onClick={() => toggleGenre(genre.slug)}
+                          className={`px-3 py-2 rounded-lg transition-all duration-200 text-sm font-medium shadow-md border ${
+                            selectedGenres.includes(genre.slug)
+                              ? "bg-gradient-to-r from-lime-500/90 to-lime-600/90 text-white shadow-lime-500/25 border-lime-500/50"
+                              : "bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 text-stone-300 border-stone-700/50"
+                          }`}
+                        >
+                          {genre.name}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
 
-              {/* Tags */}
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <FontAwesomeIcon icon={faTags} className="text-lime-400" />
-                  <h3 className="text-lg font-semibold text-white">Tags</h3>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <motion.button
-                      key={tag.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => toggleTags(tag.slug)}
-                      className={`px-3 py-2 rounded-full transition-all duration-200 text-xs font-medium shadow-md border ${
-                        selectedTags.includes(tag.slug)
-                          ? "bg-gradient-to-r from-lime-500/90 to-lime-600/90 text-white shadow-lime-500/25 border-lime-500/50"
-                          : "bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 text-stone-300 border-stone-700/50"
-                      }`}
-                    >
-                      {tag.name}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+                  {/* Tags */}
+                  <div>
+                    <div className="flex items-center space-x-2 mb-4">
+                      <FontAwesomeIcon
+                        icon={faTags}
+                        className="text-lime-400"
+                      />
+                      <h3 className="text-lg font-semibold text-white">Tags</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <motion.button
+                          key={tag.id}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => toggleTags(tag.slug)}
+                          className={`px-3 py-2 rounded-full transition-all duration-200 text-xs font-medium shadow-md border ${
+                            selectedTags.includes(tag.slug)
+                              ? "bg-gradient-to-r from-lime-500/90 to-lime-600/90 text-white shadow-lime-500/25 border-lime-500/50"
+                              : "bg-stone-800/80 backdrop-blur-sm hover:bg-stone-700/80 text-stone-300 border-stone-700/50"
+                          }`}
+                        >
+                          {tag.name}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           )}
         </motion.aside>
       )}
